@@ -2,7 +2,7 @@ NAME := a.out
 
 CC := c++
 STDFLAGS := -std=c++98
-CFLAGS := -Wall -Werror -Wextra
+CFLAGS := -Wall -Werror -Wextra -std=c++17
 INCLUDE := -I include/
 TESTFLAGS := -lgtest -lgtest_main
 
