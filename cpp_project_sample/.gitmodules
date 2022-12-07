@@ -1,3 +1,6 @@
 [submodule "lib/googletest"]
 	path = lib/googletest
 	url = https://github.com/google/googletest.git
+[submodule "test"]
+	path = test
+	url = git@github.com:jfrancai/ft_container-test.git
