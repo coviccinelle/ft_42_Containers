@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/08 14:53:39 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/08 15:23:13 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,18 @@ namespace ft {
 			using size_type = std::size_t;
 			size_type size() const
 			{
-				return (0);
+				return (_c_size);
 			}
+
+			void push_back( const Type& value )
+			{
+				//this->_c_size = 0;
+     			Type* new_data = new Type;
+        		new_data[0] = value;
+    			this->_c_size++;
+    		}
 		private:
+			size_t	_c_size;
 	};
 } // end of namespace
 
