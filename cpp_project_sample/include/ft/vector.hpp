@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/08 11:54:36 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/08 14:53:39 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,14 @@ namespace ft {
 	template<typename Type>
 	class vector {
 		public:
+			using size_type = std::size_t;
+			size_type size() const
+			{
+				return (0);
+			}
 		private:
 	};
 } // end of namespace
+
+
 #endif

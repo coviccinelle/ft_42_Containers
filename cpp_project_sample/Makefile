@@ -37,6 +37,9 @@ $(OBJSDIR)%.o: $(SRCDIR)%.cpp
 clean:
 	rm -rf $(OBJSDIR) 
 
+retet: fclean
+	make tests
+
 fclean: clean
 	rm -rf $(NAME)
 	rm -rf tests
