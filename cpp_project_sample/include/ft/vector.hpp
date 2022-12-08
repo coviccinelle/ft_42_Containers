@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/08 15:23:13 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/08 15:34:56 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,7 @@ namespace ft {
 
 			void push_back( const Type& value )
 			{
-				//this->_c_size = 0;
-     			Type* new_data = new Type;
-        		new_data[0] = value;
+				(void)value;
     			this->_c_size++;
     		}
 		private:
