@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/09 13:44:42 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/09 16:47:04 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ namespace ft {
 	class vector {
 		public:
 			vector(void) : _c_size(0){
-				this->_c_data = this->alloc.allocate(2);
+				this->_c_data = this->alloc.allocate(8);
 				//new_data[0] = 0;
 				//new_data[1] = 0;
 			};
@@ -43,20 +43,14 @@ namespace ft {
 			}
 
 			void push_back( const Type& value ){
-			//	size_t i = 0;
-				(void)value;	
-				// default allocator for ints
-        //		std::allocator<int> alloc;
-        		// demonstrating the few directly usable members
-        		//static_assert(std::is_same_v<int, decltype(alloc)::value_type>);
-        		//int* p = alloc.allocate(_c_size + 2);  // space for one int
+				//size_t i = 0;
         		//alloc.deallocate(p, 1);     
 
-			//	Type *new_data = this->alloc.allocate(_c_size + 20);
-			//	for (size_t i = 0; i <= _c_size; i++)
-			//	{
-			//		new_data[i] = _c_data[i];
-			//	}
+				//Type *new_data = this->alloc.allocate(_c_size + 20);
+				if (this->_c_size == 0)
+					_c_data[0] = value;
+				//for (size_t i2 = 0; i2 <= _c_size; i2++){
+					//new_data[i] = _c_data[i];}
 			//	_c_data[i] = value;
 			//	std::cout << "after adding data = value" << std::endl;
 				this->_c_size++;
@@ -86,7 +80,7 @@ namespace ft {
 		private:
 			size_t	_c_size;
 			Type *	_c_data;
-        	std::allocator<int> alloc;
+        	std::allocator< Type > alloc;
 			//size_t	_max_place;//capacity
 
 	};
