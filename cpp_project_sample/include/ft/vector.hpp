@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/10 13:36:22 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/10 17:12:37 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 // Class template
 namespace ft {
 
-	template<typename Type>
+	template< class Type, class Allocator = std::allocator< Type > >
 	class vector {
 		public:
 			vector(void) : _c_size(0), _capacity(2) {
@@ -35,51 +35,50 @@ namespace ft {
 				std::memset(this->_c_data, 0, this->_capacity + 1);
 			};
 			~vector(void){};
+			//vector& operator=( const vector& other );
+			vector< Type, Allocator >& operator=(const vector<Type, Allocator>& other)
+    		{
+    		    if (this != &other)
+    		    {
+    		        //delete[] this->_c_data;
+					
+					alloc.deallocate(_c_data, this->_capacity + 1);
+    		        this->_c_size = other._c_size;
+					if (this->_c_size >= this->_capacity)
+						this->_capacity *= 2;
+    		        this->_capacity = other._capacity;
+					this->_c_data = this->alloc.allocate(this->_capacity + 1);
+					std::memset(this->_c_data, 0, this->_capacity + 1);
+    		        //this->_c_data = new Type[this->_capacity];
+    		        for (size_t i = 0; i < this->_c_size; i++)
+    		            this->_c_data[i] = other._c_data[i];
+    		    }
+				std::cout << "helllllo i'm over here operator = " << std::endl;
+    		    return *this;
+    		}
 
+			typedef Type value_type;
 			typedef std::size_t size_type;//typedef = using
-
+ 			typedef Allocator allocator_type;	
 			size_type size() const { return (_c_size); }
 
-			void push_back( const Type& value ){
-				size_t old_capacity = this->_capacity;
-				for (size_t i = 0; i < this->_c_size; i++)
-					std::cout << this->_c_data[i] << " : " << this->_c_size << std::endl;
-				std::cout << std::endl;
-				if (this->_c_size == this->_capacity){
-					this->_capacity *= 2;
-					Type *new_data = this->alloc.allocate(this->_capacity + 1);
-					std::memset(this->_c_data, 0, this->_capacity + 1);
-					size_t i = 0;
-					for (; i < _c_size; i++){
-						new_data[i] = _c_data[i];
-					}
-					new_data[i] = value;
-					alloc.deallocate(_c_data, old_capacity + 1);
-					_c_data = new_data;
-					//this->_capacity = new_capacity;
-				}
-				else
+//			 Modifiers
+
+			void push_back( const Type& value ) {
+				if (this->_c_size == this->_capacity)
 				{
-					_c_data[this->_c_size] = value;
+
+					value_type	*new_data = this->alloc.allocate((this->_capacity * 2) + 1);
+					std::memset(new_data, 0, (this->_capacity * 2) + 1);
+					for (size_t i = 0; i < this->_c_size; i++)
+						new_data[i] = (*this)[i];
+					this->alloc.deallocate(this->_c_data, this->_capacity + 1);
+					this->_capacity *= 2;
+					this->_c_data = new_data;
 				}
+				(*this)[_c_size] = value;
 				this->_c_size++;
 			}
-//			 Modifiers
-  			//void push_back(const T& value) {
-  			//  if (m_size >= m_capacity) {
-  			//    // Need to allocate more memory
-  			//    size_t new_capacity = (m_capacity > 0) ? m_capacity * 2 : 1;
-  			//    T* new_data = new T[new_capacity];
-  			//    for (size_t i = 0; i < m_size; i++) {
-  			//      new_data[i] = m_data[i];
-  			//    }
-  			//    delete[] m_data;
-  			//    m_data = new_data;
-  			//    m_capacity = new_capacity;
-  			//  }
-  			//  m_data[m_size] = value;
-  			//  m_size++;
-  			//}
 			void pop_back()
 			{
 				if (_c_size == 0)
@@ -90,6 +89,7 @@ namespace ft {
 			//*** Element access ***//
 			//reference operator[]( size_type pos );
 			Type& operator[](size_t i) {
+				//std::cout << "operator []" << std::endl; 
 				return this->_c_data[i];
 			}
 
@@ -98,11 +98,13 @@ namespace ft {
 				return _c_data[i];
 			}
 
+
+
 		private:
-			size_t	_c_size;
-			Type *	_c_data;
-        	std::allocator< Type > alloc;
-			size_t	_capacity;
+			size_t			_c_size;
+			value_type *	_c_data;
+        	allocator_type	alloc;
+			size_t			_capacity;
 	};
 } // end of namespace
 #endif

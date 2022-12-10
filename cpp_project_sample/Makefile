@@ -2,10 +2,10 @@ NAME := a.out
 
 CC := c++
 STDFLAGS := -std=c++98
-STDFLAGSTEST := -std=c++17
 CFLAGS := -Wall -Werror -Wextra 
 INCLUDE := -I include/
-TESTFLAGS := -lgtest -lgtest_main -std=c++17
+TESTFLAGS := -lgtest -lgtest_main
+F17:= -std=c++17
 
 SRCDIR := src/
 OBJSDIR := objs/
@@ -30,11 +30,11 @@ $(NAME): $(OBJSDIR)main.o $(OBJS)
 	$(CC) $(CFLAGS) $(STDFLAGS) $(INCLUDE) $^ -o $@
 
 tests: $(OBJS) $(OBJSTEST)
-	$(CC) $(CFLAGS) $(INCLUDE) $^ $(TESTFLAGS) -o $@
+	$(CC) $(CFLAGS) $(STDFLAGS) $(F17) $(INCLUDE) $^ $(TESTFLAGS) -o $@
 
 $(OBJSDIR)%.o: $(TESTDIR)%.cpp 
 	mkdir -p $(OBJSDIR)
-	$(CC) $(CFLAGS) $(STDFLAGSTEST) $(INCLUDE) -c $< -o $@
+	$(CC) $(CFLAGS) $(F17) $(INCLUDE) -c $< -o $@
 
 $(OBJSDIR)%.o: $(SRCDIR)%.cpp 
 	mkdir -p $(OBJSDIR)
