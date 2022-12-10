@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/10 10:52:01 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/10 11:02:05 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ namespace ft {
 				//size_t i = 0;
 				(void)value;
 				//Type *new_data = this->alloc.allocate(_c_size + 20);
-				if (this->_c_size == 0)
-					_c_data[0] = value;
+				//if (this->_c_size == 0)
+				//	_c_data[0] = value;
 				//for (size_t i2 = 0; i2 <= _c_size; i2++){
 					//new_data[i] = _c_data[i];}
 			//	_c_data[i] = value;
