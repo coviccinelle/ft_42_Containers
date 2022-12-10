@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/09 16:47:04 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/10 10:52:01 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define VECTOR_HPP
 
 #include <iostream>
+#include <cstring>
 
 // A template is a simple yet very powerful tool in C++. The simple idea is to pass
 // data type as a parameter so that we don’t need to write the same code for different
@@ -30,9 +31,8 @@ namespace ft {
 	class vector {
 		public:
 			vector(void) : _c_size(0){
-				this->_c_data = this->alloc.allocate(8);
-				//new_data[0] = 0;
-				//new_data[1] = 0;
+				this->_c_data = this->alloc.allocate(4);
+				std::memset(this->_c_data, 0, 4);
 			};
 
 			~vector(void){};
@@ -44,15 +44,13 @@ namespace ft {
 
 			void push_back( const Type& value ){
 				//size_t i = 0;
-        		//alloc.deallocate(p, 1);     
-
+				(void)value;
 				//Type *new_data = this->alloc.allocate(_c_size + 20);
 				if (this->_c_size == 0)
 					_c_data[0] = value;
 				//for (size_t i2 = 0; i2 <= _c_size; i2++){
 					//new_data[i] = _c_data[i];}
 			//	_c_data[i] = value;
-			//	std::cout << "after adding data = value" << std::endl;
 				this->_c_size++;
 			}
 
@@ -66,8 +64,6 @@ namespace ft {
 			//*** Element access ***//
 			//reference operator[]( size_type pos );
 			Type& operator[](size_t i) {
-				std::cout << "int i = " << i << std::endl;
-				std::cout << "_c_data = " << this->_c_data  << std::endl;
 				return this->_c_data[i];
 			}
 
@@ -75,7 +71,6 @@ namespace ft {
   			const Type& operator[](size_t i) const {
 				return _c_data[i];
 			}
-
 
 		private:
 			size_t	_c_size;
