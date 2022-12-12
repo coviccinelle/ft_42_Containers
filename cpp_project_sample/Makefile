@@ -5,7 +5,7 @@ STDFLAGS := -std=c++98
 CFLAGS := -Wall -Werror -Wextra 
 INCLUDE := -I include/
 TESTFLAGS := -lgtest -lgtest_main
-F17:= -std=c++17
+F17:= -std=c++98
 
 SRCDIR := src/
 OBJSDIR := objs/

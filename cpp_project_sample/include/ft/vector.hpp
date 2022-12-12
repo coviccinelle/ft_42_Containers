@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/10 17:12:37 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/13 00:36:05 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,22 @@ namespace ft {
 	template< class Type, class Allocator = std::allocator< Type > >
 	class vector {
 		public:
+
+			typedef Type value_type;
+			typedef std::size_t size_type;//typedef = using
+ 			typedef Allocator allocator_type;	
+
 			vector(void) : _c_size(0), _capacity(2) {
 				this->_c_data = this->alloc.allocate(this->_capacity + 1);//void deallocate( T* p, std::size_t n ); //pointer allocate( size_type n, const void * hint = 0 );
-				std::memset(this->_c_data, 0, this->_capacity + 1);
+				//std::memset(this->_c_data, 0, this->_capacity + 1);
+				//std::cout << "Constructor called" << std::endl;
 			};
-			~vector(void){};
+
+			~vector(void){
+				//reallocate
+				//std::cout << "Destructor called" << std::endl;
+				this->alloc.destroy(this->_c_data);
+			};
 			//vector& operator=( const vector& other );
 			vector< Type, Allocator >& operator=(const vector<Type, Allocator>& other)
     		{
@@ -57,9 +68,6 @@ namespace ft {
     		    return *this;
     		}
 
-			typedef Type value_type;
-			typedef std::size_t size_type;//typedef = using
- 			typedef Allocator allocator_type;	
 			size_type size() const { return (_c_size); }
 
 //			 Modifiers
