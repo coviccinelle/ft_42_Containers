@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/13 00:36:05 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/13 01:52:37 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ namespace ft {
  			typedef Allocator allocator_type;	
 
 			vector(void) : _c_size(0), _capacity(2) {
-				this->_c_data = this->alloc.allocate(this->_capacity + 1);//void deallocate( T* p, std::size_t n ); //pointer allocate( size_type n, const void * hint = 0 );
+				this->_c_data = this->alloc.allocate(this->_capacity);//void deallocate( T* p, std::size_t n ); //pointer allocate( size_type n, const void * hint = 0 );
 				//std::memset(this->_c_data, 0, this->_capacity + 1);
 				//std::cout << "Constructor called" << std::endl;
 			};
@@ -44,7 +44,9 @@ namespace ft {
 			~vector(void){
 				//reallocate
 				//std::cout << "Destructor called" << std::endl;
-				this->alloc.destroy(this->_c_data);
+				for (size_t i = 0; i <= this->_c_size; i++)
+					this->alloc.destroy((this->_c_data + i));//address of this->_c_data[i] == (*this).(_c_data + i) // 
+				this->alloc.deallocate(this->_c_data, this->_capacity);
 			};
 			//vector& operator=( const vector& other );
 			vector< Type, Allocator >& operator=(const vector<Type, Allocator>& other)
@@ -53,13 +55,13 @@ namespace ft {
     		    {
     		        //delete[] this->_c_data;
 					
-					alloc.deallocate(_c_data, this->_capacity + 1);
+					alloc.deallocate(_c_data, this->_capacity);
     		        this->_c_size = other._c_size;
 					if (this->_c_size >= this->_capacity)
 						this->_capacity *= 2;
     		        this->_capacity = other._capacity;
-					this->_c_data = this->alloc.allocate(this->_capacity + 1);
-					std::memset(this->_c_data, 0, this->_capacity + 1);
+					this->_c_data = this->alloc.allocate(this->_capacity);
+					std::memset(this->_c_data, 0, this->_capacity);
     		        //this->_c_data = new Type[this->_capacity];
     		        for (size_t i = 0; i < this->_c_size; i++)
     		            this->_c_data[i] = other._c_data[i];
@@ -76,15 +78,18 @@ namespace ft {
 				if (this->_c_size == this->_capacity)
 				{
 
-					value_type	*new_data = this->alloc.allocate((this->_capacity * 2) + 1);
-					std::memset(new_data, 0, (this->_capacity * 2) + 1);
-					for (size_t i = 0; i < this->_c_size; i++)
-						new_data[i] = (*this)[i];
-					this->alloc.deallocate(this->_c_data, this->_capacity + 1);
 					this->_capacity *= 2;
+					value_type	*new_data = this->alloc.allocate((this->_capacity));
+					//std::memset(new_data, 0, (this->_capacity * 2) + 1);
+					for (size_t i = 0; i < this->_c_size; i++)
+					{
+						this->alloc.construct((new_data + i), *((*this)._c_data + i));
+						this->alloc.destroy((*this)._c_data + i);
+					}
+					this->alloc.deallocate((*this)._c_data, this->_capacity);
 					this->_c_data = new_data;
 				}
-				(*this)[_c_size] = value;
+				this->alloc.construct(((*this)._c_data + (*this)._c_size), value);
 				this->_c_size++;
 			}
 			void pop_back()
@@ -92,6 +97,7 @@ namespace ft {
 				if (_c_size == 0)
 					return ;
 				this->_c_size--;
+				this->alloc.destroy((*this)._c_data + this->_c_size);
 			}
 			
 			//*** Element access ***//
