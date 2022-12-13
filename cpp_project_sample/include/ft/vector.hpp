@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/13 01:52:37 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/13 15:36:45 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,16 @@ namespace ft {
 			typedef std::size_t size_type;//typedef = using
  			typedef Allocator allocator_type;	
 
+		// *** TEST ONLY *** //
+
+			allocator_type & getAlloc(void){
+				return (this->alloc);
+			}
+
+			value_type *& getElements(void){
+				return (this->_c_data);
+			}
+
 			vector(void) : _c_size(0), _capacity(2) {
 				this->_c_data = this->alloc.allocate(this->_capacity);//void deallocate( T* p, std::size_t n ); //pointer allocate( size_type n, const void * hint = 0 );
 				//std::memset(this->_c_data, 0, this->_capacity + 1);
@@ -44,7 +54,7 @@ namespace ft {
 			~vector(void){
 				//reallocate
 				//std::cout << "Destructor called" << std::endl;
-				for (size_t i = 0; i <= this->_c_size; i++)
+				for (size_t i = 0; i < this->_c_size; i++)
 					this->alloc.destroy((this->_c_data + i));//address of this->_c_data[i] == (*this).(_c_data + i) // 
 				this->alloc.deallocate(this->_c_data, this->_capacity);
 			};
