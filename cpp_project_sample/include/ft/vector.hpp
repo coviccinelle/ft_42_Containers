@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/14 12:37:12 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/15 18:20:49 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ namespace ft {
 			typedef value_type * pointer;
 			typedef std::size_t size_type;//typedef = using
  			typedef Allocator allocator_type;	
+			typedef value_type& reference;
 
 		// *** TEST ONLY *** //
 
@@ -50,6 +51,10 @@ namespace ft {
 				return (this->_capacity);
 			}
 
+						//--------------------------------//
+						// ***	  MEMBER FUNCTIONS 	***   //
+						//--------------------------------//
+
 			vector(void) : _c_size(0), _capacity(2) {
 				this->_c_data = this->alloc.allocate(this->_capacity);//void deallocate( T* p, std::size_t n ); //pointer allocate( size_type n, const void * hint = 0 );
 				//std::memset(this->_c_data, 0, this->_capacity + 1);
@@ -63,6 +68,7 @@ namespace ft {
 					this->alloc.destroy((this->_c_data + i));//address of this->_c_data[i] == (*this).(_c_data + i) // 
 				this->alloc.deallocate(this->_c_data, this->_capacity);
 			};
+
 			//vector& operator=( const vector& other );
 			vector< Type, Allocator >& operator=(const vector<Type, Allocator>& other)
     		{
@@ -87,9 +93,43 @@ namespace ft {
     		    return *this;
     		}
 
+
+						//--------------------------------//
+						//	 *** 	ELEMENT ACCESS 	 ***  //
+						//--------------------------------//
+						// at, operator[], front, back, data
+
+			//reference operator[]( size_type pos );
+			Type& operator[](size_t i) {
+				//std::cout << "operator []" << std::endl;
+				if (i > this->_c_size)
+				{
+					std::cout << "Error: Can't access further, sorry" << std::endl;
+					return (this->_c_data[0]);
+				 }
+				return this->_c_data[i];
+			}
+
+			//const_reference operator[]( size_type pos ) const;
+  			const Type& operator[](size_t i) const {
+				return _c_data[i];
+			}
+
+			// front : acess the first element
+			reference front(void){
+				return (this->_c_data[0]);
+			}
+
+						//--------------------------------//
+						//	 *** 	 CAPACITY		 ***  //
+						//--------------------------------//
+
 			size_type size() const { return (_c_size); }
 
-//			 Modifiers
+
+						//--------------------------------//
+						//	 *** 	 MODIFIERS		 ***  //
+						//--------------------------------//
 
 			void push_back( const Type& value ) {
 				if (this->_c_size == this->_capacity)
@@ -109,26 +149,19 @@ namespace ft {
 				this->alloc.construct(((*this)._c_data + (*this)._c_size), value);
 				this->_c_size++;
 			}
+
 			void pop_back()
 			{
-				if (_c_size == 0)
+				if (this->_c_size <= 0)
 					return ;
-				this->_c_size--;
-				this->alloc.destroy((*this)._c_data + this->_c_size);
+				else {
+					//std::cout << "what are we destroying? => " << this->_c_data[this->_c_size - 1] << std::endl;
+					this->alloc.destroy((*this)._c_data + this->_c_size);
+					this->_c_size--;
+					//std::cout << "last_element now? => " << this->_c_data[this->_c_size - 1] << std::endl;
+				}
 			}
 			
-			//*** Element access ***//
-			//reference operator[]( size_type pos );
-			Type& operator[](size_t i) {
-				//std::cout << "operator []" << std::endl; 
-				return this->_c_data[i];
-			}
-
-			//const_reference operator[]( size_type pos ) const;
-  			const Type& operator[](size_t i) const {
-				return _c_data[i];
-			}
-
 
 
 		private:
