@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/13 15:36:45 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/14 12:37:12 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ namespace ft {
 		public:
 
 			typedef Type value_type;
+			typedef value_type * pointer;
 			typedef std::size_t size_type;//typedef = using
  			typedef Allocator allocator_type;	
 
@@ -41,8 +42,12 @@ namespace ft {
 				return (this->alloc);
 			}
 
-			value_type *& getElements(void){
+			pointer getElements(void) const {
 				return (this->_c_data);
+			}
+
+			size_type getCapacity(void) const {
+				return (this->_capacity);
 			}
 
 			vector(void) : _c_size(0), _capacity(2) {
@@ -61,10 +66,11 @@ namespace ft {
 			//vector& operator=( const vector& other );
 			vector< Type, Allocator >& operator=(const vector<Type, Allocator>& other)
     		{
+				(void)other;
+					/*
     		    if (this != &other)
     		    {
     		        //delete[] this->_c_data;
-					
 					alloc.deallocate(_c_data, this->_capacity);
     		        this->_c_size = other._c_size;
 					if (this->_c_size >= this->_capacity)
@@ -76,6 +82,7 @@ namespace ft {
     		        for (size_t i = 0; i < this->_c_size; i++)
     		            this->_c_data[i] = other._c_data[i];
     		    }
+				*/
 				std::cout << "helllllo i'm over here operator = " << std::endl;
     		    return *this;
     		}

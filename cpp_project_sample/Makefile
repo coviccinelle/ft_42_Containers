@@ -17,6 +17,9 @@ ifeq ($(INT_ONLY), 1)
 	CFLAGS		+= -DINT_ONLY
 endif
 
+ifeq ($(NICE), 1)
+	CFLAGS  += -DNICE
+endif
 
 TEST := vector_test.cpp
 
