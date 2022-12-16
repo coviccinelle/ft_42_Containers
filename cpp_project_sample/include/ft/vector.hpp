@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/15 18:20:49 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/16 01:49:42 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ namespace ft {
 			typedef std::size_t size_type;//typedef = using
  			typedef Allocator allocator_type;	
 			typedef value_type& reference;
+			typedef const Type & const_reference;
 
 		// *** TEST ONLY *** //
 
@@ -56,24 +57,23 @@ namespace ft {
 						//--------------------------------//
 
 			vector(void) : _c_size(0), _capacity(2) {
-				this->_c_data = this->alloc.allocate(this->_capacity);//void deallocate( T* p, std::size_t n ); //pointer allocate( size_type n, const void * hint = 0 );
-				//std::memset(this->_c_data, 0, this->_capacity + 1);
-				//std::cout << "Constructor called" << std::endl;
+				this->_c_data = this->alloc.allocate(this->_capacity);
+				//void deallocate( T* p, std::size_t n );
+				//pointer allocate( size_type n, const void * hint = 0 );
 			};
 
 			~vector(void){
-				//reallocate
 				//std::cout << "Destructor called" << std::endl;
 				for (size_t i = 0; i < this->_c_size; i++)
-					this->alloc.destroy((this->_c_data + i));//address of this->_c_data[i] == (*this).(_c_data + i) // 
+					this->alloc.destroy((this->_c_data + i));
+				//address of this->_c_data[i] == (*this).(_c_data + i) // 
 				this->alloc.deallocate(this->_c_data, this->_capacity);
 			};
 
 			//vector& operator=( const vector& other );
 			vector< Type, Allocator >& operator=(const vector<Type, Allocator>& other)
     		{
-				(void)other;
-					/*
+				//(void)other;
     		    if (this != &other)
     		    {
     		        //delete[] this->_c_data;
@@ -88,11 +88,61 @@ namespace ft {
     		        for (size_t i = 0; i < this->_c_size; i++)
     		            this->_c_data[i] = other._c_data[i];
     		    }
-				*/
-				std::cout << "helllllo i'm over here operator = " << std::endl;
     		    return *this;
     		}
 
+			allocator_type get_allocator() const{
+				return ((*this).alloc);
+			}
+
+	//		void assign( size_type count, const T& value ){
+			void assign( size_type count, const_reference value ){
+				if (count > 9223372036854775807) // equal .max_size()
+				{
+					throw std::invalid_argument("cannot create std::vector larger than max_size()");
+					std::abort();
+				}
+				for (size_type i = 0; i < this->_c_size; i++)
+					this->alloc.destroy((this->_c_data + i));
+				if (count > this->_capacity)
+				{
+					this->alloc.deallocate(_c_data, this->_capacity);
+					while (this->_capacity < count)
+						this->_capacity *= 2;
+					this->_c_data = this->alloc.allocate(this->_capacity);
+				}
+				for (size_type k = 0; k < count; k++)
+					this->alloc.construct(_c_data + k, value);
+					/*
+					{0x00, ...      , 0x08, 0x02}, 0x03, 0x04
+					{0 0 0 0 1 0 1 0, 
+					[ 42, 	,	12,  3],         ?,   ?
+					_c_data (int *) address = 0x0
+
+					*_c_data = 42
+					*(_c_data + 2) = 3
+					*(_c_data + 5) = undefined behavior
+					*(_c_data + 0) + 1 =  43
+
+					_c_data[0] = 42;
+					_c_data[2] = 3;
+					_c_data[5] = undef;
+					_c_data[0] + 1  = 43;
+
+					_c_data + 1 = 0x00 + 0x01 = 0x01
+					_c_data + 2 = 0x00 + 0x02 = 0x02
+					_c_data + 5 = 0x00 + 0x05 = 0x05
+					*/
+				/*	
+					int *myArray;
+
+					*(((*pMyClass).myArray) + 0) == *(this->myArray + 0) == this->myArray[0]
+				*/	//this->_c_data[k] = value;
+				this->_c_size = count;
+			}
+			
+			// assign_2 with iterator
+			//template< class InputIt > void assign( InputIt first, InputIt last );
 
 						//--------------------------------//
 						//	 *** 	ELEMENT ACCESS 	 ***  //
@@ -104,7 +154,7 @@ namespace ft {
 				//std::cout << "operator []" << std::endl;
 				if (i > this->_c_size)
 				{
-					std::cout << "Error: Can't access further, sorry" << std::endl;
+					//std::cout << "   Error: Can't access further, sorry, i = " << i << " --- size = " << this->_c_size << std::endl;
 					return (this->_c_data[0]);
 				 }
 				return this->_c_data[i];
@@ -112,19 +162,20 @@ namespace ft {
 
 			//const_reference operator[]( size_type pos ) const;
   			const Type& operator[](size_t i) const {
-				return _c_data[i];
+				return (this->_c_data[i]);
 			}
 
 			// front : acess the first element
 			reference front(void){
 				return (this->_c_data[0]);
+				//return ((*this)[0]);
 			}
 
 						//--------------------------------//
 						//	 *** 	 CAPACITY		 ***  //
 						//--------------------------------//
 
-			size_type size() const { return (_c_size); }
+			size_type size() const { return (this->_c_size); }
 
 
 						//--------------------------------//
@@ -161,8 +212,6 @@ namespace ft {
 					//std::cout << "last_element now? => " << this->_c_data[this->_c_size - 1] << std::endl;
 				}
 			}
-			
-
 
 		private:
 			size_t			_c_size;
