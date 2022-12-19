@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/16 01:49:42 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/17 12:58:11 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <sstream>
 
 // A template is a simple yet very powerful tool in C++. The simple idea is to pass
 // data type as a parameter so that we don’t need to write the same code for different
@@ -31,12 +32,12 @@ namespace ft {
 	class vector {
 		public:
 
-			typedef Type value_type;
-			typedef value_type * pointer;
-			typedef std::size_t size_type;//typedef = using
- 			typedef Allocator allocator_type;	
-			typedef value_type& reference;
-			typedef const Type & const_reference;
+			typedef Type 			value_type;
+			typedef value_type * 	pointer;
+			typedef std::size_t 	size_type;//typedef = using
+ 			typedef Allocator 		allocator_type;	
+			typedef value_type & 	reference;
+			typedef const Type & 	const_reference;
 
 		// *** TEST ONLY *** //
 
@@ -48,21 +49,18 @@ namespace ft {
 				return (this->_c_data);
 			}
 
-			size_type getCapacity(void) const {
-				return (this->_capacity);
-			}
-
 						//--------------------------------//
 						// ***	  MEMBER FUNCTIONS 	***   //
 						//--------------------------------//
 
-			vector(void) : _c_size(0), _capacity(2) {
-				this->_c_data = this->alloc.allocate(this->_capacity);
+			vector(void) : _c_size(0), _c_data(0), _capacity(0) {
+				//this->_c_data = this->alloc.allocate(this->_capacity);
 				//void deallocate( T* p, std::size_t n );
 				//pointer allocate( size_type n, const void * hint = 0 );
 			};
 
 			~vector(void){
+				if (this->_capacity > 0)
 				//std::cout << "Destructor called" << std::endl;
 				for (size_t i = 0; i < this->_c_size; i++)
 					this->alloc.destroy((this->_c_data + i));
@@ -76,14 +74,18 @@ namespace ft {
 				//(void)other;
     		    if (this != &other)
     		    {
+					for (size_t i = 0; i < this->_c_size; i++)
+						this->alloc.destroy((this->_c_data + i));
     		        //delete[] this->_c_data;
-					alloc.deallocate(_c_data, this->_capacity);
     		        this->_c_size = other._c_size;
-					if (this->_c_size >= this->_capacity)
-						this->_capacity *= 2;
-    		        this->_capacity = other._capacity;
-					this->_c_data = this->alloc.allocate(this->_capacity);
-					std::memset(this->_c_data, 0, this->_capacity);
+					if (this->_capacity != other.capacity()){
+						alloc.deallocate(_c_data, this->_capacity);
+    		        	this->_capacity = other.capacity();
+						this->_c_data = this->alloc.allocate(this->_capacity);
+					}
+					//std::memset(this->_c_data, 0, this->_capacity);
+					for (size_t k = 0; k < this->_c_size; k++)
+						this->alloc.construct(this->_c_data + k, 0);
     		        //this->_c_data = new Type[this->_capacity];
     		        for (size_t i = 0; i < this->_c_size; i++)
     		            this->_c_data[i] = other._c_data[i];
@@ -113,31 +115,6 @@ namespace ft {
 				}
 				for (size_type k = 0; k < count; k++)
 					this->alloc.construct(_c_data + k, value);
-					/*
-					{0x00, ...      , 0x08, 0x02}, 0x03, 0x04
-					{0 0 0 0 1 0 1 0, 
-					[ 42, 	,	12,  3],         ?,   ?
-					_c_data (int *) address = 0x0
-
-					*_c_data = 42
-					*(_c_data + 2) = 3
-					*(_c_data + 5) = undefined behavior
-					*(_c_data + 0) + 1 =  43
-
-					_c_data[0] = 42;
-					_c_data[2] = 3;
-					_c_data[5] = undef;
-					_c_data[0] + 1  = 43;
-
-					_c_data + 1 = 0x00 + 0x01 = 0x01
-					_c_data + 2 = 0x00 + 0x02 = 0x02
-					_c_data + 5 = 0x00 + 0x05 = 0x05
-					*/
-				/*	
-					int *myArray;
-
-					*(((*pMyClass).myArray) + 0) == *(this->myArray + 0) == this->myArray[0]
-				*/	//this->_c_data[k] = value;
 				this->_c_size = count;
 			}
 			
@@ -149,15 +126,34 @@ namespace ft {
 						//--------------------------------//
 						// at, operator[], front, back, data
 
+
+			const_reference at( size_type pos ) const
+			{
+				if ((pos >= this->size()))
+				{
+					std::ostringstream out;
+					out << "vector::_M_range_check: __n (which is " << pos << ") >= this->size() (which is " << this->size() << ")";
+					throw std::out_of_range(out.str());
+				}
+				return (this->_c_data[pos]);
+			}
+
+			reference at( size_type pos ){
+				return (const_cast<reference>(
+					static_cast < const typename ft::vector< Type, Allocator >& >(*this).at(pos)
+							));
+			}
+
 			//reference operator[]( size_type pos );
 			Type& operator[](size_t i) {
 				//std::cout << "operator []" << std::endl;
-				if (i > this->_c_size)
+			/*	if (i > this->_c_size)
 				{
-					//std::cout << "   Error: Can't access further, sorry, i = " << i << " --- size = " << this->_c_size << std::endl;
-					return (this->_c_data[0]);
-				 }
-				return this->_c_data[i];
+					throw std::invalid_argument( "Error: Can't acess further, sorry\n" );
+				 }*/
+				return (const_cast<reference>(
+					static_cast < const typename ft::vector< Type, Allocator > &>(*this)[i]
+							));
 			}
 
 			//const_reference operator[]( size_type pos ) const;
@@ -166,24 +162,49 @@ namespace ft {
 			}
 
 			// front : acess the first element
-			reference front(void){
-				return (this->_c_data[0]);
-				//return ((*this)[0]);
+			const_reference front() const
+			{
+				return (this->_c_data[0]); // ==return ((*this)[0]);
+			}
+
+			reference front()
+			{
+				return (const_cast<reference>(
+					static_cast < const typename ft::vector< Type, Allocator > &>(*this).front()));
+			}
+
+			const_reference back() const{
+				return (this->_c_data[this->_c_size - 1]);
+			}
+
+			reference back(){
+					return (const_cast<reference>(
+						static_cast < const typename ft::vector< Type, Allocator > &>(*this).back()));
 			}
 
 						//--------------------------------//
 						//	 *** 	 CAPACITY		 ***  //
 						//--------------------------------//
 
-			size_type size() const { return (this->_c_size); }
+			size_type size() const {
+				return (this->_c_size); }
 
+			size_type capacity(void) const {
+				return (this->_capacity);
+			}
 
 						//--------------------------------//
 						//	 *** 	 MODIFIERS		 ***  //
 						//--------------------------------//
 
 			void push_back( const Type& value ) {
-				if (this->_c_size == this->_capacity)
+				if (this->_capacity == 0)
+				{
+					this->_c_data = this->alloc.allocate(1);
+					//this->alloc.construct(this->_c_data, value);
+					this->_capacity = 1;
+				}
+				else if(this->_c_size == this->_capacity)
 				{
 
 					this->_capacity *= 2;
@@ -206,10 +227,8 @@ namespace ft {
 				if (this->_c_size <= 0)
 					return ;
 				else {
-					//std::cout << "what are we destroying? => " << this->_c_data[this->_c_size - 1] << std::endl;
 					this->alloc.destroy((*this)._c_data + this->_c_size);
 					this->_c_size--;
-					//std::cout << "last_element now? => " << this->_c_data[this->_c_size - 1] << std::endl;
 				}
 			}
 
