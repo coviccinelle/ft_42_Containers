@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/19 12:47:47 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/19 13:46:31 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,21 @@ namespace ft {
 					return (const_cast<reference>(
 						static_cast < const typename ft::vector< Type, Allocator > &>(*this).back()));
 			}
+
+			const pointer data() const{
+				return (const_cast<pointer>(
+					static_cast < const typename ft::vector< Type, Allocator > >(*this).data()
+							));
+			}
+			
+			pointer data()
+			{
+				if (this->_c_size == 0)
+					return (NULL);
+				return (this->_c_data);
+				
+			}
+
 
 						//--------------------------------//
 						//	 *** 	 CAPACITY		 ***  //
