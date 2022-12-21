@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/21 09:25:39 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/21 11:29:19 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,23 @@ namespace ft {
 				//pointer allocate( size_type n, const void * hint = 0 );
 			};
 
+// A coder ^^
+			//explicit vector( const Allocator& alloc );
+
+			//explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator());
+
+			//template< class InputIt > vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() );
+
+			// A TESTSER
+			vector( const vector& other ){//constructeur de recopie
+				other._c_size = this->_c_size;
+				other._capacity = this->_capacity;
+				for (size_t i = 0; i < this->_c_size; i++)
+					other.alloc.construct(other._c_data + i, this->_c_data + i);
+			}
+
+
+
 			~vector(void){
 				if (this->_capacity > 0)
 				//std::cout << "Destructor called" << std::endl;
@@ -82,12 +99,10 @@ namespace ft {
     		        	this->_capacity = other.capacity();
 						this->_c_data = this->alloc.allocate(this->_capacity);
 					}
-					//std::memset(this->_c_data, 0, this->_capacity);
 					for (size_t k = 0; k < this->_c_size; k++)
-						this->alloc.construct(this->_c_data + k, 0);
-    		        //this->_c_data = new Type[this->_capacity];
-    		        for (size_t i = 0; i < this->_c_size; i++)
-    		            this->_c_data[i] = other._c_data[i];
+						this->alloc.construct(this->_c_data + k, other._c_data[k]);
+    		        //for (size_t i = 0; i < this->_c_size; i++)
+    		          //  this->_c_data[i] = other._c_data[i];
     		    }
     		    return *this;
     		}
@@ -99,7 +114,7 @@ namespace ft {
 	//		void assign( size_type count, const T& value ){
 			void assign( size_type count, const_reference value ){
 				//std::cout << "count = " << count << " value = " << value << " size = " << this->_c_size << " capacity = "<< this->_capacity << std::endl;
-				if (count > 9223372036854775807) // equal .max_size()
+				if (count > this->max_size()) // equal .max_size()
 				{
 					throw std::invalid_argument("cannot create std::vector larger than max_size()");
 					std::abort();
@@ -233,7 +248,9 @@ namespace ft {
 			}
 
 			void reserve( size_type new_cap ){
-				if (new_cap > this->_capacity/* && (*this)._c_data*/)
+				if (new_cap > this->max_size())
+					throw std::length_error("vector::reserve");
+				else if (new_cap > this->_capacity/* && (*this)._c_data*/)
 				{
 					///*
 					for (size_t i = 0; i < this->_c_size; i++)
@@ -253,6 +270,17 @@ namespace ft {
 					return (1);
 				return (0);
 			}
+
+			size_type max_size() const{
+			#ifdef __APPLE__
+				if (sizeof(Type) == 1)
+					return (std::numeric_limits< size_t >::max() / (2 * sizeof (Type)));
+			#endif
+				return (this->alloc.max_size());
+			//#else
+			}
+
+
 						//--------------------------------//
 						//	 *** 	 MODIFIERS		 ***  //
 						//--------------------------------//
