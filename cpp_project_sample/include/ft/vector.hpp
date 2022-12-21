@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/19 13:46:31 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/20 14:15:07 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,25 @@ namespace ft {
 
 	//		void assign( size_type count, const T& value ){
 			void assign( size_type count, const_reference value ){
+				//std::cout << "count = " << count << " value = " << value << " size = " << this->_c_size << " capacity = "<< this->_capacity << std::endl;
 				if (count > 9223372036854775807) // equal .max_size()
 				{
 					throw std::invalid_argument("cannot create std::vector larger than max_size()");
 					std::abort();
 				}
-				for (size_type i = 0; i < this->_c_size; i++)
-					this->alloc.destroy((this->_c_data + i));
+
+				if (this->_c_size > 0)
+				{
+					for (size_type i = 0; i < this->_c_size; i++)
+						this->alloc.destroy((this->_c_data + i));
+				}
+
+				else if (this->_capacity == 0){
+					this->_c_data = this->alloc.allocate(1);
+					this->_capacity = 1;
+					this->_c_size = 1;
+				}
+				//std::cout << "Updated -> count = " << count << " value = " << value << " size = " << this->_c_size << " capacity = "<< this->_capacity << std::endl;
 				if (count > this->_capacity)
 				{
 					this->alloc.deallocate(_c_data, this->_capacity);
@@ -112,9 +124,17 @@ namespace ft {
 						this->_capacity *= 2;
 					this->_c_data = this->alloc.allocate(this->_capacity);
 				}
-				for (size_type k = 0; k < count; k++)
-					this->alloc.construct(_c_data + k, value);
-				this->_c_size = count;
+				else if (this->_capacity == count && (this->_c_size != 1))
+				{
+					std::cout << "I'm the problem is me" << std::endl;
+					this->alloc.deallocate(this->_c_data, this->_capacity);
+				}
+				//else
+				{
+					for (size_type k = 0; k < count; k++)
+						this->alloc.construct(this->_c_data + k, value);
+					this->_c_size = count;
+				}
 			}
 			
 			// assign_2 with iterator
@@ -181,18 +201,23 @@ namespace ft {
 						static_cast < const typename ft::vector< Type, Allocator > &>(*this).back()));
 			}
 
-			const pointer data() const{
-				return (const_cast<pointer>(
-					static_cast < const typename ft::vector< Type, Allocator > >(*this).data()
-							));
-			}
 			
 			pointer data()
 			{
-				if (this->_c_size == 0)
+				if (this->_c_size == 0 || !(this->_c_data))
 					return (NULL);
 				return (this->_c_data);
-				
+				/*
+				return (const_cast<pointer>(
+					static_cast < const pointer > (*this).data()
+							));
+				*/
+			}
+
+			const pointer data() const{
+				if (this->_c_size == 0 || !(this->_c_data))
+					return (NULL);
+				return (this->_c_data);
 			}
 
 
@@ -205,6 +230,22 @@ namespace ft {
 
 			size_type capacity(void) const {
 				return (this->_capacity);
+			}
+
+			void reserve( size_type new_cap ){
+				if (new_cap > this->_capacity/* && (*this)._c_data*/)
+				{
+					///*
+					for (size_t i = 0; i < this->_c_size; i++)
+					{
+						if (((*this)._c_data + i))
+							this->alloc.destroy((*this)._c_data + i);
+					}
+					//*/
+					this->alloc.deallocate((*this)._c_data, this->_capacity);
+					this->_capacity = new_cap;
+					this->alloc.allocate(this->_capacity);
+				}
 			}
 
 						//--------------------------------//
@@ -241,7 +282,7 @@ namespace ft {
 				if (this->_c_size <= 0)
 					return ;
 				else {
-					this->alloc.destroy((*this)._c_data + this->_c_size);
+					this->alloc.destroy((*this)._c_data + this->_c_size - 1);
 					this->_c_size--;
 				}
 			}
