@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/24 18:11:59 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/24 18:14:29 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ namespace ft {
 			explicit vector( size_type count, const_reference value = value_type(), const Allocator& alloc = Allocator()) : _c_size(count), _alloc(alloc), _capacity(count){
 				if (count > this->max_size()) // equal .max_size()
 				{
-					throw std::invalid_argument("cannot create std::vector larger than max_size()");
+					throw std::length_error("cannot create std::vector larger than max_size()");
 					std::abort();
 				}
 				this->_c_data =  this->_alloc.allocate(count);
