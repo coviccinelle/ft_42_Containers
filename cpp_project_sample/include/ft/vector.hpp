@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/21 11:29:19 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/24 12:21:44 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ namespace ft {
 		// *** TEST ONLY *** //
 
 			allocator_type & getAlloc(void){
-				return (this->alloc);
+				return (this->_alloc);
 			}
 
 			pointer getElements(void) const {
@@ -53,36 +53,46 @@ namespace ft {
 						// ***	  MEMBER FUNCTIONS 	***   //
 						//--------------------------------//
 
-			vector(void) : _c_size(0), _c_data(0), _capacity(0) {
-				//this->_c_data = this->alloc.allocate(this->_capacity);
+		//	vector(void) : _c_size(0), _c_data(0), _capacity(0) {
+				//this->_c_data = this->_alloc.allocate(this->_capacity);
 				//void deallocate( T* p, std::size_t n );
 				//pointer allocate( size_type n, const void * hint = 0 );
-			};
+		//	};
 
 // A coder ^^
-			//explicit vector( const Allocator& alloc );
+			explicit vector( const Allocator& alloc = Allocator() ) : _c_size(0), _c_data(0), _alloc(alloc), _capacity(0) {
+			}
 
 			//explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator());
 
 			//template< class InputIt > vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() );
-
-			// A TESTSER
-			vector( const vector& other ){//constructeur de recopie
-				other._c_size = this->_c_size;
-				other._capacity = this->_capacity;
-				for (size_t i = 0; i < this->_c_size; i++)
-					other.alloc.construct(other._c_data + i, this->_c_data + i);
+		/*	vector( value_type Type, std::allocator< Type > allocator){
+				std::cout << "Now what? :) " << std::endl;
+				(void) Type;
+				(void) allocator;
 			}
-
+		*/
+			// A TESTSER
+			vector( const vector& other ) : _c_size(other.size()),/* _c_data(this->_alloc.allocate(other.capacity())),*/ _alloc(other.get_allocator()), _capacity(other.capacity()) {//constructeur de recopie
+				//this->_alloc = other.get_allocator();
+				//try {
+					this->_c_data = this->_alloc.allocate(other.capacity());
+				//}
+				//catch
+				for (size_t i = 0; i < this->_c_size; i++)
+					this->_alloc.construct(this->_c_data + i, other[i]);	
+			}
+/*
+*/
 
 
 			~vector(void){
 				if (this->_capacity > 0)
 				//std::cout << "Destructor called" << std::endl;
 				for (size_t i = 0; i < this->_c_size; i++)
-					this->alloc.destroy((this->_c_data + i));
+					this->_alloc.destroy((this->_c_data + i));
 				//address of this->_c_data[i] == (*this).(_c_data + i) // 
-				this->alloc.deallocate(this->_c_data, this->_capacity);
+				this->_alloc.deallocate(this->_c_data, this->_capacity);
 			};
 
 			//vector& operator=( const vector& other );
@@ -91,24 +101,22 @@ namespace ft {
     		    if (this != &other)
     		    {
 					for (size_t i = 0; i < this->_c_size; i++)
-						this->alloc.destroy((this->_c_data + i));
+						this->_alloc.destroy((this->_c_data + i));
     		        //delete[] this->_c_data;
     		        this->_c_size = other._c_size;
 					if (this->_capacity != other.capacity()){
-						alloc.deallocate(_c_data, this->_capacity);
+						this->_alloc.deallocate(_c_data, this->_capacity);
     		        	this->_capacity = other.capacity();
-						this->_c_data = this->alloc.allocate(this->_capacity);
+						this->_c_data = this->_alloc.allocate(this->_capacity);
 					}
 					for (size_t k = 0; k < this->_c_size; k++)
-						this->alloc.construct(this->_c_data + k, other._c_data[k]);
-    		        //for (size_t i = 0; i < this->_c_size; i++)
-    		          //  this->_c_data[i] = other._c_data[i];
+						this->_alloc.construct(this->_c_data + k, other._c_data[k]);
     		    }
     		    return *this;
     		}
 
 			allocator_type get_allocator() const{
-				return ((*this).alloc);
+				return (this->_alloc);
 			}
 
 	//		void assign( size_type count, const T& value ){
@@ -123,31 +131,31 @@ namespace ft {
 				if (this->_c_size > 0)
 				{
 					for (size_type i = 0; i < this->_c_size; i++)
-						this->alloc.destroy((this->_c_data + i));
+						this->_alloc.destroy((this->_c_data + i));
 				}
 
 				else if (this->_capacity == 0){
-					this->_c_data = this->alloc.allocate(1);
+					this->_c_data = this->_alloc.allocate(1);
 					this->_capacity = 1;
 					this->_c_size = 1;
 				}
 				//std::cout << "Updated -> count = " << count << " value = " << value << " size = " << this->_c_size << " capacity = "<< this->_capacity << std::endl;
 				if (count > this->_capacity)
 				{
-					this->alloc.deallocate(_c_data, this->_capacity);
+					this->_alloc.deallocate(_c_data, this->_capacity);
 					while (this->_capacity < count)
 						this->_capacity *= 2;
-					this->_c_data = this->alloc.allocate(this->_capacity);
+					this->_c_data = this->_alloc.allocate(this->_capacity);
 				}
 				else if (this->_capacity == count && (this->_c_size != 1))
 				{
 					std::cout << "I'm the problem is me" << std::endl;
-					this->alloc.deallocate(this->_c_data, this->_capacity);
+					this->_alloc.deallocate(this->_c_data, this->_capacity);
 				}
 				//else
 				{
 					for (size_type k = 0; k < count; k++)
-						this->alloc.construct(this->_c_data + k, value);
+						this->_alloc.construct(this->_c_data + k, value);
 					this->_c_size = count;
 				}
 			}
@@ -252,16 +260,17 @@ namespace ft {
 					throw std::length_error("vector::reserve");
 				else if (new_cap > this->_capacity/* && (*this)._c_data*/)
 				{
+					value_type	*new_data = this->_alloc.allocate((new_cap));
 					///*
 					for (size_t i = 0; i < this->_c_size; i++)
 					{
-						if (((*this)._c_data + i))
-							this->alloc.destroy((*this)._c_data + i);
+						this->_alloc.construct((new_data + i), this->_c_data[i]);
+						this->_alloc.destroy(this->_c_data + i);
 					}
-					//*/
-					this->alloc.deallocate((*this)._c_data, this->_capacity);
+				//	*/
+					this->_alloc.deallocate(this->_c_data, this->_capacity);
 					this->_capacity = new_cap;
-					this->alloc.allocate(this->_capacity);
+					this->_c_data = new_data;
 				}
 			}
 
@@ -276,7 +285,7 @@ namespace ft {
 				if (sizeof(Type) == 1)
 					return (std::numeric_limits< size_t >::max() / (2 * sizeof (Type)));
 			#endif
-				return (this->alloc.max_size());
+				return (this->_alloc.max_size());
 			//#else
 			}
 
@@ -288,25 +297,25 @@ namespace ft {
 			void push_back( const Type& value ) {
 				if (this->_capacity == 0)
 				{
-					this->_c_data = this->alloc.allocate(1);
-					//this->alloc.construct(this->_c_data, value);
+					this->_c_data = this->_alloc.allocate(1);
+					//this->_alloc.construct(this->_c_data, value);
 					this->_capacity = 1;
 				}
 				else if(this->_c_size == this->_capacity)
 				{
 
 					this->_capacity *= 2;
-					value_type	*new_data = this->alloc.allocate((this->_capacity));
+					value_type	*new_data = this->_alloc.allocate((this->_capacity));
 					//std::memset(new_data, 0, (this->_capacity * 2) + 1);
 					for (size_t i = 0; i < this->_c_size; i++)
 					{
-						this->alloc.construct((new_data + i), *((*this)._c_data + i));
-						this->alloc.destroy((*this)._c_data + i);
+						this->_alloc.construct((new_data + i), *((*this)._c_data + i));
+						this->_alloc.destroy((*this)._c_data + i);
 					}
-					this->alloc.deallocate((*this)._c_data, this->_capacity);
+					this->_alloc.deallocate((*this)._c_data, this->_capacity);
 					this->_c_data = new_data;
 				}
-				this->alloc.construct(((*this)._c_data + (*this)._c_size), value);
+				this->_alloc.construct(((*this)._c_data + (*this)._c_size), value);
 				this->_c_size++;
 			}
 
@@ -315,7 +324,7 @@ namespace ft {
 				if (this->_c_size <= 0)
 					return ;
 				else {
-					this->alloc.destroy((*this)._c_data + this->_c_size - 1);
+					this->_alloc.destroy((*this)._c_data + this->_c_size - 1);
 					this->_c_size--;
 				}
 			}
@@ -323,7 +332,7 @@ namespace ft {
 		private:
 			size_t			_c_size;
 			value_type *	_c_data;
-        	allocator_type	alloc;
+        	allocator_type	_alloc;
 			size_t			_capacity;
 	};
 } // end of namespace
