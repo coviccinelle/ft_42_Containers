@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/24 12:21:44 by thi-phng         ###   ########.fr       */
+/*   Updated: 2022/12/24 18:11:59 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ namespace ft {
 			typedef value_type * 	pointer;
 			typedef std::size_t 	size_type;//typedef = using
  			typedef Allocator 		allocator_type;	
+ 			typedef Allocator & 	allocator_reference;	
 			typedef value_type & 	reference;
 			typedef const Type & 	const_reference;
 
@@ -44,6 +45,12 @@ namespace ft {
 			allocator_type & getAlloc(void){
 				return (this->_alloc);
 			}
+/*
+			allocator_type & getAlloc(void){
+				//return (this->_alloc);
+				return (const_cast<allocator_reference>(
+					static_cast < const typename ft::vector< Type, Allocator > &>(*this).front()));
+			}*/
 
 			pointer getElements(void) const {
 				return (this->_c_data);
@@ -63,7 +70,16 @@ namespace ft {
 			explicit vector( const Allocator& alloc = Allocator() ) : _c_size(0), _c_data(0), _alloc(alloc), _capacity(0) {
 			}
 
-			//explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator());
+			explicit vector( size_type count, const_reference value = value_type(), const Allocator& alloc = Allocator()) : _c_size(count), _alloc(alloc), _capacity(count){
+				if (count > this->max_size()) // equal .max_size()
+				{
+					throw std::invalid_argument("cannot create std::vector larger than max_size()");
+					std::abort();
+				}
+				this->_c_data =  this->_alloc.allocate(count);
+				for (size_t i = 0; i < count; i++)
+					this->_alloc.construct(this->_c_data + i, value);	
+			}
 
 			//template< class InputIt > vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() );
 		/*	vector( value_type Type, std::allocator< Type > allocator){
@@ -84,7 +100,6 @@ namespace ft {
 			}
 /*
 */
-
 
 			~vector(void){
 				if (this->_capacity > 0)
