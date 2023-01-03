@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/01/03 21:01:44 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/01/03 21:05:11 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,16 +291,76 @@ namespace ft {
 			};
 
 /*
+ *  https://stackoverflow.com/questions/8054273/how-to-implement-an-stl-style-iterator-and-avoid-common-pitfalls
+ *
+ 
+		input_iterator : public virtual iterator {
+		    iterator operator++(int); //postfix increment
+		    value_type operator*() const;
+		    pointer operator->() const;
+		    friend bool operator==(const iterator&, const iterator&);
+		    friend bool operator!=(const iterator&, const iterator&); 
+		};
+		//once an input iterator has been dereferenced, it is 
+		//undefined to dereference one before that.
+		
+		output_iterator : public virtual iterator {
+		    reference operator*() const;
+		    iterator operator++(int); //postfix increment
+		};
+		//dereferences may only be on the left side of an assignment
+		//once an output iterator has been dereferenced, it is 
+		//undefined to dereference one before that.
+		
+		forward_iterator : input_iterator, output_iterator {
+		    forward_iterator();
+		};
+		//multiple passes allowed
+		
+		bidirectional_iterator : forward_iterator {
+		    iterator& operator--(); //prefix decrement
+		    iterator operator--(int); //postfix decrement
+		};
+		
+		random_access_iterator : bidirectional_iterator {
+		    friend bool operator<(const iterator&, const iterator&);
+		    friend bool operator>(const iterator&, const iterator&);
+		    friend bool operator<=(const iterator&, const iterator&);
+		    friend bool operator>=(const iterator&, const iterator&);
+		
+		    iterator& operator+=(size_type);
+		    friend iterator operator+(const iterator&, size_type);
+		    friend iterator operator+(size_type, const iterator&);
+		    iterator& operator-=(size_type);  
+		    friend iterator operator-(const iterator&, size_type);
+		    friend difference_type operator-(iterator, iterator);
+		
+		    reference operator[](size_type) const;
+		};
+		
+		-----------------------
+		
+		struct std::iterator_traits<youriterator> {
+		    typedef ???? difference_type; //almost always ptrdiff_t
+		    typedef ???? value_type; //almost always T
+		    typedef ???? reference; //almost always T& or const T&
+		    typedef ???? pointer; //almost always T* or const T*
+		    typedef ???? iterator_category;  //usually std::forward_iterator_tag or similar
+		};
+		
+*/
+/*
 			template<typename value_type, typename Alloc>
 			typename vector<Type, Alloc>::iterator vector<Type, Alloc>::begin(void) {
 				std::cout << "Hello\n" << std::endl;
 				return (iterator(this->_c_data));
 			}
 */
-		/*	
-		 // Iterator to the first element.
-		 	iterator begin();
+			 iterator begin(){
+				 return (iterator(this->_c_data));
+			 }
 
+		/*	
 			const_iterator begin() const;
 
 			//Iterator to the element following the last element.
@@ -318,10 +378,6 @@ namespace ft {
 
 
 			*/
-
-			 iterator begin(){
-				 return (iterator(this->_c_data));
-			 }
 
 						//--------------------------------//
 						//	 *** 	 CAPACITY		 ***  //
