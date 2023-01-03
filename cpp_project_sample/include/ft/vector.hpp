@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2022/12/24 18:14:29 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/01/03 20:51:04 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,6 +258,72 @@ namespace ft {
 				return (this->_c_data);
 			}
 
+						//--------------------------------//
+						//	 *** 	 ITERATORS  	***   //
+						//--------------------------------//
+						// begin, end, rbegin, rend	
+
+			//template <class T>
+			class iterator {
+				public:
+					typedef std::random_access_iterator_tag	iterator_category;
+					typedef Type							value_type;
+					typedef value_type						&reference;
+					typedef value_type						*pointer;
+					typedef std::ptrdiff_t					difference_type;
+
+			 // Constructor
+			 iterator(void) : _ptr(NULL){}
+			 iterator(pointer p) : _ptr(p){}
+			 iterator(const iterator&){}
+		     ~iterator(){}
+    		/* iterator& operator=(const iterator&);
+    		 iterator& operator++(); //prefix increment
+    		 reference operator*() const;
+			 iterator(void) : _ptr(NULL){}
+			 iterator(value_type){}
+			*/
+			 // Overload the * operator to return a reference to the element at the current iterator position
+			 reference operator*() {
+			   return (* _ptr);;
+			 }
+
+			private:
+			 	pointer  	_ptr;
+			};
+
+/*
+			template<typename value_type, typename Alloc>
+			typename vector<Type, Alloc>::iterator vector<Type, Alloc>::begin(void) {
+				std::cout << "Hello\n" << std::endl;
+				return (iterator(this->_c_data));
+			}
+*/
+		/*	
+		 // Iterator to the first element.
+		 	iterator begin();
+
+			const_iterator begin() const;
+
+			//Iterator to the element following the last element.
+			iterator end();
+			const_iterator end() const;
+
+			//Reverse iterator to the first element.
+			reverse_iterator rbegin();
+			const_reverse_iterator rbegin() const;
+
+
+			//Reverse iterator to the element following the last element.
+			reverse_iterator rend();
+			const_reverse_iterator rend() const;
+
+
+			*/
+
+			 iterator begin(){
+				 return (iterator(this->_c_data));
+			 }
 
 						//--------------------------------//
 						//	 *** 	 CAPACITY		 ***  //
