@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/01/03 20:51:04 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/01/03 21:01:44 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,8 +279,6 @@ namespace ft {
 		     ~iterator(){}
     		/* iterator& operator=(const iterator&);
     		 iterator& operator++(); //prefix increment
-    		 reference operator*() const;
-			 iterator(void) : _ptr(NULL){}
 			 iterator(value_type){}
 			*/
 			 // Overload the * operator to return a reference to the element at the current iterator position
