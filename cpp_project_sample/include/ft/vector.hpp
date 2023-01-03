@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/01/03 21:05:11 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/01/03 21:14:53 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,6 +358,13 @@ namespace ft {
 */
 			 iterator begin(){
 				 return (iterator(this->_c_data));
+			 }
+			// const iterator begin() const {
+			//	 return (const iterator(this->_c_data));
+			// }
+
+			 iterator end(){
+				 return (iterator(this->_c_data + this->_c_size + 1));
 			 }
 
 		/*	
