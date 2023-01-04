@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/01/03 21:14:53 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/01/04 14:33:25 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,10 +275,27 @@ namespace ft {
 			 // Constructor
 			 iterator(void) : _ptr(NULL){}
 			 iterator(pointer p) : _ptr(p){}
-			 iterator(const iterator&){}
+			 iterator(const iterator& other){ this->_ptr = other._ptr;}
 		     ~iterator(){}
-    		/* iterator& operator=(const iterator&);
-    		 iterator& operator++(); //prefix increment
+			 iterator& operator=(const iterator &other){
+			 	this->_ptr = other._ptr;
+				return (*this);
+			 }
+    		 iterator& operator++(){
+				 ++_ptr;
+				 return (*this);
+			 }//prefix increment
+
+			 bool operator==(const iterator &other) const{
+				 return (this->_ptr == other._ptr);
+			 }
+			 bool operator!=(const iterator &other) const{
+				 return (this->_ptr != other._ptr);
+			 }
+			 pointer operator->() const{
+				 return (this->_ptr);
+			 }
+    		/*
 			 iterator(value_type){}
 			*/
 			 // Overload the * operator to return a reference to the element at the current iterator position
