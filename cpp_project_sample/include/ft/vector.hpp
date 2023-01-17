@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/01/17 10:37:10 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/01/17 13:17:59 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,16 +277,23 @@ namespace ft {
 			 	this->_ptr = other._ptr;
 				return (*this);
 			 }
-    		 iterator& operator++(){
-				 ++_ptr;
-				 return (*this);
-			 }//prefix increment
-
 			 bool operator==(const iterator &other) const{
 				 return (this->_ptr == other._ptr);
 			 }
 			 bool operator!=(const iterator &other) const{
 				 return (this->_ptr != other._ptr);
+			 }
+			 bool operator>(const iterator &other) const{
+				 return (this->_ptr > other._ptr);
+			 }
+			 bool operator<=(const iterator &other) const{
+				 return (this->_ptr <= other._ptr);
+			 }
+			 bool operator>=(const iterator &other) const{
+				 return (this->_ptr <= other._ptr);
+			 }
+			 bool operator<(const iterator &other) const{
+				 return (this->_ptr < other._ptr);
 			 }
 			 pointer operator->() const{
 				 return (this->_ptr);
@@ -298,11 +305,29 @@ namespace ft {
 			 reference operator*() {
 			   return (* _ptr);;
 			 }
+
+		//pre-increment (++a)
+    		 iterator& operator++(){
+				 ++_ptr;
+				 return (*this);
+			 }
+		//post-decrement (--a)
+    		 iterator& operator--(){
+				 --_ptr;
+				 return (*this);
+			 }
+		// post-increment (a++)
     		 iterator operator++(int){
 				 iterator tmp(*this);
 				 ++(*this);
 				 return (tmp);
-			 }//prefix increment
+			 }
+		//pret-decrement (a--)
+    		 iterator operator--(int){
+				 iterator tmp(*this);
+				 --(*this);
+				 return (tmp);
+			 }
 
 			private:
 			 	pointer  	_ptr;
