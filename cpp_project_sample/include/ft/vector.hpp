@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/01/04 14:33:25 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/01/17 10:37:10 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,25 +136,21 @@ namespace ft {
 
 	//		void assign( size_type count, const T& value ){
 			void assign( size_type count, const_reference value ){
-				//std::cout << "count = " << count << " value = " << value << " size = " << this->_c_size << " capacity = "<< this->_capacity << std::endl;
 				if (count > this->max_size()) // equal .max_size()
 				{
 					throw std::invalid_argument("cannot create std::vector larger than max_size()");
 					std::abort();
 				}
-
 				if (this->_c_size > 0)
 				{
 					for (size_type i = 0; i < this->_c_size; i++)
 						this->_alloc.destroy((this->_c_data + i));
 				}
-
 				else if (this->_capacity == 0){
 					this->_c_data = this->_alloc.allocate(1);
 					this->_capacity = 1;
 					this->_c_size = 1;
 				}
-				//std::cout << "Updated -> count = " << count << " value = " << value << " size = " << this->_c_size << " capacity = "<< this->_capacity << std::endl;
 				if (count > this->_capacity)
 				{
 					this->_alloc.deallocate(_c_data, this->_capacity);
@@ -302,6 +298,11 @@ namespace ft {
 			 reference operator*() {
 			   return (* _ptr);;
 			 }
+    		 iterator operator++(int){
+				 iterator tmp(*this);
+				 ++(*this);
+				 return (tmp);
+			 }//prefix increment
 
 			private:
 			 	pointer  	_ptr;
