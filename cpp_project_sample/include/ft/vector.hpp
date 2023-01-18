@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/01/17 13:20:57 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/01/18 10:45:18 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,7 @@ namespace ft {
 				public:
 					typedef std::random_access_iterator_tag	iterator_category;
 					typedef Type							value_type;
+					typedef size_t							size_type;
 					typedef value_type						&reference;
 					typedef value_type						*pointer;
 					typedef std::ptrdiff_t					difference_type;
@@ -273,6 +274,7 @@ namespace ft {
 			 iterator(pointer p) : _ptr(p){}
 			 iterator(const iterator& other){ this->_ptr = other._ptr;}
 		     ~iterator(){}
+
 			 iterator& operator=(const iterator &other){
 			 	this->_ptr = other._ptr;
 				return (*this);
@@ -295,17 +297,50 @@ namespace ft {
 			 bool operator<(const iterator &other) const{
 				 return (this->_ptr < other._ptr);
 			 }
+
+		//acces
+			 // Overload the * operator to return a reference to the element at the current iterator position
+			 reference operator*() const {
+			   return (* _ptr);;
+			 }
+
 			 pointer operator->() const{
 				 return (this->_ptr);
 			 }
 
+			 reference operator[](size_type n) const {
+			   return (_ptr[n]);;
+			 }
+		//assignmennt
+		    iterator& operator+=(size_type n){
+				_ptr += n;
+				return(* this);
+			}
+
+		    iterator& operator-=(size_type n){
+				_ptr -= n;
+				return(* this);
+			}
+		// arithmetic
+			iterator operator+(size_type n) const{
+				return (iterator(_ptr + n));
+			}
+
+			iterator operator-(size_type n) const{
+				return (iterator(_ptr - n));
+			}
+
+			difference_type operator+(iterator const &other) const{
+				return (this->_ptr + other._ptr);
+			}
+
+			difference_type operator-(iterator const &other) const{
+				return (this->_ptr - other._ptr);
+			}
+
     		/*
 			 iterator(value_type){}
 			*/
-			 // Overload the * operator to return a reference to the element at the current iterator position
-			 reference operator*() {
-			   return (* _ptr);;
-			 }
 
 		//pre-increment (++a)
     		 iterator& operator++(){
