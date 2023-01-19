@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/01/18 10:45:18 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/01/19 19:15:49 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 
 // Class template
 namespace ft {
-
 	template< class Type, class Allocator = std::allocator< Type > >
 	class vector {
 		public:
@@ -261,6 +260,8 @@ namespace ft {
 
 			//template <class T>
 			class iterator {
+				template< class ItType, class ItAllocator >
+				friend class vector ;
 				public:
 					typedef std::random_access_iterator_tag	iterator_category;
 					typedef Type							value_type;
@@ -443,7 +444,7 @@ namespace ft {
 			// }
 
 			 iterator end(){
-				 return (iterator(this->_c_data + this->_c_size + 1));
+				 return (iterator(this->_c_data + this->_c_size ));
 			 }
 
 		/*	
@@ -481,7 +482,7 @@ namespace ft {
 					throw std::length_error("vector::reserve");
 				else if (new_cap > this->_capacity/* && (*this)._c_data*/)
 				{
-					value_type	*new_data = this->_alloc.allocate((new_cap));
+					pointer new_data = this->_alloc.allocate(new_cap);
 					///*
 					for (size_t i = 0; i < this->_c_size; i++)
 					{
@@ -514,6 +515,14 @@ namespace ft {
 						//--------------------------------//
 						//	 *** 	 MODIFIERS		 ***  //
 						//--------------------------------//
+				//	( clear, insert, erease, push_back, pop_back, resize, swap )
+
+			void clear(){
+				for (size_t i = 0; i < this->_c_size; ++i)
+					this->_alloc.destroy((*this)._c_data + i );
+				//this->_alloc.deallocate((*this)._c_data, this->_capacity);
+				this->_c_size = 0;
+			}
 
 			void push_back( const Type& value ) {
 				if (this->_capacity == 0)
@@ -548,6 +557,56 @@ namespace ft {
 					this->_alloc.destroy((*this)._c_data + this->_c_size - 1);
 					this->_c_size--;
 				}
+			}
+			void resize( size_type count, value_type value= value_type() ){
+				if (count > this->max_size())
+				{
+					std::cout << "cannot create std::vector larger than max_size()" << std::endl;
+		//			throw std::length_error("cannot create std::vector larger than max_size()");
+					//std::abort();
+				}
+				if (this->_c_size < count)
+				{
+					reserve(count);
+					for (iterator it (this->_c_data + count - 1); it != end() - 1;  --it)
+						this->_alloc.construct(it._ptr, value);
+				}
+				else if (this->_c_size > count)
+				{
+					std::cout << "			CASE 2 : size > count -> need to remove " << std::endl;
+					for (iterator it (this->_c_data + count); it != end(); ++it)
+						this->_alloc.destroy(it._ptr);
+				}
+				this->_c_size = count;
+			}
+			/*
+			void resize( size_type count, value_type value= value_type() ){
+				if (this->_c_size < count)
+				{
+					for (size_t i = this->_c_size; i < count; i++)
+						this->push_back(value);
+					if (this->_c_size == count)
+						std::cout << "		CASE 1: size > count :	Ok count = this->_c_size" << std::endl;
+					else
+						std::cout << "		CASE 1: size > count :		NOT OK count != this->_c_size" << std::endl;
+				}
+				else if (this->_c_size > count)
+				{
+					for (size_t i = this->_c_size; i > count; i--)
+						this->pop_back();
+					if (this->_c_size == count)
+						std::cout << "		CASE 2 : size < count : Ok count = this->_c_size" << std::endl;
+					else
+						std::cout << "		CASE 2 : size < count :	NOT OK count != this->_c_size" << std::endl;
+				}
+			}
+			*/
+
+			void swap( vector& other ){
+				std::swap(_c_size, other._c_size);
+				std::swap(this->_c_data, other._c_data);
+				std::swap(this->_alloc, other._alloc);
+				std::swap(this->_capacity, other._capacity);
 			}
 
 		private:
