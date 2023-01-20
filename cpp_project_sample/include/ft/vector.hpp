@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/01/20 16:49:45 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/01/20 17:08:39 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -698,8 +698,7 @@ namespace ft {
 			void resize( size_type count, value_type value= value_type() ){
 				if (count > this->max_size())
 				{
-					std::cout << "cannot create std::vector larger than max_size()" << std::endl;
-		//			throw std::length_error("cannot create std::vector larger than max_size()");
+					throw std::length_error("vector::resize");
 					//std::abort();
 				}
 				if (this->_c_size < count)
