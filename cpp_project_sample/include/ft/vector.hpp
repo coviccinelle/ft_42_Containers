@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/01/19 19:15:49 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/01/20 13:11:38 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -523,6 +523,18 @@ namespace ft {
 				//this->_alloc.deallocate((*this)._c_data, this->_capacity);
 				this->_c_size = 0;
 			}
+			iterator erase( iterator pos ){
+				std::copy(pos + 1, end(), pos);
+				resize(_c_size - 1);
+				return (pos);
+			}
+
+
+			/*
+			iterator erase( iterator first, iterator last ){
+
+			}
+			*/
 
 			void push_back( const Type& value ) {
 				if (this->_capacity == 0)
@@ -536,7 +548,6 @@ namespace ft {
 
 					this->_capacity *= 2;
 					value_type	*new_data = this->_alloc.allocate((this->_capacity));
-					//std::memset(new_data, 0, (this->_capacity * 2) + 1);
 					for (size_t i = 0; i < this->_c_size; i++)
 					{
 						this->_alloc.construct((new_data + i), *((*this)._c_data + i));
@@ -573,34 +584,12 @@ namespace ft {
 				}
 				else if (this->_c_size > count)
 				{
-					std::cout << "			CASE 2 : size > count -> need to remove " << std::endl;
+					//std::cout << "			CASE 2 : size > count -> need to remove " << std::endl;
 					for (iterator it (this->_c_data + count); it != end(); ++it)
 						this->_alloc.destroy(it._ptr);
 				}
 				this->_c_size = count;
 			}
-			/*
-			void resize( size_type count, value_type value= value_type() ){
-				if (this->_c_size < count)
-				{
-					for (size_t i = this->_c_size; i < count; i++)
-						this->push_back(value);
-					if (this->_c_size == count)
-						std::cout << "		CASE 1: size > count :	Ok count = this->_c_size" << std::endl;
-					else
-						std::cout << "		CASE 1: size > count :		NOT OK count != this->_c_size" << std::endl;
-				}
-				else if (this->_c_size > count)
-				{
-					for (size_t i = this->_c_size; i > count; i--)
-						this->pop_back();
-					if (this->_c_size == count)
-						std::cout << "		CASE 2 : size < count : Ok count = this->_c_size" << std::endl;
-					else
-						std::cout << "		CASE 2 : size < count :	NOT OK count != this->_c_size" << std::endl;
-				}
-			}
-			*/
 
 			void swap( vector& other ){
 				std::swap(_c_size, other._c_size);
