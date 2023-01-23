@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/01/20 17:08:39 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/01/23 11:28:14 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,6 @@ namespace ft {
 			allocator_type & getAlloc(void){
 				return (this->_alloc);
 			}
-/*
-			allocator_type & getAlloc(void){
-				//return (this->_alloc);
-				return (const_cast<allocator_reference>(
-					static_cast < const typename ft::vector< Type, Allocator > &>(*this).front()));
-			}*/
 
 			pointer getElements(void) const {
 				return (this->_c_data);
@@ -59,13 +53,6 @@ namespace ft {
 						// ***	  MEMBER FUNCTIONS 	***   //
 						//--------------------------------//
 
-		//	vector(void) : _c_size(0), _c_data(0), _capacity(0) {
-				//this->_c_data = this->_alloc.allocate(this->_capacity);
-				//void deallocate( T* p, std::size_t n );
-				//pointer allocate( size_type n, const void * hint = 0 );
-		//	};
-
-// A coder ^^
 			explicit vector( const Allocator& alloc = Allocator() ) : _c_size(0), _c_data(0), _alloc(alloc), _capacity(0) {
 			}
 
@@ -102,21 +89,17 @@ namespace ft {
 
 			~vector(void){
 				if (this->_capacity > 0)
-				//std::cout << "Destructor called" << std::endl;
 				for (size_t i = 0; i < this->_c_size; i++)
 					this->_alloc.destroy((this->_c_data + i));
-				//address of this->_c_data[i] == (*this).(_c_data + i) // 
 				this->_alloc.deallocate(this->_c_data, this->_capacity);
 			};
 
-			//vector& operator=( const vector& other );
 			vector< Type, Allocator >& operator=(const vector<Type, Allocator>& other)
     		{
     		    if (this != &other)
     		    {
 					for (size_t i = 0; i < this->_c_size; i++)
 						this->_alloc.destroy((this->_c_data + i));
-    		        //delete[] this->_c_data;
     		        this->_c_size = other._c_size;
 					if (this->_capacity != other.capacity()){
 						this->_alloc.deallocate(_c_data, this->_capacity);
@@ -198,7 +181,6 @@ namespace ft {
 
 			//reference operator[]( size_type pos );
 			Type& operator[](size_t i) {
-				//std::cout << "operator []" << std::endl;
 			/*	if (i > this->_c_size)
 				{
 					throw std::invalid_argument( "Error: Can't acess further, sorry\n" );
@@ -213,7 +195,6 @@ namespace ft {
 				return (this->_c_data[i]);
 			}
 
-			// front : acess the first element
 			const_reference front() const
 			{
 				return (this->_c_data[0]); // ==return ((*this)[0]);
@@ -240,11 +221,6 @@ namespace ft {
 				if (this->_c_size == 0 || !(this->_c_data))
 					return (NULL);
 				return (this->_c_data);
-				/*
-				return (const_cast<pointer>(
-					static_cast < const pointer > (*this).data()
-							));
-				*/
 			}
 
 			const pointer data() const{
@@ -280,24 +256,19 @@ namespace ft {
 			 			this->_ptr = other._ptr;
 			 		   return (*this);
 			 		}
+
 			 		bool operator==(const iterator &other) const{
-			 		    return (this->_ptr == other._ptr);
-			 		}
+			 		    return (this->_ptr == other._ptr); }
 			 		bool operator!=(const iterator &other) const{
-			 		    return (this->_ptr != other._ptr);
-			 		}
+			 		    return (this->_ptr != other._ptr); }
 			 		bool operator>(const iterator &other) const{
-			 		    return (this->_ptr > other._ptr);
-			 		}
+			 		    return (this->_ptr > other._ptr); }
 			 		bool operator<=(const iterator &other) const{
-			 		    return (this->_ptr <= other._ptr);
-			 		}
+			 		    return (this->_ptr <= other._ptr); }
 			 		bool operator>=(const iterator &other) const{
-			 		    return (this->_ptr <= other._ptr);
-			 		}
+			 		    return (this->_ptr <= other._ptr); }
 			 		bool operator<(const iterator &other) const{
-			 		    return (this->_ptr < other._ptr);
-			 		}
+			 		    return (this->_ptr < other._ptr); }
 
 					//access
 			 		// Overload the * operator to return a reference to the element at the current iterator position
@@ -305,23 +276,19 @@ namespace ft {
 			 		  return (* _ptr);;
 			 		}
 
-			 		pointer operator->() const{
-			 		    return (this->_ptr);
-			 		}
+			 		pointer operator->() const{ return (this->_ptr); }
 
-			 		reference operator[](size_type n) const {
-			 		  return (_ptr[n]);;
-			 		}
+			 		reference operator[](size_type n) const { return (_ptr[n]); }
+
 					//assignment
 		    		iterator& operator+=(size_type n){
 			 		   _ptr += n;
-			 		   return(* this);
-					}		
+			 		   return(* this); }		
 
 		    		iterator& operator-=(size_type n){
 			 		   _ptr -= n;
-			 		   return(* this);
-					}		
+			 		   return(* this); }
+
 					// arithmetic
 					iterator operator+(size_type n) const{
 						iterator it(_ptr);
@@ -331,44 +298,31 @@ namespace ft {
 
 					friend iterator operator+(size_t i, const iterator& it) { return it + i;}
 
-					iterator operator-(size_type n) const{
-			 		   return (iterator(_ptr - n));
-					}		
+					iterator operator-(size_type n) const { return (iterator(_ptr - n)); }		
 
-					difference_type operator+(iterator const &other) const{
-			 		   return (this->_ptr + other._ptr);
-					}		
+					difference_type operator+(iterator const &other) const {  return (this->_ptr + other._ptr); }		
 
-					difference_type operator-(iterator const &other) const{
-			 		   return (this->_ptr - other._ptr);
-					}		
+					difference_type operator-(iterator const &other) const { return (this->_ptr - other._ptr); }		
 
-    			/*
-			 		iterator(value_type){}
-			*/
 
-		//pre		-increment (++a)
+			//pre-increment (++a)
     		 		iterator& operator++(){
 			 		    ++_ptr;
-			 		    return (*this);
-			 		}
-		//pos		t-decrement (--a)
+			 		    return (*this); }
+			//post-decrement (--a)
     		 		iterator& operator--(){
 			 		    --_ptr;
-			 		    return (*this);
-			 		}
-		// po		st-increment (a++)
+			 		    return (*this); }
+			// post-increment (a++)
     		 		iterator operator++(int){
 			 		    iterator tmp(*this);
 			 		    ++(*this);
-			 		    return (tmp);
-			 		}
-		//pre		t-decrement (a--)
+			 		    return (tmp); }
+			//pret-decrement (a--)
     		 		iterator operator--(int){
 			 		    iterator tmp(*this);
 			 		    --(*this);
-			 		    return (tmp);
-			 		}
+			 		    return (tmp); }
 
 			private:
 			 	pointer  	_ptr;
@@ -416,20 +370,15 @@ namespace ft {
 			 		    return (this->_ptr < other._ptr);
 			 		}
 
-					//access
+			//access
 			 		// Overload the * operator to return a reference to the element at the current iterator position
-			 		reference operator*() const {
-			 		  return (* _ptr);;
-			 		}
+			 		reference operator*() const { return (* _ptr); }
 
-			 		pointer operator->() const{
-			 		    return (this->_ptr);
-			 		}
+			 		pointer operator->() const{ return (this->_ptr); }
 
-			 		reference operator[](size_type n) const {
-			 		  return (_ptr[n]);;
-			 		}
-					//assignment
+			 		reference operator[](size_type n) const { return (_ptr[n]); }
+
+			//assignment
 		    		const_iterator& operator+=(size_type n){
 			 		   _ptr += n;
 			 		   return(* this);
@@ -439,28 +388,17 @@ namespace ft {
 			 		   _ptr -= n;
 			 		   return(* this);
 					}		
-					// arithmetic
-					const_iterator operator+(size_type n) const{
-			 		   return (const_iterator(_ptr + n));
-					}		
+			// arithmetic
+					const_iterator operator+(size_type n) const{ return (const_iterator(_ptr + n)); }		
 
 					friend const_iterator operator+(size_type i, const const_iterator& it) { return it + i;}
 
-					const_iterator operator-(size_type n) const{
-			 		   return (const_iterator(_ptr - n));
-					}		
+					const_iterator operator-(size_type n) const{ return (const_iterator(_ptr - n)); }		
 
-					difference_type operator+(const_iterator const &other) const{
-			 		   return (this->_ptr + other._ptr);
-					}		
+					difference_type operator+(const_iterator const &other) const{ return (this->_ptr + other._ptr); }
 
-					difference_type operator-(const_iterator const &other) const{
-			 		   return (this->_ptr - other._ptr);
-					}		
+					difference_type operator-(const_iterator const &other) const{ return (this->_ptr - other._ptr); }
 
-    			/*
-			 		iterator(value_type){}
-			*/
 
 		//pre		-increment (++a)
     		 		const_iterator& operator++(){
@@ -488,82 +426,12 @@ namespace ft {
 			private:
 			 	pointer  	_ptr;
 			};
-/*
- *  https://stackoverflow.com/questions/8054273/how-to-implement-an-stl-style-iterator-and-avoid-common-pitfalls
- *
- 
-		input_iterator : public virtual iterator {
-		    iterator operator++(int); //postfix increment
-		    value_type operator*() const;
-		    pointer operator->() const;
-		    friend bool operator==(const iterator&, const iterator&);
-		    friend bool operator!=(const iterator&, const iterator&); 
-		};
-		//once an input iterator has been dereferenced, it is 
-		//undefined to dereference one before that.
-		
-		output_iterator : public virtual iterator {
-		    reference operator*() const;
-		    iterator operator++(int); //postfix increment
-		};
-		//dereferences may only be on the left side of an assignment
-		//once an output iterator has been dereferenced, it is 
-		//undefined to dereference one before that.
-		
-		forward_iterator : input_iterator, output_iterator {
-		    forward_iterator();
-		};
-		//multiple passes allowed
-		
-		bidirectional_iterator : forward_iterator {
-		    iterator& operator--(); //prefix decrement
-		    iterator operator--(int); //postfix decrement
-		};
-		
-		random_access_iterator : bidirectional_iterator {
-		    friend bool operator<(const iterator&, const iterator&);
-		    friend bool operator>(const iterator&, const iterator&);
-		    friend bool operator<=(const iterator&, const iterator&);
-		    friend bool operator>=(const iterator&, const iterator&);
-		
-		    iterator& operator+=(size_type);
-		    friend iterator operator+(const iterator&, size_type);
-		    friend iterator operator+(size_type, const iterator&);
-		    iterator& operator-=(size_type);  
-		    friend iterator operator-(const iterator&, size_type);
-		    friend difference_type operator-(iterator, iterator);
-		
-		    reference operator[](size_type) const;
-		};
-		
-		-----------------------
-		
-		struct std::iterator_traits<youriterator> {
-		    typedef ???? difference_type; //almost always ptrdiff_t
-		    typedef ???? value_type; //almost always T
-		    typedef ???? reference; //almost always T& or const T&
-		    typedef ???? pointer; //almost always T* or const T*
-		    typedef ???? iterator_category;  //usually std::forward_iterator_tag or similar
-		};
-		
-*/
-/*
-			template<typename value_type, typename Alloc>
-			typename vector<Type, Alloc>::iterator vector<Type, Alloc>::begin(void) {
-				std::cout << "Hello\n" << std::endl;
-				return (iterator(this->_c_data));
-			}
-*/
-			 iterator begin(){
-				 return (iterator(this->_c_data));
-			 }
-			// const iterator begin() const {
-			//	 return (const iterator(this->_c_data));
-			// }
 
-			 iterator end(){
-				 return (iterator(this->_c_data + this->_c_size ));
-			 }
+			iterator begin() { return (iterator(this->_c_data)); }
+
+//			const_iterator begin() const { return (const_iterator(this->_c_data)); }
+
+			 iterator end() { return (iterator(this->_c_data + this->_c_size )); }
 
 		/*	
 			const_iterator begin() const;
