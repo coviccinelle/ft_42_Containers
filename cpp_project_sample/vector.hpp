@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/01/23 11:28:14 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/01/23 23:30:29 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ namespace ft {
 			}
 		*/
 			// A TESTSER
-			vector( const vector& other ) : _c_size(other.size()),/* _c_data(this->_alloc.allocate(other.capacity())),*/ _alloc(other.get_allocator()), _capacity(other.capacity()) {//constructeur de recopie
+			vector( const vector& other ) : _c_size(other.size()), _c_data(0),_alloc(other.get_allocator()), _capacity(other.size()) {//constructeur de recopie
 				//this->_alloc = other.get_allocator();
 				//try {
 					this->_c_data = this->_alloc.allocate(other.capacity());
@@ -103,8 +103,8 @@ namespace ft {
     		        this->_c_size = other._c_size;
 					if (this->_capacity != other.capacity()){
 						this->_alloc.deallocate(_c_data, this->_capacity);
-    		        	this->_capacity = other.capacity();
-						this->_c_data = this->_alloc.allocate(this->_capacity);
+    		        	this->_capacity = other.size();
+						this->_c_data = this->_alloc.allocate(this->_c_size);
 					}
 					for (size_t k = 0; k < this->_c_size; k++)
 						this->_alloc.construct(this->_c_data + k, other._c_data[k]);
@@ -123,36 +123,26 @@ namespace ft {
 					throw std::invalid_argument("cannot create std::vector larger than max_size()");
 					std::abort();
 				}
-				if (this->_c_size > 0)
-				{
-					for (size_type i = 0; i < this->_c_size; i++)
-						this->_alloc.destroy((this->_c_data + i));
-				}
+				clear();
+/*
 				else if (this->_capacity == 0){
 					this->_c_data = this->_alloc.allocate(1);
 					this->_capacity = 1;
 					this->_c_size = 1;
 				}
+				*/
 				if (count > this->_capacity)
 				{
 					this->_alloc.deallocate(_c_data, this->_capacity);
-					while (this->_capacity < count)
-						this->_capacity *= 2;
-					this->_c_data = this->_alloc.allocate(this->_capacity);
+					this->_c_data = this->_alloc.allocate(count);
+					this->_capacity = count;
 				}
-				else if (this->_capacity == count && (this->_c_size != 1))
-				{
-					std::cout << "I'm the problem is me" << std::endl;
-					this->_alloc.deallocate(this->_c_data, this->_capacity);
-				}
-				//else
-				{
-					for (size_type k = 0; k < count; k++)
-						this->_alloc.construct(this->_c_data + k, value);
-					this->_c_size = count;
-				}
+				for (size_type k = 0; k < count; k++)
+					this->_alloc.construct(this->_c_data + k, value);
+				this->_c_size = count;
 			}
 			
+	// *** //
 			// assign_2 with iterator
 			//template< class InputIt > void assign( InputIt first, InputIt last );
 
@@ -429,9 +419,10 @@ namespace ft {
 
 			iterator begin() { return (iterator(this->_c_data)); }
 
-//			const_iterator begin() const { return (const_iterator(this->_c_data)); }
+			const_iterator begin() const { return (const_iterator(this->_c_data)); }
 
-			 iterator end() { return (iterator(this->_c_data + this->_c_size )); }
+			iterator end() { return (iterator(this->_c_data + this->_c_size )); }
+			const_iterator end() const{ return (const_iterator(this->_c_data + this->_c_size )); }
 
 		/*	
 			const_iterator begin() const;
@@ -506,7 +497,6 @@ namespace ft {
 			void clear(){
 				for (size_t i = 0; i < this->_c_size; ++i)
 					this->_alloc.destroy((*this)._c_data + i );
-				//this->_alloc.deallocate((*this)._c_data, this->_capacity);
 				this->_c_size = 0;
 			}
 
@@ -534,7 +524,6 @@ namespace ft {
 				if (this->_capacity == 0)
 				{
 					this->_c_data = this->_alloc.allocate(1);
-					//this->_alloc.construct(this->_c_data, value);
 					this->_capacity = 1;
 				}
 				else if(this->_c_size == this->_capacity)
@@ -596,5 +585,19 @@ namespace ft {
         	allocator_type	_alloc;
 			size_t			_capacity;
 	};
+			//template< class T, class Alloc >
+template< class Type, class Allocator >
+void swap( ft::vector < Type, Allocator >& x, ft::vector < Type, Allocator > & other ) {
+	x.swap(other);
+}
+
+template< class Iterator >
+void swap(Iterator& x, Iterator& other ) {
+	Iterator	tmp(x);
+
+	x = other;
+	other = tmp;
+}
+
 } // end of namespace
 #endif
