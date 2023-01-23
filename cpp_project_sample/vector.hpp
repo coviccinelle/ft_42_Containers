@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/01/23 23:30:29 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/01/23 23:51:03 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -573,10 +573,21 @@ namespace ft {
 			}
 
 			void swap( vector& other ){
-				std::swap(_c_size, other._c_size);
-				std::swap(this->_c_data, other._c_data);
-				std::swap(this->_alloc, other._alloc);
-				std::swap(this->_capacity, other._capacity);
+
+				size_type tmp_size = this->_c_size;
+				pointer tmp_data = this->_c_data;
+				size_type tmp_capacity = this->_capacity;
+				allocator_type tmp_alloc = this->_alloc;
+				
+				this->_c_size = other._c_size;
+				this->_c_data = other._c_data;
+				this->_capacity = other._capacity;
+				this->_alloc = other._alloc;
+
+				other._c_size = tmp_size;
+				other._c_data = tmp_data;
+				other._capacity = tmp_capacity;
+				other._alloc = tmp_alloc;
 			}
 
 		private:
