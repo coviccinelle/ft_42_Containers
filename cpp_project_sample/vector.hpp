@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/01/23 23:51:03 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/01/24 15:52:11 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,27 +124,39 @@ namespace ft {
 					std::abort();
 				}
 				clear();
-/*
-				else if (this->_capacity == 0){
-					this->_c_data = this->_alloc.allocate(1);
-					this->_capacity = 1;
-					this->_c_size = 1;
-				}
-				*/
 				if (count > this->_capacity)
 				{
 					this->_alloc.deallocate(_c_data, this->_capacity);
 					this->_c_data = this->_alloc.allocate(count);
 					this->_capacity = count;
 				}
-				for (size_type k = 0; k < count; k++)
-					this->_alloc.construct(this->_c_data + k, value);
-				this->_c_size = count;
+				//for (size_type k = 0; k < count; k++)
+				//	this->_alloc.construct(this->_c_data + k, value);
+				//this->_c_size = count;
+				while (_c_size < count)
+					this->_alloc.construct(&this->_c_data[_c_size++], value);
 			}
 			
 	// *** //
 			// assign_2 with iterator
-			//template< class InputIt > void assign( InputIt first, InputIt last );
+			template< class InputIt > void assign( InputIt first, InputIt last ){
+				size_type diff = std::distance(first, last);
+
+				if (diff > this->max_size())
+				{
+					throw std::invalid_argument("cannot create std::vector larger than max_size()");
+					std::abort();
+				}
+				clear();
+				if (diff > this->_capacity)
+				{
+					this->_alloc.deallocate(_c_data, this->_capacity);
+					this->_c_data = this->_alloc.allocate(diff);
+					this->_capacity = diff;
+				}
+				while (first != last)
+					this->_alloc.construct(&this->_c_data[_c_size++], *first++);
+			}
 
 						//--------------------------------//
 						//	 *** 	ELEMENT ACCESS 	 ***  //
@@ -160,14 +172,10 @@ namespace ft {
 					out << "vector::_M_range_check: __n (which is " << pos << ") >= this->size() (which is " << this->size() << ")";
 					throw std::out_of_range(out.str());
 				}
-				return (this->_c_data[pos]);
-			}
+				return (this->_c_data[pos]); }
 
 			reference at( size_type pos ){
-				return (const_cast<reference>(
-					static_cast < const typename ft::vector< Type, Allocator >& >(*this).at(pos)
-							));
-			}
+				return (const_cast<reference>(static_cast < const typename ft::vector< Type, Allocator >& >(*this).at(pos))); }
 
 			//reference operator[]( size_type pos );
 			Type& operator[](size_t i) {
@@ -175,39 +183,27 @@ namespace ft {
 				{
 					throw std::invalid_argument( "Error: Can't acess further, sorry\n" );
 				 }*/
-				return (const_cast<reference>(
-					static_cast < const typename ft::vector< Type, Allocator > &>(*this)[i]
-							));
-			}
+				return (const_cast<reference>(static_cast < const typename ft::vector< Type, Allocator > &>(*this)[i])); }
 
 			//const_reference operator[]( size_type pos ) const;
   			const Type& operator[](size_t i) const {
-				return (this->_c_data[i]);
-			}
+				return (this->_c_data[i]); }
 
-			const_reference front() const
-			{
-				return (this->_c_data[0]); // ==return ((*this)[0]);
-			}
+			const_reference front() const {
+				return (this->_c_data[0]); }
 
-			reference front()
-			{
+			reference front(){
 				return (const_cast<reference>(
-					static_cast < const typename ft::vector< Type, Allocator > &>(*this).front()));
-			}
+					static_cast < const typename ft::vector< Type, Allocator > &>(*this).front())); }
 
 			const_reference back() const{
-				return (this->_c_data[this->_c_size - 1]);
-			}
+				return (this->_c_data[this->_c_size - 1]); }
 
 			reference back(){
 					return (const_cast<reference>(
-						static_cast < const typename ft::vector< Type, Allocator > &>(*this).back()));
-			}
+						static_cast < const typename ft::vector< Type, Allocator > &>(*this).back()));}
 
-			
-			pointer data()
-			{
+			pointer data(){
 				if (this->_c_size == 0 || !(this->_c_data))
 					return (NULL);
 				return (this->_c_data);
@@ -425,11 +421,7 @@ namespace ft {
 			const_iterator end() const{ return (const_iterator(this->_c_data + this->_c_size )); }
 
 		/*	
-			const_iterator begin() const;
-
 			//Iterator to the element following the last element.
-			iterator end();
-			const_iterator end() const;
 
 			//Reverse iterator to the first element.
 			reverse_iterator rbegin();
