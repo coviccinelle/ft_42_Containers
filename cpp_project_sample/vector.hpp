@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/01/24 15:52:11 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/05 11:23:52 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 #include <iostream>
 #include <cstring>
 #include <sstream>
+#include "vector.hpp"
+#include "iterator_traits.hpp"
+#include "reverse_iterator.hpp"
 
 // A template is a simple yet very powerful tool in C++. The simple idea is to pass
 // data type as a parameter so that we don’t need to write the same code for different
@@ -252,7 +255,7 @@ namespace ft {
 			 		bool operator<=(const iterator &other) const{
 			 		    return (this->_ptr <= other._ptr); }
 			 		bool operator>=(const iterator &other) const{
-			 		    return (this->_ptr <= other._ptr); }
+			 		    return (this->_ptr >= other._ptr); }
 			 		bool operator<(const iterator &other) const{
 			 		    return (this->_ptr < other._ptr); }
 
@@ -350,7 +353,7 @@ namespace ft {
 			 		    return (this->_ptr <= other._ptr);
 			 		}
 			 		bool operator>=(const const_iterator &other) const{
-			 		    return (this->_ptr <= other._ptr);
+			 		    return (this->_ptr >= other._ptr);
 			 		}
 			 		bool operator<(const const_iterator &other) const{
 			 		    return (this->_ptr < other._ptr);
@@ -386,23 +389,23 @@ namespace ft {
 					difference_type operator-(const_iterator const &other) const{ return (this->_ptr - other._ptr); }
 
 
-		//pre		-increment (++a)
+		//pre-increment (++a)
     		 		const_iterator& operator++(){
 			 		    ++_ptr;
 			 		    return (*this);
 			 		}
-		//pos		t-decrement (--a)
+		//post-decrement (--a)
     		 		const_iterator& operator--(){
 			 		    --_ptr;
 			 		    return (*this);
 			 		}
-		// po		st-increment (a++)
+		// post-increment (a++)
     		 		const_iterator operator++(int){
 			 		    const_iterator tmp(*this);
 			 		    ++(*this);
 			 		    return (tmp);
 			 		}
-		//pre		t-decrement (a--)
+		//pret-decrement (a--)
     		 		const_iterator operator--(int){
 			 		    const_iterator tmp(*this);
 			 		    --(*this);

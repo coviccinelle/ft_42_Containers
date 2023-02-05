@@ -6,18 +6,19 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 12:51:45 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/01/24 16:42:46 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/05 11:24:01 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REVERSE_ITERATOR_HPP
-#define REVERSE_ITERATOR__HPP
+#define REVERSE_ITERATOR_HPP
 
+//#include "random_acc_iterator.hpp"
 #include "vector.hpp"
 #include "iterator_traits.hpp"
 
 namespace ft{
-	template< class iterator >
+	template< class Iterator >
 	class reverse_iterator{
 		public:
 			typedef Iterator												iterator_type;
@@ -26,76 +27,123 @@ namespace ft{
 			typedef typename iterator_traits<Iterator>::pointer				pointer;
 			typedef typename iterator_traits<Iterator>::reference			reference;
 			typedef typename iterator_traits<Iterator>::iterator_category	iterator_category;
-
+			typedef typename std::size_t									size_type;
 	// constructor
-			reverse_iterator(void) : _ptr() {};
-			explicit reverse_iterator( iterator_type x ) : _ptr(x) {};
+			reverse_iterator(void) : _it(Iterator()) {};
+			explicit reverse_iterator( iterator_type x ) : _it(x) {};
 
-			reverse_iterator( const reverse_iterator< iterator >& other ) : _ptr(other._ptr_ {} ;
-			~reverve_iterator() {};
+			reverse_iterator( const reverse_iterator< Iterator >& other ) : _it(other._it) {};
+			~reverse_iterator() {};
 			
 			reverse_iterator &operator=(const reverse_iterator &other){
-				_ptr = other._ptr;
+				this->_it = other._it;
 				return (*this);
 			}
-
-			operator reverse_iterator<iterator<value_type const> > () const{
-				return (reverse_iterator<value_type const> >(_ptr));
-			}
-			operator reverse_iterator<iterator<value_type > > () {
-				return (reverse_iterator<value_type > >(_ptr));
-			}
 			iterator_type base() const{
-				return (_ptr);	
+				return (_it);
 			}
+			reference operator*() const {
+				return (*(_it - 1));
+			}
+//			pointer operator->() const{ return (this->_it); }
+			reference operator[](size_t n) const { return (_it[-n - 1]); }
+		private:
+			iterator_type	_it;
 
-	//bool
+		public:
+//			//assignment
+		    reverse_iterator& operator+=(size_type n){
+				_it -= n;
+				return(* this); }		
+
+		    reverse_iterator& operator-=(size_type n){
+				_it += n;
+			 	return(* this); }
+
+			// arithmetic
+			reverse_iterator operator+(size_type n) const{
+				reverse_iterator it(_it);
+				it += n;
+				return (it);
+			}		
+
+			friend reverse_iterator operator+(size_t i, const reverse_iterator& it) { return it + i;}
+
+			reverse_iterator operator-(size_type n) const { return (reverse_iterator(_it + n)); }		
+
+			difference_type operator+(reverse_iterator const &other) const {  return (this->_it - other._it); }		
+
+			difference_type operator-(reverse_iterator const &other) const { return (this->_it + other._it); }		
+//	//bool
 			bool	operator==(const reverse_iterator& other) const
-				{return _ptr == other._ptr;}
+				{return _it == other._it;}
+
 			bool	operator!=(const reverse_iterator& other) const
-				{return _ptr != other._ptr;}
+				{return _it != other._it;}
+
 			bool	operator<(const reverse_iterator& other) const
-				{return _ptr < other._ptr;}
+				{return _it > other._it;}
+
 			bool	operator>(const reverse_iterator& other) const
-				{return _ptr > other._ptr;}
+				{return _it < other._it;}
+
 			bool	operator<=(const reverse_iterator& other) const
-				{return _ptr >= other._ptr;}
+				{return _it >= other._it;}
+
 			bool	operator>=(const reverse_iterator& other) const
-				{return _ptr <= other._ptr;}
-			
-	//increment/decrement
-			//pre-increment (++a)
+				{return _it <= other._it;}
+//			
+//	//increment/decrement
+//			//pre-increment (++a)
     		reverse_iterator& operator++()
 			{
-				++_ptr;
+				--_it;
 				return (*this); 
 			}
-			//post-decrement (--a)
+//			//post-decrement (--a)
     		reverse_iterator& operator--(){
-				--_ptr;
+				++_it;
 				return (*this); 
 			}
-			// post-increment (a++)
+//			// post-increment (a++)
     		reverse_iterator operator++(int){
-				iterator tmp(*this);
-				++(*this);
+				reverse_iterator tmp(*this);
+				--(_it);
 			 	return (tmp);
 			}
 			//pret-decrement (a--)
     		reverse_iterator operator--(int){
-				iterator tmp(*this);
-				--(*this);
+				reverse_iterator tmp(*this);
+				++(_it);
 				return (tmp);
 			}
-
-
-
-		private:
-			iterator_type			_ptr;
-
 
 
 	};
 }
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+			operator reverse_iterator<Iterator<value_type const> > () const{
+				return (reverse_iterator< value_type const> (_it));
+			}
+			operator reverse_iterator<Iterator<value_type> > () {
+				return (reverse_iterator<value_type > >(_it));
+			}
+*/
