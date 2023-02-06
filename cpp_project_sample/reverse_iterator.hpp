@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 12:51:45 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/05 11:24:01 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/06 11:20:52 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,25 +74,7 @@ namespace ft{
 			difference_type operator+(reverse_iterator const &other) const {  return (this->_it - other._it); }		
 
 			difference_type operator-(reverse_iterator const &other) const { return (this->_it + other._it); }		
-//	//bool
-			bool	operator==(const reverse_iterator& other) const
-				{return _it == other._it;}
-
-			bool	operator!=(const reverse_iterator& other) const
-				{return _it != other._it;}
-
-			bool	operator<(const reverse_iterator& other) const
-				{return _it > other._it;}
-
-			bool	operator>(const reverse_iterator& other) const
-				{return _it < other._it;}
-
-			bool	operator<=(const reverse_iterator& other) const
-				{return _it >= other._it;}
-
-			bool	operator>=(const reverse_iterator& other) const
-				{return _it <= other._it;}
-//			
+			
 //	//increment/decrement
 //			//pre-increment (++a)
     		reverse_iterator& operator++()
@@ -119,6 +101,19 @@ namespace ft{
 			}
 
 
+//	//bool
+			template <class Ii> bool	operator==(const reverse_iterator<Ii>& other) const {return this->_it == other.base();}
+			template <class Ii> bool	operator!=(const reverse_iterator<Ii>& other) const {return this->_it != other.base();}
+			template <class Ii> bool	operator<(const reverse_iterator<Ii>& other) const {return this->_it > other.base();}
+			template <class Ii> bool	operator>(const reverse_iterator<Ii>& other) const {return this->_it < other.base();}
+			template <class Ii> bool	operator<=(const reverse_iterator<Ii>& other) const {return this->_it >= other.base();}
+			template <class Ii> bool	operator>=(const reverse_iterator<Ii>& other) const {return this->_it <= other.base();}
+//			template <class Iterator> bool	operator!=(const reverse_iterator<Iterator>& other) const {return _it != other._it;}
+//			template <class Iterator> bool	operator<(const reverse_iterator<Iterator>& other) const {return _it > other._it;}
+//			template <class Iterator> bool	operator>(const reverse_iterator<Iterator>& other) const {return _it < other._it;}
+//			template <class Iterator> bool	operator<=(const reverse_iterator<Iterator>& other) const {return _it >= other._it;}
+//			template <class Iterator> bool	operator>=(const reverse_iterator<Iterator>& other) const {return _it <= other._it;}
+//			
 	};
 }
 
