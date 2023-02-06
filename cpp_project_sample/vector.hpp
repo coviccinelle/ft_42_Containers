@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/05 11:23:52 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/06 14:11:23 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,6 +315,9 @@ namespace ft {
 
 			private:
 			 	pointer  	_ptr;
+//			template <bool operator<(const const_iterator &other) const{return (this->_ptr < other._ptr);}
+			//template <typename Ii> bool	operator<(const iterator<Ii>& other) const {return this->_ptr < other._ptr;}
+//			template <typename Ii> bool	iterator<Ii>::operator<(iterator &rhs) const {return (this->_ptr < rhs._ptr);}
 			};
 
 			//template <class T>
@@ -340,24 +343,12 @@ namespace ft {
 			 			this->_ptr = other._ptr;
 			 		   return (*this);
 			 		}
-			 		bool operator==(const const_iterator &other) const{
-			 		    return (this->_ptr == other._ptr);
-			 		}
-			 		bool operator!=(const const_iterator &other) const{
-			 		    return (this->_ptr != other._ptr);
-			 		}
-			 		bool operator>(const const_iterator &other) const{
-			 		    return (this->_ptr > other._ptr);
-			 		}
-			 		bool operator<=(const const_iterator &other) const{
-			 		    return (this->_ptr <= other._ptr);
-			 		}
-			 		bool operator>=(const const_iterator &other) const{
-			 		    return (this->_ptr >= other._ptr);
-			 		}
-			 		bool operator<(const const_iterator &other) const{
-			 		    return (this->_ptr < other._ptr);
-			 		}
+			 		bool operator==(const const_iterator &other) const{return (this->_ptr == other._ptr);}
+			 		bool operator!=(const const_iterator &other) const{return (this->_ptr != other._ptr);}
+			 		bool operator>(const const_iterator &other) const{return (this->_ptr > other._ptr);}
+			 		bool operator<(const const_iterator &other) const{return (this->_ptr < other._ptr);}
+			 		bool operator<=(const const_iterator &other) const{return (this->_ptr <= other._ptr);}
+			 		bool operator>=(const const_iterator &other) const{return (this->_ptr >= other._ptr);}
 
 			//access
 			 		// Overload the * operator to return a reference to the element at the current iterator position
@@ -415,7 +406,6 @@ namespace ft {
 			private:
 			 	pointer  	_ptr;
 			};
-
 			iterator begin() { return (iterator(this->_c_data)); }
 
 			const_iterator begin() const { return (const_iterator(this->_c_data)); }

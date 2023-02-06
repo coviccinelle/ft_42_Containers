@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 12:51:45 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/06 11:20:52 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/06 14:14:26 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,6 @@ namespace ft{
 				++(_it);
 				return (tmp);
 			}
-
-
 //	//bool
 			template <class Ii> bool	operator==(const reverse_iterator<Ii>& other) const {return this->_it == other.base();}
 			template <class Ii> bool	operator!=(const reverse_iterator<Ii>& other) const {return this->_it != other.base();}
@@ -108,37 +106,8 @@ namespace ft{
 			template <class Ii> bool	operator>(const reverse_iterator<Ii>& other) const {return this->_it < other.base();}
 			template <class Ii> bool	operator<=(const reverse_iterator<Ii>& other) const {return this->_it >= other.base();}
 			template <class Ii> bool	operator>=(const reverse_iterator<Ii>& other) const {return this->_it <= other.base();}
-//			template <class Iterator> bool	operator!=(const reverse_iterator<Iterator>& other) const {return _it != other._it;}
-//			template <class Iterator> bool	operator<(const reverse_iterator<Iterator>& other) const {return _it > other._it;}
-//			template <class Iterator> bool	operator>(const reverse_iterator<Iterator>& other) const {return _it < other._it;}
-//			template <class Iterator> bool	operator<=(const reverse_iterator<Iterator>& other) const {return _it >= other._it;}
-//			template <class Iterator> bool	operator>=(const reverse_iterator<Iterator>& other) const {return _it <= other._it;}
-//			
 	};
 }
 
 #endif
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-			operator reverse_iterator<Iterator<value_type const> > () const{
-				return (reverse_iterator< value_type const> (_it));
-			}
-			operator reverse_iterator<Iterator<value_type> > () {
-				return (reverse_iterator<value_type > >(_it));
-			}
-*/
