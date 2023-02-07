@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/07 22:00:55 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/07 22:12:50 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -490,42 +490,18 @@ namespace ft {
 				return (iterator(&_c_data[i]));
 			}
 
-//			iterator insert( const_iterator pos, size_type count, const_reference value )
-//			{
-//				(void)
-//				insert(pos, 1, value);
-//			}
-
 			iterator insert(const_iterator pos, size_t count, const_reference value) {
-   				 size_t index = pos - begin();
-   				 size_t new_size = _c_size + count;
-   				 pointer new_begin = new value_type [new_size];
-   				 pointer new_end = new_begin + new_size;
-   				 pointer p = new_begin;
-   				 for (size_t i = 0; i < index; ++i) {
-   				   *p++ = begin()[i];
-   				 }
-   				 for (size_t i = 0; i < count; ++i) {
-   				   *p++ = value;
-   				 }
-   				 for (size_t i = index; i < _c_size; ++i) {
-   				   *p++ = begin()[i];
-   				 }
-//   				delete begin();
-   				 begin() = new_begin;
-   				 end() = new_end;
-   				 _c_size = new_size;
-//				if (pos == end())
-//					return (end());
-//				std::copy(pos + 1, end(), pos);
-//				resize(_c_size - 1);
-//				return (pos);
-   				 return (begin() + index);
+				size_type i = pos - begin();
+				resize(_c_size + count);
+				size_type o = 0;
+				for (; o < count; ++o)
+					_alloc.construct(&_c_data[i + o], value);
+				return (iterator(&_c_data[i + o]));
   }				
 //
 //			constexpr iterator insert( const_iterator pos, size_type count, const T& value );
 //			template< class InputIt > iterator insert( const_iterator pos, InputIt first, InputIt last );
-			
+	
 			iterator erase( iterator pos ){
 				if (pos == end())
 					return (end());
