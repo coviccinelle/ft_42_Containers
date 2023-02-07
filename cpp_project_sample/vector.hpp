@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/07 21:58:26 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/07 22:00:55 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -482,7 +482,7 @@ namespace ft {
 				this->_c_size = 0;
 			}
 
-			iterator insert( iterator pos, const_reference value )
+			iterator insert( const_iterator pos, const_reference value )
 			{
 				size_t i = pos - begin();
 				resize(_c_size + 1);
