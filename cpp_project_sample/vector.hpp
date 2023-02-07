@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/07 10:44:51 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/07 21:58:26 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ namespace ft {
  			typedef Allocator & 	allocator_reference;	
 			typedef value_type & 	reference;
 			typedef const Type & 	const_reference;
+			typedef ptrdiff_t		difference_type;
 
 		// *** TEST ONLY *** //
 
@@ -481,36 +482,23 @@ namespace ft {
 				this->_c_size = 0;
 			}
 
-//			iterator insert( const_iterator pos, const_reference value )
-//			{
-//				std::copy(pos + 1, end(), pos);
-//				resize(_c_size + 1);
-//				iterator p = end();
-//				while (p > pos) 
-//				{
-//					*p = *(p - 1);
-//					--p;
-//				}
-//				*pos = value;
-//				return pos;
-//				vec.resize(vec.size() + 1);
-//  				for (int i = vec.size() - 1; i > position; --i) 
-//				{
-//    				vec[i] = vec[i - 1];
-//  				}
-//				  vec[position] = value;
-//			}
+			iterator insert( iterator pos, const_reference value )
+			{
+				size_t i = pos - begin();
+				resize(_c_size + 1);
+				_alloc.construct(&_c_data[i], value);
+				return (iterator(&_c_data[i]));
+			}
 
 //			iterator insert( const_iterator pos, size_type count, const_reference value )
 //			{
-//				difference_type const i = pos - begin();
-//				difference_type const old_end_i = end() - begin();
-//				iterator = 
+//				(void)
+//				insert(pos, 1, value);
 //			}
-//
+
 			iterator insert(const_iterator pos, size_t count, const_reference value) {
    				 size_t index = pos - begin();
-   				 size_t new_size = _c_size+ count;
+   				 size_t new_size = _c_size + count;
    				 pointer new_begin = new value_type [new_size];
    				 pointer new_end = new_begin + new_size;
    				 pointer p = new_begin;
@@ -523,11 +511,16 @@ namespace ft {
    				 for (size_t i = index; i < _c_size; ++i) {
    				   *p++ = begin()[i];
    				 }
-   				// delete[] begin();
+//   				delete begin();
    				 begin() = new_begin;
    				 end() = new_end;
    				 _c_size = new_size;
-   				 return begin() + index;
+//				if (pos == end())
+//					return (end());
+//				std::copy(pos + 1, end(), pos);
+//				resize(_c_size - 1);
+//				return (pos);
+   				 return (begin() + index);
   }				
 //
 //			constexpr iterator insert( const_iterator pos, size_type count, const T& value );
