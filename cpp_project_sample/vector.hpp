@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/07 22:12:50 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/08 18:42:48 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,6 +317,9 @@ namespace ft {
 
 			};
 
+						//--------------------------------//
+						//	 ***  CONST_ITERATORS  	***   //
+						//--------------------------------//
 			//template <class T>
 			class const_iterator {
 				template< class ItType, class ItAllocator >
@@ -437,21 +440,20 @@ namespace ft {
 			}
 
 			void reserve( size_type new_cap ){
-				if (new_cap > this->max_size())
+				if (new_cap > max_size())
 					throw std::length_error("vector::reserve");
-				else if (new_cap > this->_capacity/* && (*this)._c_data*/)
+				else if (new_cap > _capacity)
 				{
-					pointer new_data = this->_alloc.allocate(new_cap);
-					///*
-					for (size_t i = 0; i < this->_c_size; i++)
+					pointer new_data = _alloc.allocate(new_cap);
+					for (size_t i = 0; i < _c_size; i++)
 					{
-						this->_alloc.construct((new_data + i), this->_c_data[i]);
-						this->_alloc.destroy(this->_c_data + i);
+						_alloc.construct((new_data + i), _c_data[i]);
+						_alloc.destroy(_c_data + i);
 					}
-				//	*/
-					this->_alloc.deallocate(this->_c_data, this->_capacity);
-					this->_capacity = new_cap;
-					this->_c_data = new_data;
+					if (_c_data)
+						_alloc.deallocate(_c_data, _capacity);
+					_capacity = new_cap;
+					_c_data = new_data;
 				}
 			}
 
@@ -484,20 +486,26 @@ namespace ft {
 
 			iterator insert( const_iterator pos, const_reference value )
 			{
-				size_t i = pos - begin();
-				resize(_c_size + 1);
-				_alloc.construct(&_c_data[i], value);
+				size_type i = pos - begin();
+				insert(pos, 1, value);
 				return (iterator(&_c_data[i]));
+//				return (iterator(begin() + i));
 			}
 
-			iterator insert(const_iterator pos, size_t count, const_reference value) {
-				size_type i = pos - begin();
-				resize(_c_size + count);
-				size_type o = 0;
-				for (; o < count; ++o)
-					_alloc.construct(&_c_data[i + o], value);
-				return (iterator(&_c_data[i + o]));
-  }				
+			iterator insert(const_iterator pos, size_t count, const_reference value)
+			{
+				size_t index = pos - _c_data;
+				size_t new_size = _c_size + count;
+				reserve(new_size);
+				for (size_t i = _c_size - 1; i >= index + count; --i) {
+					_c_data[i] = _c_data[i - count];
+				}
+				for (size_t i2 = index; i2 < index + count; ++i2) {
+					_c_data[i2] = value;
+				}
+				_c_size = new_size;
+				return (iterator(&_c_data[index]));
+			}				
 //
 //			constexpr iterator insert( const_iterator pos, size_type count, const T& value );
 //			template< class InputIt > iterator insert( const_iterator pos, InputIt first, InputIt last );
@@ -647,6 +655,20 @@ namespace ft {
 			value_type *	_c_data;
         	allocator_type	_alloc;
 			size_t			_capacity;
+			void	_shift_right(size_type pos, size_type n)
+			{
+				if (empty())
+				{
+					std::cout << "AHHHHHHH BEFORE SEGFAUT\n" << std::endl;
+					return;
+				}
+				std::cout << "_c_size == " << _c_size << "\nand pos = " << pos << std::endl;
+				for (size_type i = _c_size - 1; i >= pos; i--)
+				{
+					_alloc.construct(&_c_data[i + n], _c_data[i]);
+					_alloc.destroy(&_c_data[i]);
+				}
+			}
 	};
 			//template< class T, class Alloc >
 template< class Type, class Allocator >
