@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/08 18:42:48 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/09 18:39:08 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -486,25 +486,77 @@ namespace ft {
 
 			iterator insert( const_iterator pos, const_reference value )
 			{
-				size_type i = pos - begin();
+				size_t index = pos - begin();
+
 				insert(pos, 1, value);
-				return (iterator(&_c_data[i]));
-//				return (iterator(begin() + i));
+				return (iterator(_c_data + index));
 			}
 
-			iterator insert(const_iterator pos, size_t count, const_reference value)
+			void	insert(const_iterator pos, size_t count, const_reference value)
 			{
-				size_t index = pos - _c_data;
+				size_t index = pos - begin();
 				size_t new_size = _c_size + count;
-				reserve(new_size);
-				for (size_t i = _c_size - 1; i >= index + count; --i) {
-					_c_data[i] = _c_data[i - count];
+
+				if (count == 0)/* || _capacity == 0 || empty()*/
+					return ;
+//				if (_capacity == 0)
+				std::cout << "1.0 still alive " << std::endl;
+				if (empty())
+				{
+					std::cout << "2.0 still alive " << std::endl;
+					_capacity += 1;
+					while (count > _capacity)
+						_capacity *= 2;
+					std::cout << "3.0 still alive CAP =  " << _capacity << std::endl;
+					reserve(_capacity);
+					std::cout << "4.0 still alive " << std::endl;
+//					for (size_t i = index; i < index + count; ++i)
+//					{
+//						std::copy(begin(), count, 0);
+//					}
+					for (size_t i = index; i < index + count; ++i)
+					{
+						std::cout << "  index = " << index << " count = " << count << std::endl;
+						std::cout << "4.1 inside loop  i = " << i << " and VALUE = " << value << std::endl;
+						if (!(_c_data))
+							std::cout << "OMG _c_data doesn't exist from the beginning!!! " << std::endl;
+						_c_data[i] = value;
+						std::cout << "4.02 done _c_data[i] = value  " << std::endl;
+					}
+					std::cout << "5.0 still alive " << std::endl;
+					_c_size = new_size;
+					std::cout << "6.0 still alive " << std::endl;
 				}
-				for (size_t i2 = index; i2 < index + count; ++i2) {
-					_c_data[i2] = value;
+				else if (!empty())
+				{
+					if (new_size > _capacity)
+					{
+						std::cout << "2.1 still alive " << std::endl;
+						//					if (_capacity == 0)
+						//						_capacity = 1;
+						while (new_size >= _capacity)
+							_capacity *= 2;
+						std::cout << "2.2 still alive " << std::endl;
+						//					std::cout << "____capacity = " << _capacity << " and new_size = " << new_size  << std::endl;
+						reserve(_capacity + 1);
+						//					std::cout << " 1. 0____capacity = " << _capacity << " and new_size = " << new_size  << std::endl;
+						//					reserve(_capacity ? _capacity * 2 : 1);
+						std::cout << "3.3 still alive " << std::endl;
+					}
+					std::cout << "3.0 still alive " << std::endl;
+					for (size_t i = _c_size - 1; i > index; --i)
+						_c_data[i + count] = _c_data[i];
+					_c_data[index + count] = _c_data[index];
+					std::cout << "4.0 still alive " << std::endl;
+					for (size_t i = index; i < index + count; ++i)
+						_c_data[i] = value;
+					_c_size = new_size;
 				}
-				_c_size = new_size;
-				return (iterator(&_c_data[index]));
+				std::cout << "5.0 still alive " << std::endl;
+				if (_capacity % 2 != 0)
+					_capacity -= 1;
+//				std::cout << "End of function ____capacity = " << _capacity << " and new_size = " << new_size  << std::endl;
+				std::cout << "6.0 still alive " << std::endl;
 			}				
 //
 //			constexpr iterator insert( const_iterator pos, size_type count, const T& value );
