@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/10 22:02:34 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/10 23:52:27 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,7 @@ namespace ft {
 				//			range(3) from first to last
 				//			creates a vector from a range of elements defined by two iterators
 				template< class InputIt > vector( InputIt first, InputIt last, const_allocator_reference alloc = allocator_type(),
-						typename ft::enable_if<!ft::is_integral<InputIt>::value,
-						InputIt>::type* = NULL) : _c_size(0), _c_data(0), _alloc(alloc), _capacity(0)
+						typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL) : _c_size(0), _c_data(0), _alloc(alloc), _capacity(0)
 			{
 				size_t count = last - first;
 				if (count == 0)
@@ -90,18 +89,16 @@ namespace ft {
 				_c_size = count;
 				std::uninitialized_copy(first, last, _c_data);
 			}
-				/*
-				*/
-				// A TESTSER
+
 				vector( const vector& other ) : _c_size(other.size()), _c_data(0),_alloc(other.get_allocator()), _capacity(other.size())
 			{//constructeur de recopie -> //this->_alloc = other.get_allocator();
-			//try {
-					this->_c_data = this->_alloc.allocate(other.capacity());
-			//}
-					//catch
-					for (size_t i = 0; i < this->_c_size; i++)
-						this->_alloc.construct(this->_c_data + i, other[i]);	
-				}
+			 //try {
+				this->_c_data = this->_alloc.allocate(other.capacity());
+				//}
+				//catch
+				for (size_t i = 0; i < this->_c_size; i++)
+					this->_alloc.construct(this->_c_data + i, other[i]);	
+			}
 
 				~vector(void)
 				{
@@ -138,7 +135,6 @@ namespace ft {
 					if (count > this->max_size()) // equal .max_size()
 					{
 						throw std::invalid_argument("cannot create std::vector larger than max_size()");
-//						std::abort();
 					}
 					clear();
 					resize(count, value);
@@ -151,7 +147,6 @@ namespace ft {
 					if (diff > this->max_size())
 					{
 						throw std::invalid_argument("cannot create std::vector larger than max_size()");
-//						std::abort();
 					}
 					clear();
 					insert(begin(), first, last);
@@ -177,32 +172,25 @@ namespace ft {
 					return (const_cast<reference>(static_cast < const typename ft::vector< Type, Allocator >& >(*this).at(pos))); }
 
 				//reference operator[]( size_type pos );
-				Type& operator[](size_t i) {
+				reference operator[](size_t i) {
 					/*	if (i > this->_c_size)
 						{
 						throw std::invalid_argument( "Error: Can't acess further, sorry\n" );
 						}*/
 					return (const_cast<reference>(static_cast < const typename ft::vector< Type, Allocator > &>(*this)[i])); }
 
-				//const_reference operator[]( size_type pos ) const;
-				const Type& operator[](size_t i) const {
-					return (this->_c_data[i]); }
+				const_reference operator[](size_t i) const { return (this->_c_data[i]); }
 
-				const_reference front() const {
-					return (this->_c_data[0]); }
+				const_reference front() const { return (this->_c_data[0]); }
 
-				reference front(){
-					return (const_cast<reference>(
-								static_cast < const typename ft::vector< Type, Allocator > &>(*this).front())); }
+				reference front(){ return (const_cast<reference>(static_cast < const typename ft::vector< Type, Allocator > &>(*this).front())); }
 
-				const_reference back() const{
-					return (this->_c_data[this->_c_size - 1]); }
+				const_reference back() const{ return (this->_c_data[this->_c_size - 1]); }
 
-				reference back(){
-					return (const_cast<reference>(
-								static_cast < const typename ft::vector< Type, Allocator > &>(*this).back()));}
+				reference back(){ return (const_cast<reference>( static_cast < const typename ft::vector< Type, Allocator > &>(*this).back()));}
 
-				pointer data(){
+				pointer data()
+				{
 					if (this->_c_size == 0 || !(this->_c_data))
 						return (NULL);
 					return (this->_c_data);
@@ -251,9 +239,7 @@ namespace ft {
 
 					//access
 					// Overload the * operator to return a reference to the element at the current iterator position
-					reference operator*() const {
-						return (* _ptr);;
-					}
+					reference operator*() const { return (* _ptr); }
 
 					pointer operator->() const{ return (this->_ptr); }
 
@@ -269,7 +255,7 @@ namespace ft {
 						return(* this); }
 
 					// arithmetic
-					iterator operator+(size_type n) const{
+					iterator operator+(size_type n) const {
 						iterator it(_ptr);
 						it += n;
 						return (it);
@@ -338,18 +324,18 @@ namespace ft {
 						this->_ptr = other._ptr;
 						return (*this);
 					}
-					bool operator==(const const_iterator &other) const{return (this->_ptr == other._ptr);}
-					bool operator!=(const const_iterator &other) const{return (this->_ptr != other._ptr);}
-					bool operator>(const const_iterator &other) const{return (this->_ptr > other._ptr);}
-					bool operator<(const const_iterator &other) const{return (this->_ptr < other._ptr);}
-					bool operator<=(const const_iterator &other) const{return (this->_ptr <= other._ptr);}
-					bool operator>=(const const_iterator &other) const{return (this->_ptr >= other._ptr);}
+					bool operator==(const const_iterator &other) const {return (this->_ptr == other._ptr);}
+					bool operator!=(const const_iterator &other) const {return (this->_ptr != other._ptr);}
+					bool operator>(const const_iterator &other) const {return (this->_ptr > other._ptr);}
+					bool operator<(const const_iterator &other) const {return (this->_ptr < other._ptr);}
+					bool operator<=(const const_iterator &other) const {return (this->_ptr <= other._ptr);}
+					bool operator>=(const const_iterator &other) const {return (this->_ptr >= other._ptr);}
 
 					//access
 					// Overload the * operator to return a reference to the element at the current iterator position
 					reference operator*() const { return (* _ptr); }
 
-					pointer operator->() const{ return (this->_ptr); }
+					pointer operator->() const{ return (_ptr); }
 
 					reference operator[](size_type n) const { return (_ptr[n]); }
 
@@ -459,7 +445,6 @@ namespace ft {
 						return (std::numeric_limits< size_t >::max() / (2 * sizeof (Type)));
 #endif
 					return (this->_alloc.max_size());
-					//#else
 				}
 
 
@@ -508,8 +493,6 @@ namespace ft {
 							_c_data[i] = value;
 						_c_size = new_size;
 					}
-					//				if (_capacity % 2 != 0)
-					//					_capacity -= 1;
 				}				
 
 				template< class InputIt >
@@ -552,7 +535,6 @@ namespace ft {
 					return (first);
 				}
 
-
 				void push_back( const Type& value ) {
 					if (this->_capacity == 0)
 					{
@@ -591,13 +573,13 @@ namespace ft {
 						throw std::length_error("vector::resize");
 						//std::abort();
 					}
-					if (this->_c_size < count)
+					if (count > _c_size)
 					{
 						reserve(count);
 						for (iterator it (this->_c_data + count - 1); it != end() - 1;  --it)
 							this->_alloc.construct(it._ptr, value);
 					}
-					else if (this->_c_size > count)
+					else if (count < _c_size)
 					{
 						for (iterator it (this->_c_data + count); it != end(); ++it)
 							this->_alloc.destroy(it._ptr);
