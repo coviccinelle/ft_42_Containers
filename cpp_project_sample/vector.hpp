@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/09 19:25:23 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/10 12:01:59 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #include "vector.hpp"
 #include "iterator_traits.hpp"
 #include "reverse_iterator.hpp"
+# include "enable_if.hpp"
+# include "is_integral.hpp"
 
 // A template is a simple yet very powerful tool in C++. The simple idea is to pass
 // data type as a parameter so that we don’t need to write the same code for different
@@ -406,12 +408,21 @@ namespace ft {
 			private:
 			 	pointer  	_ptr;
 			};
-			iterator begin() { return (iterator(this->_c_data)); }
 
+			typedef ft::reverse_iterator<iterator>					reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
+
+			iterator begin() { return (iterator(this->_c_data)); }
 			const_iterator begin() const { return (const_iterator(this->_c_data)); }
 
 			iterator end() { return (iterator(this->_c_data + this->_c_size )); }
 			const_iterator end() const{ return (const_iterator(this->_c_data + this->_c_size )); }
+
+			reverse_iterator	rbegin() { return (reverse_iterator(_c_data + _c_size)); }
+			const_reverse_iterator	rbegin() const { return (const_reverse_iterator(_c_data + _c_size)); }
+
+			reverse_iterator	rend() { return (reverse_iterator(_c_data)); }
+			const_reverse_iterator	rend() const { return (const_reverse_iterator(_c_data)); }
 
 		/*	
 			//Iterator to the element following the last element.
@@ -526,8 +537,24 @@ namespace ft {
 //					_capacity -= 1;
 			}				
 //
-//			constexpr iterator insert( const_iterator pos, size_type count, const T& value );
-//			template< class InputIt > iterator insert( const_iterator pos, InputIt first, InputIt last );
+			template< class InputIt >
+			void insert( const_iterator pos, InputIt first, InputIt last,
+				typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
+			{
+				size_type i = pos - begin();
+				size_type n = distance(first, last);
+//				size_type n = last - first;
+
+				if (_c_size + n > _capacity)
+					reserve(_capacity + n);
+				_shift_right(i, n);
+				for (size_type o = 0; o < n; o++)
+				{
+					_alloc.construct(&_c_data[i + o], *(first + o));
+				}
+				_c_size += n;
+
+			}
 	
 			iterator erase( iterator pos ){
 				if (pos == end())
@@ -678,15 +705,24 @@ namespace ft {
 			{
 				if (empty())
 				{
-					std::cout << "AHHHHHHH BEFORE SEGFAUT\n" << std::endl;
 					return;
 				}
-				std::cout << "_c_size == " << _c_size << "\nand pos = " << pos << std::endl;
 				for (size_type i = _c_size - 1; i >= pos; i--)
 				{
 					_alloc.construct(&_c_data[i + n], _c_data[i]);
 					_alloc.destroy(&_c_data[i]);
 				}
+			}
+
+			size_t	distance(iterator first, iterator last) {
+				size_t	i = 0;
+
+				while (first != last)
+				{
+					++first;
+					++i;
+				}
+				return (i);
 			}
 	};
 			//template< class T, class Alloc >
@@ -703,5 +739,18 @@ void swap(Iterator& x, Iterator& other ) {
 	other = tmp;
 }
 
+// distance
+//template <class Ite>
+//size_t	distance(Ite first, Ite last) {
+//	size_t	i = 0;
+//
+//	while (first != last)
+//	{
+//		++first;
+//		++i;
+//	}
+//	return (i);
+//}
+//
 } // end of namespace
 #endif
