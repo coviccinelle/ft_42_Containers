@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/10 12:01:59 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/10 13:39:02 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -514,18 +514,14 @@ namespace ft {
 				{
 					reserve(count + 1);
 					for (size_t i = index; i < index + count; ++i)
-					{
 						_c_data[i] = value;
-					}
 					_c_size = new_size;
 					_capacity = count;
 				}
 				else if (!empty())
 				{
 					if (new_size > _capacity)
-					{
 						reserve(_capacity + count);
-					}
 					for (size_t i = _c_size - 1; i > index; --i)
 						_c_data[i + count] = _c_data[i];
 					_c_data[index + count] = _c_data[index];
@@ -538,21 +534,46 @@ namespace ft {
 			}				
 //
 			template< class InputIt >
-			void insert( const_iterator pos, InputIt first, InputIt last,
+			void insert( iterator pos, InputIt first, InputIt last,
 				typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
 			{
-				size_type i = pos - begin();
-				size_type n = distance(first, last);
-//				size_type n = last - first;
+//				iterator tmp = pos;
+//				  while (first != last)
+//				  {
+//					  pos = insert(pos, *first);
+//					  ++first;
+//					  ++pos;
+//				  }
+//				  pos = insert(pos, *first);
+					difference_type const	i = pos - begin();
+					difference_type const	old_end_i = end() - begin();
+					iterator				old_end, end;
 
-				if (_c_size + n > _capacity)
-					reserve(_capacity + n);
-				_shift_right(i, n);
-				for (size_type o = 0; o < n; o++)
-				{
-					_alloc.construct(&_c_data[i + o], *(first + o));
-				}
-				_c_size += n;
+					resize(_c_size +  (std::distance(first, last)));
+//					reserve(_c_size + (std::distance(first, last)));
+					end = this->end();
+					pos = begin() + i;
+					old_end = begin() + old_end_i;
+					while (old_end != pos)
+						*--end = *--old_end;
+					while (first != last)
+						*pos++ = *first++;
+//				size_type i = pos - begin();
+//				size_type n = std::distance(first, last);
+////				size_type n = last - first;
+//
+//				if (_c_size + n > _capacity)
+//					reserve(_capacity + n + 1);
+////				_shift_right(i, n);
+////				int u = 0;
+////				first -= i;
+//				while (first != last)
+//				{
+//					*pos++ = *first++;
+////					u++;
+//				}
+////				std::cout << "u = " << u << std::endl;
+//				_c_size += n;
 
 			}
 	
