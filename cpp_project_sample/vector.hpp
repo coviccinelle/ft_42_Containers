@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/10 13:39:02 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/10 17:46:15 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,15 @@ namespace ft {
 	class vector {
 		public:
 
-			typedef Type 			value_type;
-			typedef value_type * 	pointer;
-			typedef std::size_t 	size_type;//typedef = using
- 			typedef Allocator 		allocator_type;	
- 			typedef Allocator & 	allocator_reference;	
-			typedef value_type & 	reference;
-			typedef const Type & 	const_reference;
-			typedef ptrdiff_t		difference_type;
+			typedef Type 				value_type;
+			typedef value_type *	 	pointer;
+			typedef std::size_t 		size_type;//typedef = using
+ 			typedef Allocator 			allocator_type;	
+ 			typedef Allocator & 		allocator_reference;	
+ 			typedef const Allocator & 	const_allocator_reference;	
+			typedef value_type & 		reference;
+			typedef const Type & 		const_reference;
+			typedef ptrdiff_t			difference_type;
 
 		// *** TEST ONLY *** //
 
@@ -73,13 +74,24 @@ namespace ft {
 					this->_alloc.construct(this->_c_data + i, value);	
 			}
 
-			//template< class InputIt > vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() );
-		/*	vector( value_type Type, std::allocator< Type > allocator){
-				std::cout << "Now what? :) " << std::endl;
-				(void) Type;
-				(void) allocator;
+//				vector( value_type Type, std::allocator< Type > allocator){
+//
+//			range(3) from first to last
+//			creates a vector from a range of elements defined by two iterators
+			template< class InputIt > vector( InputIt first, InputIt last, const_allocator_reference alloc = allocator_type(),
+					typename ft::enable_if<!ft::is_integral<InputIt>::value,
+					InputIt>::type* = NULL) : _c_size(0), _c_data(0), _alloc(alloc), _capacity(0)
+			{
+				size_t count = last - first;
+				if (count == 0)
+					return;
+				_capacity = count;
+				_c_data = _alloc.allocate(_capacity);
+				_c_size = count;
+				std::uninitialized_copy(first, last, _c_data);
 			}
-		*/
+/*
+*/
 			// A TESTSER
 			vector( const vector& other ) : _c_size(other.size()), _c_data(0),_alloc(other.get_allocator()), _capacity(other.size()) {//constructeur de recopie
 				//this->_alloc = other.get_allocator();
@@ -90,8 +102,6 @@ namespace ft {
 				for (size_t i = 0; i < this->_c_size; i++)
 					this->_alloc.construct(this->_c_data + i, other[i]);	
 			}
-/*
-*/
 
 			~vector(void){
 				if (this->_capacity > 0)
@@ -142,11 +152,11 @@ namespace ft {
 				while (_c_size < count)
 					this->_alloc.construct(&this->_c_data[_c_size++], value);
 			}
-			
+			/*
 	// *** //
 			// assign_2 with iterator
 			template< class InputIt > void assign( InputIt first, InputIt last ){
-				size_type diff = std::distance(first, last);
+				size_t diff = last - first;
 
 				if (diff > this->max_size())
 				{
@@ -160,9 +170,11 @@ namespace ft {
 					this->_c_data = this->_alloc.allocate(diff);
 					this->_capacity = diff;
 				}
-				while (first != last)
-					this->_alloc.construct(&this->_c_data[_c_size++], *first++);
+				std::uninitialized_copy(first, last, _c_data + _c_size);
+//				while (first != last)
+//					this->_alloc.construct(&this->_c_data[_c_size++], *first++);
 			}
+*/
 
 						//--------------------------------//
 						//	 *** 	ELEMENT ACCESS 	 ***  //
@@ -424,20 +436,6 @@ namespace ft {
 			reverse_iterator	rend() { return (reverse_iterator(_c_data)); }
 			const_reverse_iterator	rend() const { return (const_reverse_iterator(_c_data)); }
 
-		/*	
-			//Iterator to the element following the last element.
-
-			//Reverse iterator to the first element.
-			reverse_iterator rbegin();
-			const_reverse_iterator rbegin() const;
-
-
-			//Reverse iterator to the element following the last element.
-			reverse_iterator rend();
-			const_reverse_iterator rend() const;
-
-
-			*/
 
 						//--------------------------------//
 						//	 *** 	 CAPACITY		 ***  //
@@ -537,43 +535,42 @@ namespace ft {
 			void insert( iterator pos, InputIt first, InputIt last,
 				typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
 			{
-//				iterator tmp = pos;
-//				  while (first != last)
-//				  {
-//					  pos = insert(pos, *first);
-//					  ++first;
-//					  ++pos;
-//				  }
-//				  pos = insert(pos, *first);
-					difference_type const	i = pos - begin();
-					difference_type const	old_end_i = end() - begin();
-					iterator				old_end, end;
+				//				iterator tmp = pos;
+				//				  while (first != last)
+				//				  {
+				//					  pos = insert(pos, *first);
+				//					  ++first;
+				//					  ++pos;
+				//				  }
+				//				  pos = insert(pos, *first);
+				difference_type const	i = pos - begin();
+				difference_type const	old_end_i = end() - begin();
+				iterator				old_end, end;
 
-					resize(_c_size +  (std::distance(first, last)));
-//					reserve(_c_size + (std::distance(first, last)));
-					end = this->end();
-					pos = begin() + i;
-					old_end = begin() + old_end_i;
-					while (old_end != pos)
-						*--end = *--old_end;
-					while (first != last)
-						*pos++ = *first++;
-//				size_type i = pos - begin();
-//				size_type n = std::distance(first, last);
-////				size_type n = last - first;
-//
-//				if (_c_size + n > _capacity)
-//					reserve(_capacity + n + 1);
-////				_shift_right(i, n);
-////				int u = 0;
-////				first -= i;
-//				while (first != last)
-//				{
-//					*pos++ = *first++;
-////					u++;
-//				}
-////				std::cout << "u = " << u << std::endl;
-//				_c_size += n;
+				resize(_c_size +  (last - first));
+				end = this->end();
+				pos = begin() + i;
+				old_end = begin() + old_end_i;
+				while (old_end != pos)
+					*--end = *--old_end;
+				while (first != last)
+					*(pos++) = *(first++);
+				//				size_type i = pos - begin();
+				//				size_type n = std::distance(first, last);
+				////				size_type n = last - first;
+				//
+				//				if (_c_size + n > _capacity)
+				//					reserve(_capacity + n + 1);
+				////				_shift_right(i, n);
+				////				int u = 0;
+				////				first -= i;
+				//				while (first != last)
+				//				{
+				//					*pos++ = *first++;
+				////					u++;
+				//				}
+				////				std::cout << "u = " << u << std::endl;
+				//				_c_size += n;
 
 			}
 	
@@ -722,56 +719,34 @@ namespace ft {
 			value_type *	_c_data;
         	allocator_type	_alloc;
 			size_t			_capacity;
-			void	_shift_right(size_type pos, size_type n)
-			{
-				if (empty())
-				{
-					return;
-				}
-				for (size_type i = _c_size - 1; i >= pos; i--)
-				{
-					_alloc.construct(&_c_data[i + n], _c_data[i]);
-					_alloc.destroy(&_c_data[i]);
-				}
-			}
+//			void	_shift_right(size_type pos, size_type n)
+//			{
+//				if (empty())
+//				{
+//					return;
+//				}
+//				for (size_type i = _c_size - 1; i >= pos; i--)
+//				{
+//					_alloc.construct(&_c_data[i + n], _c_data[i]);
+//					_alloc.destroy(&_c_data[i]);
+//				}
+//			}
 
-			size_t	distance(iterator first, iterator last) {
-				size_t	i = 0;
-
-				while (first != last)
-				{
-					++first;
-					++i;
-				}
-				return (i);
-			}
 	};
 			//template< class T, class Alloc >
-template< class Type, class Allocator >
-void swap( ft::vector < Type, Allocator >& x, ft::vector < Type, Allocator > & other ) {
-	x.swap(other);
-}
+	template< class Type, class Allocator >
+		void swap( ft::vector < Type, Allocator >& x, ft::vector < Type, Allocator > & other ) {
+			x.swap(other);
+		}
 
-template< class Iterator >
-void swap(Iterator& x, Iterator& other ) {
-	Iterator	tmp(x);
 
-	x = other;
-	other = tmp;
-}
+	template< class Iterator >
+		void swap(Iterator& x, Iterator& other ) {
+			Iterator	tmp(x);
 
-// distance
-//template <class Ite>
-//size_t	distance(Ite first, Ite last) {
-//	size_t	i = 0;
-//
-//	while (first != last)
-//	{
-//		++first;
-//		++i;
-//	}
-//	return (i);
-//}
-//
+			x = other;
+			other = tmp;
+		}
+
 } // end of namespace
 #endif
