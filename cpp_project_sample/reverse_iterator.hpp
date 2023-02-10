@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 12:51:45 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/06 14:14:26 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/10 19:20:29 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ namespace ft{
 			reference operator*() const {
 				return (*(_it - 1));
 			}
-//			pointer operator->() const{ return (this->_it); }
+			pointer operator->() const{ return (this->_it); }
 			reference operator[](size_t n) const { return (_it[-n - 1]); }
 		private:
 			iterator_type	_it;
