@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/10 18:01:43 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/10 18:35:04 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,6 @@ namespace ft {
 				return (this->_alloc);
 			}
 
-	//		void assign( size_type count, const T& value ){
 			void assign( size_type count, const_reference value ){
 				if (count > this->max_size()) // equal .max_size()
 				{
@@ -140,22 +139,11 @@ namespace ft {
 					std::abort();
 				}
 				clear();
-				if (count > this->_capacity)
-				{
-					this->_alloc.deallocate(_c_data, this->_capacity);
-					this->_c_data = this->_alloc.allocate(count);
-					this->_capacity = count;
-				}
-				//for (size_type k = 0; k < count; k++)
-				//	this->_alloc.construct(this->_c_data + k, value);
-				//this->_c_size = count;
-				while (_c_size < count)
-					this->_alloc.construct(&this->_c_data[_c_size++], value);
+				insert(0, count, value);
 			}
-			/*
-	// *** //
-			// assign_2 with iterator
-			template< class InputIt > void assign( InputIt first, InputIt last ){
+	// assign_2 with iterator
+			template< class InputIt > void assign( InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
+			{
 				size_t diff = last - first;
 
 				if (diff > this->max_size())
@@ -164,17 +152,8 @@ namespace ft {
 					std::abort();
 				}
 				clear();
-				if (diff > this->_capacity)
-				{
-					this->_alloc.deallocate(_c_data, this->_capacity);
-					this->_c_data = this->_alloc.allocate(diff);
-					this->_capacity = diff;
-				}
-				std::uninitialized_copy(first, last, _c_data + _c_size);
-//				while (first != last)
-//					this->_alloc.construct(&this->_c_data[_c_size++], *first++);
+				insert(0, first, last);
 			}
-*/
 
 						//--------------------------------//
 						//	 *** 	ELEMENT ACCESS 	 ***  //
@@ -530,21 +509,11 @@ namespace ft {
 //				if (_capacity % 2 != 0)
 //					_capacity -= 1;
 			}				
-//
+
 			template< class InputIt >
 			void insert( iterator pos, InputIt first, InputIt last,
 				typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
 			{
-//							iterator tmp = pos;
-//							  while (first != last)
-//								  {
-//									  pos = insert(pos, *first);
-//									  ++first;
-//									  ++pos;
-//								  }
-				//				  pos = insert(pos, *first);
-
-
 				difference_type const	i = pos - begin();
 				difference_type const	old_end_i = end() - begin();
 				iterator				old_end, end;
@@ -560,25 +529,6 @@ namespace ft {
 					*--end = *--old_end;
 				while (first != last)
 					*(pos++) = *(first++);
-
-
-				//				size_type i = pos - begin();
-				//				size_type n = std::distance(first, last);
-				////				size_type n = last - first;
-				//
-				//				if (_c_size + n > _capacity)
-				//					reserve(_capacity + n + 1);
-				////				_shift_right(i, n);
-				////				int u = 0;
-				////				first -= i;
-				//				while (first != last)
-				//				{
-				//					*pos++ = *first++;
-				////					u++;
-				//				}
-				////				std::cout << "u = " << u << std::endl;
-				//				_c_size += n;
-
 			}
 	
 			iterator erase( iterator pos ){
@@ -670,6 +620,7 @@ namespace ft {
 				other._capacity = tmp_capacity;
 				other._alloc = tmp_alloc;
 			}
+
 // Non-member functionn
 			friend bool operator==( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs )
 			{
@@ -726,18 +677,6 @@ namespace ft {
 			value_type *	_c_data;
         	allocator_type	_alloc;
 			size_t			_capacity;
-//			void	_shift_right(size_type pos, size_type n)
-//			{
-//				if (empty())
-//				{
-//					return;
-//				}
-//				for (size_type i = _c_size - 1; i >= pos; i--)
-//				{
-//					_alloc.construct(&_c_data[i + n], _c_data[i]);
-//					_alloc.destroy(&_c_data[i]);
-//				}
-//			}
 
 	};
 			//template< class T, class Alloc >
