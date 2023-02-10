@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/10 17:46:15 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/10 18:01:43 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -535,19 +535,24 @@ namespace ft {
 			void insert( iterator pos, InputIt first, InputIt last,
 				typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
 			{
-				//				iterator tmp = pos;
-				//				  while (first != last)
-				//				  {
-				//					  pos = insert(pos, *first);
-				//					  ++first;
-				//					  ++pos;
-				//				  }
+//							iterator tmp = pos;
+//							  while (first != last)
+//								  {
+//									  pos = insert(pos, *first);
+//									  ++first;
+//									  ++pos;
+//								  }
 				//				  pos = insert(pos, *first);
+
+
 				difference_type const	i = pos - begin();
 				difference_type const	old_end_i = end() - begin();
 				iterator				old_end, end;
 
-				resize(_c_size +  (last - first));
+				if (_capacity < _c_size + (last - first))
+					resize(_c_size +  (last - first));
+				else
+					_c_size += last - first;
 				end = this->end();
 				pos = begin() + i;
 				old_end = begin() + old_end_i;
@@ -555,6 +560,8 @@ namespace ft {
 					*--end = *--old_end;
 				while (first != last)
 					*(pos++) = *(first++);
+
+
 				//				size_type i = pos - begin();
 				//				size_type n = std::distance(first, last);
 				////				size_type n = last - first;
