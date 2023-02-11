@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/11 12:54:28 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/11 14:33:08 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -415,9 +415,10 @@ namespace ft {
 
 					const_iterator operator-(size_type n) const { return (const_iterator(_ptr - n)); }		
 
-					difference_type operator+(const_iterator const &other) const { return (this->_ptr + other._ptr); }
+					difference_type operator+(const_iterator const &other) const { return (_ptr + other._ptr); }
+//					difference_type operator+(iterator const &other) const { return (_ptr + other._ptr); }
 
-					difference_type operator-(const_iterator const &other) const { return (this->_ptr - other._ptr); }
+					difference_type operator-(const_iterator const &other) const { return (_ptr - other._ptr); }
 
 					//pre-increment (++a)
 					const_iterator& operator++(){
