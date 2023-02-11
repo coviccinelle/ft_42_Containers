@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/11 01:12:12 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/11 01:16:53 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -653,19 +653,6 @@ namespace ft {
 
 				friend bool operator<( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs )
 				{
-//					if (lhs.size() < rhs.size())
-//						return (1);
-//					else if(lhs.size() > rhs.size())
-//						return (0);
-//					else
-//					{
-//						const_iterator it2 = rhs.begin();
-//						for (const_iterator it = lhs.begin(); it != lhs.end(); ++it){
-//							if (*it < *it2)
-//								return (1);
-//							++it2;
-//						}
-//					}
 					return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())) ;
 				}
 
