@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/11 14:33:08 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/11 17:44:20 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,6 +269,7 @@ namespace ft {
 					iterator(const iterator& other) : _ptr(other._ptr) {}
 					~iterator(){}
 
+
 					iterator& operator=(const iterator &other){
 						this->_ptr = other._ptr;
 						return (*this);
@@ -315,14 +316,14 @@ namespace ft {
 					friend iterator operator+(size_t i, const iterator& it) { return it + i;}
 //					friend iterator operator+(size_t i, const const_iterator& it) { return it + i;}
 
-					iterator operator-(size_type n) const { return (iterator(_ptr - n)); }		
-//					iterator operator-(size_type n) const { return (const_terator(_ptr - n)); }		
-
 					difference_type operator+(iterator const &other) const {  return (this->_ptr + other._ptr); }		
-//					difference_type operator+(const_iterator const &other) const {  return (this->_ptr + other._ptr); }		
+					difference_type operator+(const_iterator const &other) const {  return (this->_ptr + other._ptr); }		
 
-					difference_type operator-(iterator const &other) const { return (this->_ptr - other._ptr); }		
-//					difference_type operator-(const_iterator const &other) const { return (this->_ptr - other._ptr); }		
+					iterator operator-(size_type n) const { return (iterator(_ptr - n)); }		
+					iterator operator-(size_type n) { return (iterator(_ptr - n)); }		
+
+					difference_type operator-(iterator const &other) { return (this->_ptr - other._ptr); }		
+					difference_type operator-(const_iterator const &other) const { return (this->_ptr - other._ptr); }		
 
 
 					//pre-increment (++a)
@@ -347,6 +348,9 @@ namespace ft {
 					private:
 					pointer  	_ptr;
 					public:
+//					template< class U >
+//					template< class Iterator1, class Iterator2 >
+//						iterator( const const_iterator<U>& other ) : x._ptr(y._ptr) {}
 
 					//			template <bool operator<(const const_iterator &other) const{return (this->_ptr < other._ptr);}
 					//			template <typename Ii> bool	operator<(const iterator<Ii>& other) const {return this->_ptr < other._ptr;}
@@ -413,6 +417,7 @@ namespace ft {
 
 					friend const_iterator operator+(size_type i, const const_iterator& it) { return it + i;}
 
+					const_iterator operator-(size_type n) { return (const_iterator(_ptr - n)); }
 					const_iterator operator-(size_type n) const { return (const_iterator(_ptr - n)); }		
 
 					difference_type operator+(const_iterator const &other) const { return (_ptr + other._ptr); }
