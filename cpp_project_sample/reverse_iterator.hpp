@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 12:51:45 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/11 14:27:36 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/11 16:14:34 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ namespace ft
 
 			iterator_type base() const { return (_it); }
 			reference operator*() const { return (*(_it - 1)); }
-			pointer operator->() const{ return (this->_it); }
+			pointer operator->() const{ return (&operator*()); }
 			reference operator[](size_t n) const { return (_it[-n - 1]); }
 			private:
 			iterator_type	_it;
@@ -86,10 +86,17 @@ namespace ft
 			friend reverse_iterator operator+(size_t i, const reverse_iterator& it) { return it + i;}
 
 			reverse_iterator operator-(size_type n) const { return (reverse_iterator(_it + n)); }		
-
+//			reverse_iterator operator-(size_type n) const { return (const reverse_iterator(this->_it + n)); }		
+//
 			difference_type operator+(reverse_iterator const &other) const {  return (this->_it - other._it); }		
+			template <typename U>
+				typename reverse_iterator<Iterator>::difference_type operator+(const reverse_iterator<U>& other) const {
+					return (_it - other._it); }
 
 			difference_type operator-(reverse_iterator const &other) const { return (this->_it + other._it); }		
+			template <typename U>
+				typename reverse_iterator<Iterator>::difference_type operator-(const reverse_iterator<U>& other) const {
+					return (this->_it + other._it); }
 
 			//	//increment/decrement
 //			//pre-increment (++a)
@@ -181,10 +188,15 @@ namespace ft
 			friend const_reverse_iterator operator+(size_t i, const const_reverse_iterator& it) { return it + i;}
 
 			const_reverse_iterator operator-(size_type n) const { return (const_reverse_iterator(_it + n)); }		
+//			const_reverse_iterator operator-(size_type n) const { return (reverse_iterator(_it + n)); }		
 
 			difference_type operator+(const_reverse_iterator const &other) const {  return (this->_it - other._it); }		
 
 			difference_type operator-(const_reverse_iterator const &other) const { return (this->_it + other._it); }		
+//			difference_type operator-(reverse_iterator const &other) const { return (this->_it + other._it); }		
+			template <typename U>
+				typename const_reverse_iterator<Iterator>::difference_type operator-(const reverse_iterator<U>& other) const {
+					return (_it + other._it); }
 			
 //	//increment/decrement
 //			//pre-increment (++a)
