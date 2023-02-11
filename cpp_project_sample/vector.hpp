@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/11 01:16:53 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/11 12:19:33 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,16 @@
 
 // Class template
 namespace ft {
-
+	template <class Ite>
+	size_t distance(Ite first, Ite last)
+	{
+		size_t i = 0;
+		while (first != last) {
+			++first;
+			++i;
+		}
+		return i;
+	}
 	template <class Ite1, class Ite2>
 		bool	equal(Ite1 first1, Ite1 last1, Ite2 first2)
 		{
@@ -111,7 +120,7 @@ namespace ft {
 				template< class InputIt > vector( InputIt first, InputIt last, const_allocator_reference alloc = allocator_type(),
 						typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL) : _c_size(0), _c_data(0), _alloc(alloc), _capacity(0)
 			{
-				size_t count = last - first;
+				size_t count = ft::distance(first, last);
 				if (count == 0)
 					return;
 				_capacity = count;
@@ -172,7 +181,7 @@ namespace ft {
 				// assign_2 with iterator
 				template< class InputIt > void assign( InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
 				{
-					size_t diff = last - first;
+					size_t diff = ft::distance(first, last);;
 
 					if (diff > this->max_size())
 					{
@@ -248,8 +257,8 @@ namespace ft {
 					typedef std::random_access_iterator_tag	iterator_category;
 					typedef Type							value_type;
 					typedef size_t							size_type;
-					typedef value_type						&reference;
-					typedef value_type						*pointer;
+					typedef value_type&						reference;
+					typedef value_type*						pointer;
 					typedef std::ptrdiff_t					difference_type;
 
 					// Constructor
@@ -343,8 +352,10 @@ namespace ft {
 					typedef std::random_access_iterator_tag	iterator_category;
 					typedef const Type						value_type;
 					typedef size_t							size_type;
-					typedef value_type						&reference;
-					typedef value_type						*pointer;
+					typedef value_type&						reference;
+					typedef const value_type&				const_reference;
+					typedef value_type*						pointer;
+					typedef const value_type*				const_pointer;
 					typedef std::ptrdiff_t					difference_type;
 
 					// Constructor
@@ -367,11 +378,11 @@ namespace ft {
 
 					//access
 					// Overload the * operator to return a reference to the element at the current iterator position
-					reference operator*() const { return (* _ptr); }
+					const_reference operator*() const { return (* _ptr); }
 
-					pointer operator->() const{ return (_ptr); }
+					const_pointer operator->() const{ return (_ptr); }
 
-					reference operator[](size_type n) const { return (_ptr[n]); }
+					const_reference operator[](size_type n) const { return (_ptr[n]); }
 
 					//assignment
 					const_iterator& operator+=(size_type n){
@@ -384,16 +395,15 @@ namespace ft {
 						return(* this);
 					}		
 					// arithmetic
-					const_iterator operator+(size_type n) const{ return (const_iterator(_ptr + n)); }		
+					const_iterator operator+(size_type n) const { return (const_iterator(_ptr + n)); }		
 
 					friend const_iterator operator+(size_type i, const const_iterator& it) { return it + i;}
 
-					const_iterator operator-(size_type n) const{ return (const_iterator(_ptr - n)); }		
+					const_iterator operator-(size_type n) const { return (const_iterator(_ptr - n)); }		
 
-					difference_type operator+(const_iterator const &other) const{ return (this->_ptr + other._ptr); }
+					difference_type operator+(const_iterator const &other) const { return (this->_ptr + other._ptr); }
 
-					difference_type operator-(const_iterator const &other) const{ return (this->_ptr - other._ptr); }
-
+					difference_type operator-(const_iterator const &other) const { return (this->_ptr - other._ptr); }
 
 					//pre-increment (++a)
 					const_iterator& operator++(){
@@ -536,11 +546,13 @@ namespace ft {
 						difference_type const	i = pos - begin();
 						difference_type const	old_end_i = end() - begin();
 						iterator				old_end, end;
+						size_type				dif;
 
-						if (_capacity < _c_size + (last - first))
-							resize(_c_size +  (last - first));
+						dif = ft::distance(first, last);
+						if (_capacity < _c_size + dif)
+							resize(_c_size + dif); 
 						else
-							_c_size += last - first;
+							_c_size += dif;
 						end = this->end();
 						pos = begin() + i;
 						old_end = begin() + old_end_i;

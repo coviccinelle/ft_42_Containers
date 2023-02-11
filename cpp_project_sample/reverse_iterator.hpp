@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 12:51:45 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/10 19:20:29 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/11 12:24:39 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ namespace ft{
 			template <class Ii> bool	operator<=(const reverse_iterator<Ii>& other) const {return this->_it >= other.base();}
 			template <class Ii> bool	operator>=(const reverse_iterator<Ii>& other) const {return this->_it <= other.base();}
 	};
+
 }
 
 #endif
