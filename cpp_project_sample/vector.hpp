@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/11 12:19:33 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/11 12:54:28 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,10 +249,12 @@ namespace ft {
 				// begin, end, rbegin, rend	
 
 				//template <class T>
+				class const_iterator;
 				class iterator 
 				{
 					template< class ItType, class ItAllocator >
 						friend class vector ;
+					friend class const_iterator ;
 					public:
 					typedef std::random_access_iterator_tag	iterator_category;
 					typedef Type							value_type;
@@ -279,6 +281,13 @@ namespace ft {
 					bool operator>=(const iterator &other) const{ return (_ptr >= other._ptr); }
 					bool operator<(const iterator &other) const{ return (_ptr < other._ptr); }
 
+					bool operator==(const const_iterator &other) const{ return (_ptr == other._ptr); }
+					bool operator!=(const const_iterator &other) const{ return (_ptr != other._ptr); }
+					bool operator>(const const_iterator &other) const{ return (_ptr > other._ptr); }
+					bool operator<=(const const_iterator &other) const{ return (_ptr <= other._ptr); }
+					bool operator>=(const const_iterator &other) const{ return (_ptr >= other._ptr); }
+					bool operator<(const const_iterator &other) const{ return (_ptr < other._ptr); }
+
 					//access
 					// Overload the * operator to return a reference to the element at the current iterator position
 					reference operator*() const { return (* _ptr); }
@@ -304,12 +313,16 @@ namespace ft {
 					}		
 
 					friend iterator operator+(size_t i, const iterator& it) { return it + i;}
+//					friend iterator operator+(size_t i, const const_iterator& it) { return it + i;}
 
 					iterator operator-(size_type n) const { return (iterator(_ptr - n)); }		
+//					iterator operator-(size_type n) const { return (const_terator(_ptr - n)); }		
 
 					difference_type operator+(iterator const &other) const {  return (this->_ptr + other._ptr); }		
+//					difference_type operator+(const_iterator const &other) const {  return (this->_ptr + other._ptr); }		
 
 					difference_type operator-(iterator const &other) const { return (this->_ptr - other._ptr); }		
+//					difference_type operator-(const_iterator const &other) const { return (this->_ptr - other._ptr); }		
 
 
 					//pre-increment (++a)
@@ -348,6 +361,7 @@ namespace ft {
 				{
 					template< class ItType, class ItAllocator >
 						friend class vector ;
+					friend class iterator ;
 					public:
 					typedef std::random_access_iterator_tag	iterator_category;
 					typedef const Type						value_type;
