@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/10 23:52:27 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/11 01:12:12 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,38 @@
 
 // Class template
 namespace ft {
+
+	template <class Ite1, class Ite2>
+		bool	equal(Ite1 first1, Ite1 last1, Ite2 first2)
+		{
+			while (first1 != last1)
+			{
+				if (*first1 != *first2)
+					return false;
+				++first1;
+				++first2;
+			}
+			return true;
+		}
+
+	template <class It1, class It2>
+		bool lexicographical_compare(It1 first1, It1 last1, It2 first2, It2 last2)
+		{
+			while (first1 != last1 && first2 != last2)
+			{
+				if (*first1 < *first2)
+					return true;
+				if (*first2 < *first1)
+					return false;
+				++first1;
+				++first2;
+			}
+			return (first1 == last1 && first2 != last2);
+		}
+
 	template< class Type, class Allocator = std::allocator< Type > >
-		class vector {
+		class vector
+		{
 			public:
 
 				typedef Type 				value_type;
@@ -178,6 +208,7 @@ namespace ft {
 						throw std::invalid_argument( "Error: Can't acess further, sorry\n" );
 						}*/
 					return (const_cast<reference>(static_cast < const typename ft::vector< Type, Allocator > &>(*this)[i])); }
+//					return (_c_data[i]); }
 
 				const_reference operator[](size_t i) const { return (this->_c_data[i]); }
 
@@ -196,7 +227,8 @@ namespace ft {
 					return (this->_c_data);
 				}
 
-				const pointer data() const{
+				const pointer data() const
+				{
 					if (this->_c_size == 0 || !(this->_c_data))
 						return (NULL);
 					return (this->_c_data);
@@ -208,7 +240,8 @@ namespace ft {
 				// begin, end, rbegin, rend	
 
 				//template <class T>
-				class iterator {
+				class iterator 
+				{
 					template< class ItType, class ItAllocator >
 						friend class vector ;
 					public:
@@ -230,18 +263,18 @@ namespace ft {
 						return (*this);
 					}
 
-					bool operator==(const iterator &other) const{ return (this->_ptr == other._ptr); }
-					bool operator!=(const iterator &other) const{ return (this->_ptr != other._ptr); }
-					bool operator>(const iterator &other) const{ return (this->_ptr > other._ptr); }
-					bool operator<=(const iterator &other) const{ return (this->_ptr <= other._ptr); }
-					bool operator>=(const iterator &other) const{ return (this->_ptr >= other._ptr); }
-					bool operator<(const iterator &other) const{ return (this->_ptr < other._ptr); }
+					bool operator==(const iterator &other) const{ return (_ptr == other._ptr); }
+					bool operator!=(const iterator &other) const{ return (_ptr != other._ptr); }
+					bool operator>(const iterator &other) const{ return (_ptr > other._ptr); }
+					bool operator<=(const iterator &other) const{ return (_ptr <= other._ptr); }
+					bool operator>=(const iterator &other) const{ return (_ptr >= other._ptr); }
+					bool operator<(const iterator &other) const{ return (_ptr < other._ptr); }
 
 					//access
 					// Overload the * operator to return a reference to the element at the current iterator position
 					reference operator*() const { return (* _ptr); }
 
-					pointer operator->() const{ return (this->_ptr); }
+					pointer operator->() const{ return (_ptr); }
 
 					reference operator[](size_type n) const { return (_ptr[n]); }
 
@@ -302,7 +335,8 @@ namespace ft {
 				//	 ***  CONST_ITERATORS  	***   //
 				//--------------------------------//
 				//template <class T>
-				class const_iterator {
+				class const_iterator 
+				{
 					template< class ItType, class ItAllocator >
 						friend class vector ;
 					public:
@@ -610,16 +644,7 @@ namespace ft {
 				{
 					if (lhs.size() != rhs.size())
 						return (0);
-					else
-					{
-						const_iterator it2 = rhs.begin();
-						for (const_iterator it = lhs.begin(); it != lhs.end(); ++it){
-							if (*it != *it2)
-								return (0);
-							++it2;
-						}
-					}
-					return (1);
+					return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 				}
 				friend bool operator!=( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs )
 				{
@@ -628,21 +653,22 @@ namespace ft {
 
 				friend bool operator<( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs )
 				{
-					if (lhs.size() < rhs.size())
-						return (1);
-					else if(rhs.size() < lhs.size())
-						return (0);
-					else
-					{
-						const_iterator it2 = rhs.begin();
-						for (const_iterator it = lhs.begin(); it != lhs.end(); ++it){
-							if (*it < *it2)
-								return (1);
-							++it2;
-						}
-					}
-					return (0);
+//					if (lhs.size() < rhs.size())
+//						return (1);
+//					else if(lhs.size() > rhs.size())
+//						return (0);
+//					else
+//					{
+//						const_iterator it2 = rhs.begin();
+//						for (const_iterator it = lhs.begin(); it != lhs.end(); ++it){
+//							if (*it < *it2)
+//								return (1);
+//							++it2;
+//						}
+//					}
+					return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())) ;
 				}
+
 				friend bool operator>( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs )
 				{
 					return (rhs < lhs);
@@ -653,7 +679,7 @@ namespace ft {
 				}
 				friend bool operator<=( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs )
 				{
-					return (!(rhs < lhs));
+					return (!(lhs > rhs));
 				}
 
 			private:
@@ -677,6 +703,7 @@ namespace ft {
 				x = other;
 				other = tmp;
 			}
+
 
 		} // end of namespace
 #endif
