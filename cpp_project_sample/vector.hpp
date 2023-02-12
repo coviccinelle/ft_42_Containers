@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/11 17:44:20 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/12 13:24:29 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@
 #include "vector.hpp"
 #include "iterator_traits.hpp"
 #include "reverse_iterator.hpp"
-# include "enable_if.hpp"
-# include "is_integral.hpp"
+#include "enable_if.hpp"
+#include "is_integral.hpp"
+#include "equal.hpp"
+#include "lexicographical_compare.hpp"
 
 // A template is a simple yet very powerful tool in C++. The simple idea is to pass
 // data type as a parameter so that we don’t need to write the same code for different
@@ -32,29 +34,6 @@
 
 // Class template
 namespace ft {
-	template <class Ite>
-	size_t distance(Ite first, Ite last)
-	{
-		size_t i = 0;
-		while (first != last) {
-			++first;
-			++i;
-		}
-		return i;
-	}
-	template <class Ite1, class Ite2>
-		bool	equal(Ite1 first1, Ite1 last1, Ite2 first2)
-		{
-			while (first1 != last1)
-			{
-				if (*first1 != *first2)
-					return false;
-				++first1;
-				++first2;
-			}
-			return true;
-		}
-
 	template <class It1, class It2>
 		bool lexicographical_compare(It1 first1, It1 last1, It2 first2, It2 last2)
 		{
@@ -85,16 +64,6 @@ namespace ft {
 				typedef const Type & 		const_reference;
 				typedef ptrdiff_t			difference_type;
 
-				// *** TEST ONLY *** //
-
-				allocator_type & getAlloc(void){
-					return (this->_alloc);
-				}
-
-				pointer getElements(void) const {
-					return (this->_c_data);
-				}
-
 				//--------------------------------//
 				// ***	  MEMBER FUNCTIONS 	***   //
 				//--------------------------------//
@@ -113,8 +82,6 @@ namespace ft {
 						this->_alloc.construct(this->_c_data + i, value);	
 				}
 
-				//vector( value_type Type, std::allocator< Type > allocator){
-
 				//			range(3) from first to last
 				//			creates a vector from a range of elements defined by two iterators
 				template< class InputIt > vector( InputIt first, InputIt last, const_allocator_reference alloc = allocator_type(),
@@ -131,10 +98,7 @@ namespace ft {
 
 				vector( const vector& other ) : _c_size(other.size()), _c_data(0),_alloc(other.get_allocator()), _capacity(other.size())
 			{//constructeur de recopie -> //this->_alloc = other.get_allocator();
-			 //try {
 				this->_c_data = this->_alloc.allocate(other.capacity());
-				//}
-				//catch
 				for (size_t i = 0; i < this->_c_size; i++)
 					this->_alloc.construct(this->_c_data + i, other[i]);	
 			}
@@ -196,7 +160,6 @@ namespace ft {
 				//--------------------------------//
 				// at, operator[], front, back, data
 
-
 				const_reference at( size_type pos ) const
 				{
 					if ((pos >= this->size()))
@@ -210,14 +173,7 @@ namespace ft {
 				reference at( size_type pos ){
 					return (const_cast<reference>(static_cast < const typename ft::vector< Type, Allocator >& >(*this).at(pos))); }
 
-				//reference operator[]( size_type pos );
-				reference operator[](size_t i) {
-					/*	if (i > this->_c_size)
-						{
-						throw std::invalid_argument( "Error: Can't acess further, sorry\n" );
-						}*/
-					return (const_cast<reference>(static_cast < const typename ft::vector< Type, Allocator > &>(*this)[i])); }
-//					return (_c_data[i]); }
+				reference operator[](size_t i) { return (_c_data[i]); }//return (const_cast<reference>(static_cast < const typename ft::vector< Type, Allocator > &>(*this)[i])); }
 
 				const_reference operator[](size_t i) const { return (this->_c_data[i]); }
 
@@ -269,6 +225,9 @@ namespace ft {
 					iterator(const iterator& other) : _ptr(other._ptr) {}
 					~iterator(){}
 
+//					//User-defined conversion function/
+//					operator	iterator<value_type const>() const
+//					{return (iterator<value_type const>(_ptr));}
 
 					iterator& operator=(const iterator &other){
 						this->_ptr = other._ptr;
@@ -347,14 +306,6 @@ namespace ft {
 
 					private:
 					pointer  	_ptr;
-					public:
-//					template< class U >
-//					template< class Iterator1, class Iterator2 >
-//						iterator( const const_iterator<U>& other ) : x._ptr(y._ptr) {}
-
-					//			template <bool operator<(const const_iterator &other) const{return (this->_ptr < other._ptr);}
-					//			template <typename Ii> bool	operator<(const iterator<Ii>& other) const {return this->_ptr < other._ptr;}
-
 				};
 
 				//--------------------------------//
