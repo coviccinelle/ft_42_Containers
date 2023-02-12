@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 12:51:45 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/12 11:22:13 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/12 14:10:37 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,8 @@
 namespace ft
 {
 	template< class Iterator >
-		class const_reverse_iterator ;
-	template< class Iterator >
 		class reverse_iterator
 		{
-			template< class Iterator3 >
-				friend class const_reverse_iterator ;
 			public:
 			typedef Iterator												iterator_type;
 			typedef typename iterator_traits<Iterator>::value_type			value_type;
@@ -35,6 +31,11 @@ namespace ft
 			typedef typename iterator_traits<Iterator>::reference			reference;
 			typedef typename iterator_traits<Iterator>::iterator_category	iterator_category;
 			typedef typename std::size_t									size_type;
+
+			protected:
+				iterator_type	_it;
+
+			public:
 			// constructor
 			reverse_iterator(void) : _it(Iterator()) {};
 			explicit reverse_iterator( iterator_type x ) : _it(x) {};
@@ -59,10 +60,7 @@ namespace ft
 			reference operator*() const { return (*(_it - 1)); }
 			pointer operator->() const{ return (&operator*()); }
 			reference operator[](size_t n) const { return (_it[-n - 1]); }
-			private:
-			iterator_type	_it;
 
-			public:
 			//assignment
 			reverse_iterator& operator+=(size_type n){
 				_it -= n;

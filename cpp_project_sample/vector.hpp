@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/12 13:24:29 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/12 14:07:43 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -400,7 +400,7 @@ namespace ft {
 					}
 
 					private:
-					pointer  	_ptr;
+						pointer  	_ptr;
 				};
 
 				typedef ft::reverse_iterator<iterator>					reverse_iterator;

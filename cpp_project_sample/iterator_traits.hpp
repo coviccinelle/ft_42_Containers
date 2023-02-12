@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 17:11:09 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/10 16:07:13 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/12 13:41:40 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,18 +50,6 @@ namespace ft
 				typedef std::random_access_iterator_tag		iterator_category;
 		};
 
-//	template< class iterator>
-//	size_t	distance(iterator first, iterator last)
-//	{
-//		size_t	i = 0;
-//
-//		while (first != last)
-//		{
-//			++first;
-//			++i;
-//		}
-//		return (i);
-//	}
 }
 
 #endif
