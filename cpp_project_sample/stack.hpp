@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 13:40:05 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/12 14:53:09 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/13 14:32:12 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ namespace ft
 		class stack
 		{
 			public:
-				typedef	Type									value_type;
-				typedef	Container								container_type;
+				typedef	Type									value_type; //first template parameter (T)
+				typedef	Container								container_type; //second template parameter. It's the type of underlying container object
 				typedef typename container_type::size_type		size_type;
 			//protected:
 				typedef value_type&				reference;
@@ -73,31 +73,33 @@ namespace ft
 				void push( const value_type& value ) { return (c.push_back(value)); }
 				void pop() { return (c.pop_back()); }
 
+				friend bool operator==(const stack &x, const stack &y) { return (x.c == y.c); }
+				friend bool operator<(const stack &x, const stack &y) { return (x.c < y.c); }
+
 		};
 
+// --------------------------------- ***  [ END OF STACK ] *** --------------------------------------------//
+
+				//-----------------------------------------//
+				//	 *** 	NON-MEMBER FUNCTIONS	 ***  //
+				//----------------------------------------//
+				//	( relational operators )
+				
 	template< class Type, class Container >
-		bool operator==( const stack<Type, Container>& x, const stack<Type, Container>& y )
-		{return (x.c == y.c);}
-
-		template< class Type, class Container >
 		bool operator!=( const stack<Type, Container>& x, const stack<Type, Container>& y )
-		{return !(x.c == y.c);}
+		{return !(x == y);}
 
-		template< class Type, class Container >
-		bool operator< ( const stack<Type, Container>& x, const stack<Type, Container>& y )
-		{return (x.c < y.c);}
-
-		template< class Type, class Container >
+	template< class Type, class Container >
 		bool operator<=( const stack<Type, Container>& x, const stack<Type, Container>& y )
-		{ return !(y.c < x.c); }
+		{ return !(y < x); }
 
-		template< class Type, class Container >
+	template< class Type, class Container >
 		bool operator> ( const stack<Type, Container>& x, const stack<Type, Container>& y )
-		{ return (y.c < x.c); }
+		{ return (y < x); }
 
-		template< class Type, class Container >
+	template< class Type, class Container >
 		bool operator>=( const stack<Type, Container>& x, const stack<Type, Container>& y )
-		{ return !(x.c < y.c); }
+		{ return !(x < y); }
 
 }
 #endif
