@@ -21,7 +21,7 @@ ifeq ($(NICE), 1)
 	CFLAGS  += -DNICE
 endif
 
-TEST := stack_test.cpp 
+TEST := vector_test.cpp 
 
 OBJS := $(SRC:%.cpp=$(OBJSDIR)%.o)
 OBJSTEST := $(TEST:%.cpp=$(OBJSDIR)%.o)

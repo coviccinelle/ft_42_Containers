@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/12 14:07:43 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/14 14:13:23 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,22 +33,8 @@
 // The second keyword can always be replaced by the keyword ‘class’.
 
 // Class template
-namespace ft {
-	template <class It1, class It2>
-		bool lexicographical_compare(It1 first1, It1 last1, It2 first2, It2 last2)
-		{
-			while (first1 != last1 && first2 != last2)
-			{
-				if (*first1 < *first2)
-					return true;
-				if (*first2 < *first1)
-					return false;
-				++first1;
-				++first2;
-			}
-			return (first1 == last1 && first2 != last2);
-		}
-
+namespace ft
+{
 	template< class Type, class Allocator = std::allocator< Type > >
 		class vector
 		{

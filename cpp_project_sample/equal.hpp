@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 13:08:32 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/12 13:19:29 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/14 13:53:44 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ namespace ft
 			}
 			return true;
 		}
+
 	template< class It1, class It2, class BinaryPredicate >
 			bool equal( It1 first1, It1 last1, It2 first2, BinaryPredicate pred )
 			{
