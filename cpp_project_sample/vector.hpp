@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/14 14:13:23 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/17 11:47:13 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@
 // The second keyword can always be replaced by the keyword ‘class’.
 
 // Class template
-namespace ft
-{
+namespace ft {
+
 	template< class Type, class Allocator = std::allocator< Type > >
 		class vector
 		{
