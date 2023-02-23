@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   rbtree.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adelille <adelille@student.42.fr>          +#+  +:+       +#+        */
+/*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/17 10:48:44 by adelille          #+#    #+#             */
-/*   Updated: 2022/03/03 18:42:09 by adelille         ###   ########.fr       */
+/*   Created: 2023/02/23 14:05:16 by thi-phng          #+#    #+#             */
+/*   Updated: 2023/02/23 14:42:28 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef RBTREE_HPP
 # define RBTREE_HPP
@@ -19,6 +20,11 @@
 # include "pair.hpp"
 # include "reverse_iterator.hpp"
 # include "tree_iterator.hpp"
+# include "lexicographical_compare.hpp"
+# include "iterator_traits.hpp"
+# include "enable_if.hpp"
+# include "is_integral.hpp"
+# include "equal.hpp"
 
 # define RED	true
 # define BLACK	false
@@ -65,8 +71,7 @@ namespace ft
 				size_type	_size;
 
 			public:
-				_rb_tree(allocator alloc = allocator())
-					: _compare(compare()), _size(0)
+				_rb_tree(allocator alloc = allocator()): _compare(compare()), _size(0)
 				{
 					_alloc = alloc;
 
@@ -91,7 +96,6 @@ namespace ft
 					NIL->color = BLACK;
 
 					root = NIL;
-					//other.print();
 					_recursive_copy(*this, other.root, other.NIL);
 				}
 
@@ -102,7 +106,7 @@ namespace ft
 					_alloc.deallocate(NIL, 1);
 				}
 
-				_rb_tree	&operator=(_rb_tree const &other)
+				_rb_tree	&operator=(const _rb_tree &other)
 				{
 					clear();
 					_recursive_copy(*this, other.root, other.NIL);
@@ -196,13 +200,10 @@ namespace ft
 					_size = 0;
 				}
 
-				size_type	size() const
-				{return (_size);}
-				size_type	max_size() const
-				{return (_alloc.max_size());}
+				size_type	size() const {return (_size);}
+				size_type	max_size() const {return (_alloc.max_size());}
 
-				void	swap(_rb_tree &other)
-				{
+				void	swap(_rb_tree &other) {
 					std::swap(_alloc, other._alloc);
 					std::swap(_compare, other._compare);
 					std::swap(_size, other._size);

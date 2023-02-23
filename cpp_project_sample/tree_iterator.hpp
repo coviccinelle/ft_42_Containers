@@ -6,15 +6,15 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:59:03 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/23 12:59:08 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/23 18:52:59 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TREE_ITERATOR_HPP
 # define TREE_ITERATOR_HPP
 
-# include <iterator>
-# include <cstddef>
+//# include <iterator>
+//# include <cstddef>
 
 namespace ft
 {
@@ -24,10 +24,10 @@ namespace ft
 			public:
 				typedef Node									value_type;
 				typedef value_type								*node_ptr;
-				typedef typename Node::value_type				const data_type;
-				typedef data_type								&reference;
-				typedef data_type								const &const_reference;
-				typedef data_type								*pointer;
+				typedef typename Node::value_type				data_type;
+				typedef data_type &								reference;
+				typedef data_type const &						const_reference;
+				typedef data_type * 							pointer;
 				typedef data_type								const *const_pointer;
 				typedef typename std::ptrdiff_t					difference_type;
 				typedef std::bidirectional_iterator_tag			iterator_category;
@@ -48,8 +48,7 @@ namespace ft
 
 				~tree_iterator(void) {}
 
-				operator tree_iterator<value_type const>(void) const
-				{return tree_iterator<value_type const>(node, _root, _NIL);}
+				operator tree_iterator<value_type const>(void) const { return tree_iterator<value_type const>(node, _root, _NIL);}
 
 				tree_iterator	&operator=(const tree_iterator &other)
 				{
@@ -62,6 +61,14 @@ namespace ft
 				bool	operator==(const tree_iterator &other) const { return (node == other.node);}
 
 				bool	operator!=(const tree_iterator &other) const { return (node != other.node);}
+
+//				bool	operator<(const tree_iterator &other) const { return (node < other.node);}
+//
+//				bool	operator>(const tree_iterator &other) const { return (node > other.node);}
+//
+//				bool	operator>=(const tree_iterator &other) const { return (node >= other.node);}
+//
+//				bool	operator<=(const tree_iterator &other) const { return (node <= other.node);}
 
 				reference	operator*(void) { return (node->data);}
 
@@ -132,11 +139,27 @@ namespace ft
 					return (prev);
 				}
 
+//				node_ptr _next() {
+//					if (node == nullptr) {
+//						return nullptr;
+//					}
+//					if (node->right != nullptr) {
+//						return _min(node->right);
+//					}
+//					node_ptr y = node->parent;
+//					while (y != nullptr && node == y->right) {
+//						node = y;
+//						y = y->parent;
+//					}
+//					return y;
+//				}
 				node_ptr	_next(void)
 				{
 					node_ptr	n = node;
 					node_ptr	next = _NIL;
 
+					if (n == NULL)
+						return (NULL);
 					if (n->right != _NIL)
 						return _min(n->right);
 					next = n->parent;
@@ -147,7 +170,6 @@ namespace ft
 					}
 					return (next);
 				}
-
 		};
 }
 

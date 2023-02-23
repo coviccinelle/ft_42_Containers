@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/17 11:47:13 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/23 14:22:56 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@
 // The second keyword can always be replaced by the keyword ‘class’.
 
 // Class template
-namespace ft {
-
+namespace ft
+{
 	template< class Type, class Allocator = std::allocator< Type > >
 		class vector
 		{
@@ -389,6 +389,8 @@ namespace ft {
 						pointer  	_ptr;
 				};
 
+//				typedef std::reverse_iterator<iterator>					reverse_iterator;
+//				typedef std::reverse_iterator<const_iterator>			const_reverse_iterator;
 				typedef ft::reverse_iterator<iterator>					reverse_iterator;
 				typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 

@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:58:53 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/23 12:59:57 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/23 14:42:28 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,13 @@
 # include <memory>
 
 # include "lexicographical_compare.hpp"
-# include "equal.hpp"
 # include "pair.hpp"
 # include "rbtree.hpp"
+# include "reverse_iterator.hpp"
+# include "iterator_traits.hpp"
+# include "enable_if.hpp"
+# include "is_integral.hpp"
+# include "equal.hpp"
 
 // https://www.cplusplus.com/reference/map/map/
 
