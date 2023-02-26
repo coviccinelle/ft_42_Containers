@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 13:25:09 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/15 23:13:08 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/26 12:27:54 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,20 @@ namespace ft
 				}
 				return *this;
 			}
-			bool operator!=(const pair& other) const { return (this->first != other.first && this->second != other.second); }
-			bool operator==(const pair& other) const { return (this->first == other.first && this->second == other.second); }
-			// bool operator<( const pair& lhs, const Pair& rhs )
-			// {
-			// 	return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())) ;
-			// }
-
 
 		};
+	template <typename Pair1, typename Pair2>
+		bool operator==(const Pair1& x, const Pair2& y) { return (x.first == y.first && x.second == y.second); }
+	template <typename Pair1, typename Pair2>
+		bool operator!=(const Pair1& x, const Pair2& y) { return (!(x == y)); }
+	template <typename Pair1, typename Pair2>
+		bool operator<(const Pair1& x, const Pair2& y) { return (x.first < y.first || (x.first == y.first && x.second < y.second)); }
+	template <typename Pair1, typename Pair2>
+		bool operator>(const Pair1& x, const Pair2& y) { return (y < x); }
+	template <typename Pair1, typename Pair2>
+		bool operator>=(const Pair1& x, const Pair2& y) { return (!(x < y)); }
+	template <typename Pair1, typename Pair2>
+		bool operator<=(const Pair1& x, const Pair2& y) { return (!(y < x)); }
 
 	/*
     ** Construct a pair object with "first" and "second".
