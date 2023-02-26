@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 14:05:16 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/23 20:12:30 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/26 13:52:51 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ namespace ft
 				typedef _rb_node<value_type>					node;
 				typedef node *									node_ptr;
 				typedef std::ptrdiff_t							difference_type;
-				typedef ft::tree_iterator<node>					iterator;
-				typedef ft::tree_iterator<node>					const_iterator;
+				typedef ft::tree_iterator<T, T>					iterator;
+				typedef ft::tree_iterator<T, const T>			const_iterator;
 				typedef ft::reverse_iterator<iterator>			reverse_iterator;
 				typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
@@ -225,7 +225,7 @@ namespace ft
 
 				const_iterator	lower_bound(const value_type &value) const
 				{
-					for (iterator it = begin(); it != end(); ++it)
+					for (const_iterator it = begin(); it != end(); ++it)
 					{
 						if (_compare(value, it.node->data)
 								|| _compare(it.node->data, value) == 0)
@@ -246,41 +246,13 @@ namespace ft
 
 				const_iterator	upper_bound(const value_type &value) const
 				{
-					for (iterator it = begin(); it != end(); ++it)
+					for (const_iterator it = begin(); it != end(); ++it)
 					{
 						if (_compare(value, it.node->data))
 							return (it);
 					}
 					return (end());
 				}
-
-				// void	print(node *p = NULL, int indent = 0) const
-				// {
-				// 	if (p == NULL)
-				// 		p = root;
-				// 	if (p != NIL)
-				// 	{
-				// 		if (p->right != NIL)
-				// 		{
-				// 			print(p->right, indent + 4);
-				// 		}
-				// 		if (indent)
-				// 		{
-				// 			std::cout << std::setw(indent) << ' ';
-				// 		}
-				// 		if (p->right != NIL)
-				// 			std::cout << " /" << std::endl
-				// 				<< std::setw(indent) << ' ';
-				// 		if (p->color == RED)
-				// 			std::cout << "\033[0;31m";
-				// 		std::cout << p->data << std::endl << "\033[0m";
-				// 		if (p->left != NIL)
-				// 		{
-				// 			std::cout << std::setw(indent) << ' ' << " \\" << std::endl;
-				// 			print(p->left, indent + 4);
-				// 		}
-				// 	}
-				// }
 
 				iterator		begin() { return (iterator(_minimum(root), root, NIL));}
 				const_iterator	begin() const { return (const_iterator(_minimum(root), root, NIL));}
@@ -669,6 +641,7 @@ namespace ft
 					return (next);
 				}
 		};
+
 }
 
 #endif

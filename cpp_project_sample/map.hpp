@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:58:53 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/23 21:16:27 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/26 14:39:46 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,12 @@ namespace ft
 				typedef const value_type					&const_reference;
 				typedef value_type							*pointer;
 				typedef const value_type					*const_pointer;
+				class value_compare;
+				typedef typename _rb_tree<value_type, value_compare>::iterator	iterator;
+				typedef typename _rb_tree<value_type, value_compare>::const_iterator	const_iterator;
+				typedef typename _rb_tree<value_type, value_compare>::reverse_iterator	reverse_iterator;
+				typedef typename _rb_tree<value_type, value_compare>::const_reverse_iterator	const_reverse_iterator;
+
 
 				class value_compare
 				{
@@ -56,10 +62,6 @@ namespace ft
 						{return (*this);}
 				};
 
-				typedef typename _rb_tree<value_type, value_compare>::iterator	iterator;
-				typedef typename _rb_tree<value_type, value_compare>::const_iterator	const_iterator;
-				typedef typename _rb_tree<value_type, value_compare>::reverse_iterator	reverse_iterator;
-				typedef typename _rb_tree<value_type, value_compare>::const_reverse_iterator	const_reverse_iterator;
 
 			private:
 				_rb_tree<value_type, value_compare>	_tree;
@@ -110,9 +112,9 @@ namespace ft
 
 				allocator_type	get_allocator() const {return (_alloc);}
 
-				iterator	begin(void) {return (iterator(_tree.begin()));}
+				iterator	begin(void) {return (_tree.begin());}
 
-				const_iterator	begin(void) const {return const_iterator(_tree.begin());}
+				const_iterator	begin(void) const {return (_tree.begin());}
 
 				iterator	end(void) {return (_tree.end());}
 
@@ -197,7 +199,7 @@ namespace ft
 
 				size_type	count(const key_type &key) const
 				{
-					iterator	res = _tree.find(ft::make_pair(key, mapped_type()));
+					const_iterator	res = _tree.find(ft::make_pair(key, mapped_type()));
 
 					return ((res == _tree.end()) ? 0 : 1);
 				}

@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 12:51:45 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/24 15:25:45 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/26 13:10:46 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,25 +58,14 @@ namespace ft
 
 			iterator_type base() const { return (_it); }
 
-//			reference operator*() const { return (*(--_it)); }
 			reference operator*() const {
 				iterator_type tmp = _it;
 				return *(--tmp);
 			}
+
 			pointer operator->() const{ return (&operator*()); }
+
 			reference operator[](size_t n) const { return (_it[-n - 1]); }
-//---------------------------------------------------------------------------//
-//
-//
-//			template <class U> bool	operator==(const reverse_iterator<U> &y) const { return this->_it.operator==(y.base()); };
-//			template <class U> bool	operator!=(const reverse_iterator<U> &y) const { return this->_it.operator!=(y.base()); };
-//			template <class U> bool	operator< (const reverse_iterator<U> &y) const { return this->_it.operator> (y.base()); };
-//			template <class U> bool	operator<=(const reverse_iterator<U> &y) const { return this->_it.operator>=(y.base()); };
-//			template <class U> bool	operator> (const reverse_iterator<U> &y) const { return this->_it.operator< (y.base()); };
-//			template <class U> bool	operator>=(const reverse_iterator<U> &y) const { return this->_it.operator<=(y.base()); };
-//
-//
-//
 //---------------------------------------------------------------------------//
 			//assignment
 			reverse_iterator& operator+=(difference_type n){

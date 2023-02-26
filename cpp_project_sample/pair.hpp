@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 13:25:09 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/26 12:27:54 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/26 14:31:37 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,25 @@ namespace ft
 			}
 
 		};
+
 	template <typename Pair1, typename Pair2>
-		bool operator==(const Pair1& x, const Pair2& y) { return (x.first == y.first && x.second == y.second); }
+		bool operator==(const ft::pair<Pair1, Pair2>& x, const ft::pair<Pair1, Pair2>& y) { return (x.first == y.first && x.second == y.second); }
+//		bool operator==(const ft::pair<Pair1, Pair2>& x, const ft::pair<Pair1, Pair2>& y) { return (x.first == y.first && x.second == y.second); }
+
 	template <typename Pair1, typename Pair2>
-		bool operator!=(const Pair1& x, const Pair2& y) { return (!(x == y)); }
+		bool operator!=(const ft::pair<Pair1, Pair2>& x, const ft::pair<Pair1, Pair2>& y) { return (!(x == y)); }
+
 	template <typename Pair1, typename Pair2>
-		bool operator<(const Pair1& x, const Pair2& y) { return (x.first < y.first || (x.first == y.first && x.second < y.second)); }
+		bool operator<(const ft::pair<Pair1, Pair2>& x, const ft::pair<Pair1, Pair2>& y) { return (x.first < y.first || (x.first == y.first && x.second < y.second)); }
+
 	template <typename Pair1, typename Pair2>
-		bool operator>(const Pair1& x, const Pair2& y) { return (y < x); }
+		bool operator>(const ft::pair<Pair1, Pair2>& x, const ft::pair<Pair1, Pair2>& y) { return (y < x); }
+
 	template <typename Pair1, typename Pair2>
-		bool operator>=(const Pair1& x, const Pair2& y) { return (!(x < y)); }
+		bool operator>=(const ft::pair<Pair1, Pair2>& x, const ft::pair<Pair1, Pair2>& y) { return (!(x < y)); }
+
 	template <typename Pair1, typename Pair2>
-		bool operator<=(const Pair1& x, const Pair2& y) { return (!(y < x)); }
+		bool operator<=(const ft::pair<Pair1, Pair2>& x, const ft::pair<Pair1, Pair2>& y) { return (!(y < x)); }
 
 	/*
     ** Construct a pair object with "first" and "second".
