@@ -26,7 +26,7 @@ namespace ft
 
 
 				// *** default *** //
-			pair() : first(), second() {}
+			pair(void) : first(), second() {}
 				// *** copy *** //
 			pair(const T1& x, const T2& y) : first(x), second(y) {}
 
@@ -44,6 +44,14 @@ namespace ft
 				}
 				return *this;
 			}
+			bool operator!=(const pair& other) const { return (this->first != other.first && this->second != other.second); }
+			bool operator==(const pair& other) const { return (this->first == other.first && this->second == other.second); }
+			// bool operator<( const pair& lhs, const Pair& rhs )
+			// {
+			// 	return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())) ;
+			// }
+
+
 		};
 
 	/*

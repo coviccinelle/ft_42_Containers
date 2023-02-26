@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 14:05:16 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/23 14:42:28 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/23 20:12:30 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ namespace ft
 				typedef Compare									compare;
 				typedef Allocator								allocator;
 				typedef _rb_node<value_type>					node;
-				typedef node									*node_ptr;
+				typedef node *									node_ptr;
 				typedef std::ptrdiff_t							difference_type;
 				typedef ft::tree_iterator<node>					iterator;
 				typedef ft::tree_iterator<node>					const_iterator;
@@ -203,7 +203,8 @@ namespace ft
 				size_type	size() const {return (_size);}
 				size_type	max_size() const {return (_alloc.max_size());}
 
-				void	swap(_rb_tree &other) {
+				void	swap(_rb_tree &other)
+				{
 					std::swap(_alloc, other._alloc);
 					std::swap(_compare, other._compare);
 					std::swap(_size, other._size);
@@ -253,57 +254,57 @@ namespace ft
 					return (end());
 				}
 
-				void	print(node *p = NULL, int indent = 0) const
-				{
-					if (p == NULL)
-						p = root;
-					if (p != NIL)
-					{
-						if (p->right != NIL)
-						{
-							print(p->right, indent + 4);
-						}
-						if (indent)
-						{
-							std::cout << std::setw(indent) << ' ';
-						}
-						if (p->right != NIL)
-							std::cout << " /" << std::endl
-								<< std::setw(indent) << ' ';
-						if (p->color == RED)
-							std::cout << "\033[0;31m";
-						std::cout << p->data << std::endl << "\033[0m";
-						if (p->left != NIL)
-						{
-							std::cout << std::setw(indent) << ' ' << " \\" << std::endl;
-							print(p->left, indent + 4);
-						}
-					}
-				}
+				// void	print(node *p = NULL, int indent = 0) const
+				// {
+				// 	if (p == NULL)
+				// 		p = root;
+				// 	if (p != NIL)
+				// 	{
+				// 		if (p->right != NIL)
+				// 		{
+				// 			print(p->right, indent + 4);
+				// 		}
+				// 		if (indent)
+				// 		{
+				// 			std::cout << std::setw(indent) << ' ';
+				// 		}
+				// 		if (p->right != NIL)
+				// 			std::cout << " /" << std::endl
+				// 				<< std::setw(indent) << ' ';
+				// 		if (p->color == RED)
+				// 			std::cout << "\033[0;31m";
+				// 		std::cout << p->data << std::endl << "\033[0m";
+				// 		if (p->left != NIL)
+				// 		{
+				// 			std::cout << std::setw(indent) << ' ' << " \\" << std::endl;
+				// 			print(p->left, indent + 4);
+				// 		}
+				// 	}
+				// }
 
-				iterator	begin()
-				{return (iterator(_minimum(root), root, NIL));}
-				const_iterator	begin() const
-				{return (const_iterator(_minimum(root), root, NIL));}
-				iterator	end()
-				{return (iterator(NIL, root, NIL));}
-				const_iterator	end() const
-				{return (const_iterator(NIL, root, NIL));}
+				iterator		begin() { return (iterator(_minimum(root), root, NIL));}
+				const_iterator	begin() const { return (const_iterator(_minimum(root), root, NIL));}
+				iterator		end() { return (iterator(NIL, root, NIL));}
+				const_iterator	end() const { return (const_iterator(NIL, root, NIL));}
+
 				reverse_iterator	rbegin()
 				{
 					iterator	it = end();
 					return (reverse_iterator(it));
 				}
+
 				const_reverse_iterator	rbegin() const
 				{
 					const_iterator	it = end();
 					return (const_reverse_iterator(it));
 				}
+
 				reverse_iterator	rend()
 				{
 					iterator	it = begin();
 					return (reverse_iterator(it));
 				}
+
 				const_reverse_iterator	rend() const
 				{
 					const_iterator	it = begin();
@@ -325,7 +326,6 @@ namespace ft
 				node_ptr	_grand_parent(node_ptr const node) const
 				{
 					node_ptr	grand_parent = node->parent->parent;
-
 					return (grand_parent);
 				}
 
@@ -342,7 +342,6 @@ namespace ft
 				node_ptr	_uncle(node_ptr const node) const
 				{
 					node_ptr	grand_parent = _grand_parent(node);
-
 					return (_sibling(grand_parent));
 				}
 
