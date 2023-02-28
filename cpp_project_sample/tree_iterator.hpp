@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:59:03 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/27 15:02:21 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/28 21:58:29 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@
 namespace ft
 {
 	template <class T>
-		struct _rb_node;
+		struct RB_node;
 	template <class NodeType, class IteType>
 		class tree_iterator
 		{
 			public:
 				typedef IteType									value_type;
-				typedef ft::_rb_node<NodeType>*					node_ptr;
+				typedef ft::RB_node<NodeType>*					node_ptr;
 //				typedef typename Node::value_type				data_type;
 				typedef value_type &							reference;
 				typedef value_type const &						const_reference;
@@ -37,18 +37,17 @@ namespace ft
 				node_ptr	node;
 			private:
 				node_ptr _root;
-				node_ptr _NIL;
 
 			public:
-				tree_iterator(node_ptr node, node_ptr root, node_ptr NIL): node(node), _root(root), _NIL(NIL) {}
+				tree_iterator(node_ptr node, node_ptr root): node(node), _root(root) {}
 
-				tree_iterator(void) : node(NULL), _root(NULL), _NIL(NULL) {}
+				tree_iterator(void) : node(NULL), _root(NULL) {}
 
-				tree_iterator(const tree_iterator &other) : node(other.node), _root(other._root), _NIL(other._NIL) {}
+				tree_iterator(const tree_iterator &other) : node(other.node), _root(other._root) {}
 
 				~tree_iterator(void) {}
 
-				operator tree_iterator<NodeType, const IteType>(void) const { return tree_iterator<NodeType, const IteType>(node, _root, _NIL);}
+				operator tree_iterator<NodeType, const IteType>(void) const { return tree_iterator<NodeType, const IteType>(node, _root);}
 
 				tree_iterator	&operator=(const tree_iterator &other)
 				{
@@ -67,7 +66,7 @@ namespace ft
 
 				tree_iterator	&operator++(void)
 				{
-					if (node != _NIL)
+					if (node->is_nil == 0)
 						node = _next();
 					return (*this);
 				}
@@ -81,7 +80,7 @@ namespace ft
 
 				tree_iterator	&operator--(void)
 				{
-					if (node != _NIL)
+					if (node->is_nil == 0)
 						node = _prev();
 					else
 						node = _max(_root);
@@ -98,27 +97,34 @@ namespace ft
 			private:
 				node_ptr	_max(node_ptr node)
 				{
-					while (node->right != _NIL)
+					if (node->is_nil == 0)
+						return (node);
+					while (node->right->is_nil == 0)
 						node = node->right;
 					return (node);
 				}
 
 				node_ptr	_min(node_ptr node)
 				{
-					while (node->left != _NIL)
+					if (node->is_nil)
+						return (node);
+					while (node->left->is_nil == 0)// && node != node->left)
+					{
+//						std::cout << "2.0 BOUCLE, node = " << node << "and node -> left = " << node->left << std::endl;
 						node = node->left;
+					}
 					return (node);
 				}
 
 				node_ptr	_prev(void)
 				{
 					node_ptr	n = node;
-					node_ptr	prev = _NIL;
+					node_ptr	prev;
 
-					if (n->left != _NIL)
+					if (n->left->is_nil == 0)
 						return _max(n->left);
 					prev = n->parent;
-					while (prev != _NIL && n == prev->left)
+					while (prev->is_nil == 0 && n == prev->left)
 					{
 						n = prev;
 						prev = prev->parent;
@@ -129,14 +135,14 @@ namespace ft
 				node_ptr	_next(void)
 				{
 					node_ptr	n = node;
-					node_ptr	next = _NIL;
+					node_ptr	next;
 
-					if (n == NULL)
-						return (NULL);
-					if (n->right != _NIL)
+					if (n->is_nil)
+						return (n);
+					if (n->right->is_nil == 0)
 						return _min(n->right);
 					next = n->parent;
-					while (next != _NIL && n == next->right)
+					while (next->is_nil == 0 && n == next->right)
 					{
 						n = next;
 						next = next->parent;

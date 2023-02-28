@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 14:05:16 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/26 13:52:51 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/28 22:02:48 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,26 +36,27 @@
 namespace ft
 {
 	template <class T>
-		struct _rb_node
+		struct RB_node
 		{
 			typedef T	value_type;
-			_rb_node	*parent;
-			_rb_node	*left;
-			_rb_node	*right;
+			RB_node		*parent;
+			RB_node		*left;
+			RB_node		*right;
 			bool		color;
+			bool		is_nil;
 			T			data;
-			_rb_node(T const &data) : data(data) {}
+			RB_node(T const &data) : data(data) {}
 		};
 
-	template <class T, class Compare, class Allocator = std::allocator<_rb_node<T> > >
-		class _rb_tree
+	template <class T, class Compare, class Allocator = std::allocator<RB_node<T> > >
+		class RB_tree
 		{
 			public:
 				typedef T										value_type;
 				typedef size_t									size_type;
 				typedef Compare									compare;
 				typedef Allocator								allocator;
-				typedef _rb_node<value_type>					node;
+				typedef RB_node<value_type>						node;
 				typedef node *									node_ptr;
 				typedef std::ptrdiff_t							difference_type;
 				typedef ft::tree_iterator<T, T>					iterator;
@@ -71,7 +72,7 @@ namespace ft
 				size_type	_size;
 
 			public:
-				_rb_tree(allocator alloc = allocator()): _compare(compare()), _size(0)
+				RB_tree(allocator alloc = allocator()): _compare(compare()), _size(0)
 				{
 					_alloc = alloc;
 
@@ -81,10 +82,11 @@ namespace ft
 					NIL->left = NIL;
 					NIL->right = NIL;
 					NIL->color = BLACK;
+					NIL->is_nil = 1;
 					root = NIL;
 				}
 
-				_rb_tree(_rb_tree const &other)
+				RB_tree(RB_tree const &other)
 				{
 					_alloc = other._alloc;
 					_compare = other._compare;
@@ -93,25 +95,27 @@ namespace ft
 					NIL->parent = NIL;
 					NIL->left = NIL;
 					NIL->right = NIL;
-					NIL->color = BLACK;
-
+					NIL->color = other.color;
+					NIL->is_nil = other.is_nil;
 					root = NIL;
 					_recursive_copy(*this, other.root, other.NIL);
 				}
 
-				~_rb_tree()
+				~RB_tree()
 				{
 					clear();
 					_alloc.destroy(NIL);
 					_alloc.deallocate(NIL, 1);
 				}
 
-				_rb_tree	&operator=(const _rb_tree &other)
+				RB_tree	&operator=(const RB_tree &other)
 				{
 					clear();
 					_recursive_copy(*this, other.root, other.NIL);
 					return *this;
 				}
+
+				node_ptr	GetNil(void) const { return (this->NIL); }
 
 				iterator	find(value_type const &value)
 				{
@@ -120,7 +124,7 @@ namespace ft
 					if (!found)
 						return (end());
 					else
-						return (iterator(found, root, NIL));
+						return (iterator(found, root));
 				}
 
 				const_iterator	find(value_type const &value) const
@@ -148,13 +152,13 @@ namespace ft
 						root = n;
 						while (root->parent != NIL)
 							root = root->parent;
-						return (ft::make_pair(iterator(n, root, NIL), true));
+						return (ft::make_pair(iterator(n, root), true));
 					}
 					else
 					{
 						_alloc.destroy(n);
 						_alloc.deallocate(n, 1);
-						return (ft::make_pair(iterator(r.first, root, NIL), false));
+						return (ft::make_pair(iterator(r.first, root), false));
 					}
 				}
 
@@ -203,7 +207,7 @@ namespace ft
 				size_type	size() const {return (_size);}
 				size_type	max_size() const {return (_alloc.max_size());}
 
-				void	swap(_rb_tree &other)
+				void	swap(RB_tree &other)
 				{
 					std::swap(_alloc, other._alloc);
 					std::swap(_compare, other._compare);
@@ -254,10 +258,10 @@ namespace ft
 					return (end());
 				}
 
-				iterator		begin() { return (iterator(_minimum(root), root, NIL));}
-				const_iterator	begin() const { return (const_iterator(_minimum(root), root, NIL));}
-				iterator		end() { return (iterator(NIL, root, NIL));}
-				const_iterator	end() const { return (const_iterator(NIL, root, NIL));}
+				iterator		begin() { return (iterator(_minimum(root), root));}
+				const_iterator	begin() const { return (const_iterator(_minimum(root), root));}
+				iterator		end() { return (iterator(NIL, root));}
+				const_iterator	end() const { return (const_iterator(NIL, root));}
 
 				reverse_iterator	rbegin()
 				{
@@ -288,9 +292,11 @@ namespace ft
 				{
 					node	*node = _alloc.allocate(1);
 
+					node->is_nil = 0;
 					_alloc.construct(node, data);
 					node->color = RED;
-					node->left = node->right = NIL;
+					node->left = NIL;
+					node->right = NIL;
 					node->parent = NIL;
 					return (node);
 				}
@@ -600,7 +606,7 @@ namespace ft
 					}
 				}
 
-				void	_recursive_copy(_rb_tree &dst, node_ptr x, node_ptr x_nil)
+				void	_recursive_copy(RB_tree &dst, node_ptr x, node_ptr x_nil)
 				{
 					if (x != x_nil)
 					{

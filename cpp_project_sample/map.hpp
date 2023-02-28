@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:58:53 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/26 14:39:46 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/28 20:56:51 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ namespace ft
 				typedef value_type							*pointer;
 				typedef const value_type					*const_pointer;
 				class value_compare;
-				typedef typename _rb_tree<value_type, value_compare>::iterator	iterator;
-				typedef typename _rb_tree<value_type, value_compare>::const_iterator	const_iterator;
-				typedef typename _rb_tree<value_type, value_compare>::reverse_iterator	reverse_iterator;
-				typedef typename _rb_tree<value_type, value_compare>::const_reverse_iterator	const_reverse_iterator;
+				typedef typename RB_tree<value_type, value_compare>::iterator	iterator;
+				typedef typename RB_tree<value_type, value_compare>::const_iterator	const_iterator;
+				typedef typename RB_tree<value_type, value_compare>::reverse_iterator	reverse_iterator;
+				typedef typename RB_tree<value_type, value_compare>::const_reverse_iterator	const_reverse_iterator;
 
 
 				class value_compare
@@ -64,7 +64,7 @@ namespace ft
 
 
 			private:
-				_rb_tree<value_type, value_compare>	_tree;
+				RB_tree<value_type, value_compare>	_tree;
 				allocator_type						_alloc;
 				key_compare							_key_comp;
 				value_compare						_value_comp;
@@ -99,12 +99,8 @@ namespace ft
 
 				map	&operator=(const map &other)
 				{
-//					_alloc = other._alloc;
-//					_key_comp = other._key_comp;
-//					_value_comp = other._value_comp;
-//					_tree = other._tree;
-						if (this == &other)
-					return (*this);
+					if (this == &other)
+						return (*this);
 					this->clear();
 					this->insert(other.begin(), other.end());
 					return (*this);
