@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/23 14:22:56 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/27 14:58:26 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ namespace ft
 						this->_alloc.construct(this->_c_data + i, value);	
 				}
 
-				//			range(3) from first to last
-				//			creates a vector from a range of elements defined by two iterators
+				//	range(3) from first to last
+				//	creates a vector from a range of elements defined by two iterators
 				template< class InputIt > vector( InputIt first, InputIt last, const_allocator_reference alloc = allocator_type(),
 						typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL) : _c_size(0), _c_data(0), _alloc(alloc), _capacity(0)
 			{
@@ -83,7 +83,7 @@ namespace ft
 			}
 
 				vector( const vector& other ) : _c_size(other.size()), _c_data(0),_alloc(other.get_allocator()), _capacity(other.size())
-			{//constructeur de recopie -> //this->_alloc = other.get_allocator();
+			{
 				this->_c_data = this->_alloc.allocate(other.capacity());
 				for (size_t i = 0; i < this->_c_size; i++)
 					this->_alloc.construct(this->_c_data + i, other[i]);	
@@ -222,17 +222,17 @@ namespace ft
 
 					bool operator==(const iterator &other) const{ return (_ptr == other._ptr); }
 					bool operator!=(const iterator &other) const{ return (_ptr != other._ptr); }
-					bool operator>(const iterator &other) const{ return (_ptr > other._ptr); }
+					bool operator> (const iterator &other) const{ return (_ptr >  other._ptr); }
 					bool operator<=(const iterator &other) const{ return (_ptr <= other._ptr); }
 					bool operator>=(const iterator &other) const{ return (_ptr >= other._ptr); }
-					bool operator<(const iterator &other) const{ return (_ptr < other._ptr); }
+					bool operator< (const iterator &other) const{ return (_ptr  < other._ptr); }
 
 					bool operator==(const const_iterator &other) const{ return (_ptr == other._ptr); }
 					bool operator!=(const const_iterator &other) const{ return (_ptr != other._ptr); }
-					bool operator>(const const_iterator &other) const{ return (_ptr > other._ptr); }
+					bool operator> (const const_iterator &other) const{ return (_ptr >  other._ptr); }
 					bool operator<=(const const_iterator &other) const{ return (_ptr <= other._ptr); }
 					bool operator>=(const const_iterator &other) const{ return (_ptr >= other._ptr); }
-					bool operator<(const const_iterator &other) const{ return (_ptr < other._ptr); }
+					bool operator< (const const_iterator &other) const{ return (_ptr <  other._ptr); }
 
 					//access
 					// Overload the * operator to return a reference to the element at the current iterator position
@@ -358,7 +358,6 @@ namespace ft
 					const_iterator operator-(size_type n) const { return (const_iterator(_ptr - n)); }		
 
 					difference_type operator+(const_iterator const &other) const { return (_ptr + other._ptr); }
-//					difference_type operator+(iterator const &other) const { return (_ptr + other._ptr); }
 
 					difference_type operator-(const_iterator const &other) const { return (_ptr - other._ptr); }
 
@@ -389,8 +388,6 @@ namespace ft
 						pointer  	_ptr;
 				};
 
-//				typedef std::reverse_iterator<iterator>					reverse_iterator;
-//				typedef std::reverse_iterator<const_iterator>			const_reverse_iterator;
 				typedef ft::reverse_iterator<iterator>					reverse_iterator;
 				typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
@@ -617,28 +614,11 @@ namespace ft
 						return (0);
 					return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 				}
-				friend bool operator!=( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs )
-				{
-					return (!(lhs == rhs));
-				}
-
-				friend bool operator<( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs )
-				{
-					return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())) ;
-				}
-
-				friend bool operator>( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs )
-				{
-					return (rhs < lhs);
-				}
-				friend bool operator>=( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs )
-				{
-					return (!(lhs < rhs));
-				}
-				friend bool operator<=( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs )
-				{
-					return (!(lhs > rhs));
-				}
+				friend bool operator!=( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs ) { return (!(lhs == rhs)); }
+				friend bool operator<( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs ) { return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())) ; }
+				friend bool operator>( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs ) { return (rhs < lhs); }
+				friend bool operator>=( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs ) { return (!(lhs < rhs)); }
+				friend bool operator<=( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs ) { return (!(lhs > rhs)); }
 
 			private:
 				size_t			_c_size;
@@ -653,15 +633,11 @@ namespace ft
 				x.swap(other);
 			}
 
-
 		template< class Iterator >
 			void swap(Iterator& x, Iterator& other ) {
 				Iterator	tmp(x);
-
 				x = other;
 				other = tmp;
 			}
-
-
 		} // end of namespace
 #endif

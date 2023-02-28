@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 13:25:09 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/26 14:31:37 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/27 14:54:35 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ namespace ft
 
 	template <typename Pair1, typename Pair2>
 		bool operator==(const ft::pair<Pair1, Pair2>& x, const ft::pair<Pair1, Pair2>& y) { return (x.first == y.first && x.second == y.second); }
-//		bool operator==(const ft::pair<Pair1, Pair2>& x, const ft::pair<Pair1, Pair2>& y) { return (x.first == y.first && x.second == y.second); }
 
 	template <typename Pair1, typename Pair2>
 		bool operator!=(const ft::pair<Pair1, Pair2>& x, const ft::pair<Pair1, Pair2>& y) { return (!(x == y)); }

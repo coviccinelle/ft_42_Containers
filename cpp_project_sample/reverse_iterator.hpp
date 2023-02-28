@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 12:51:45 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/26 13:10:46 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/27 15:01:16 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,30 +99,26 @@ namespace ft
 				return (it);
 			}
 
-//			reverse_iterator operator-(size_type n) const { return (reverse_iterator(_it.operator+(n))); }		
-//			difference_type operator-(const difference_type& n) const {
-//				return (_it + n - 1) - _it.begin();
-//			}
-
-			//	//increment/decrement
-//			//pre-increment (++a)
+//------------------- increment/decrement -------------------//
+//
+		//pre-increment (++a)
     		reverse_iterator& operator++()
 			{
 				--_it;
 				return (*this); 
 			}
-//			//post-decrement (--a)
+		//post-decrement (--a)
     		reverse_iterator& operator--(){
 				++_it;
 				return (*this); 
 			}
-//			// post-increment (a++)
+		// post-increment (a++)
     		reverse_iterator operator++(int){
 				reverse_iterator tmp(*this);
 				--(_it);
 			 	return (tmp);
 			}
-			//pret-decrement (a--)
+		//pret-decrement (a--)
     		reverse_iterator operator--(int){
 				reverse_iterator tmp(*this);
 				++(_it);
@@ -134,7 +130,8 @@ namespace ft
 				//--------------------------------//
 				//	 ***  NON_MEMBERS  	***   //
 				//--------------------------------//
-				//
+			
+			
 	template< class Iterator1, class Iterator2 >
 		bool operator==( const reverse_iterator<Iterator1>& x, const reverse_iterator<Iterator2>& y ) { return x.base() == y.base() ;}
 
@@ -143,7 +140,6 @@ namespace ft
 
 	template< class Iterator1, class Iterator2 >
 		bool operator<( const reverse_iterator<Iterator1>& x, const reverse_iterator<Iterator2>& y ) { return x.base() > y.base() ;}
-//		bool operator<( const reverse_iterator<Iterator1>& x, const reverse_iterator<Iterator2>& y ) { return x.operator>( y.base()) ;}
 
 	template< class Iterator1, class Iterator2 >
 		bool operator>( const reverse_iterator<Iterator1>& x, const reverse_iterator<Iterator2>& y ) { return x.base() < y.base() ;}
@@ -155,13 +151,11 @@ namespace ft
 		bool operator>=( const reverse_iterator<Iterator1>& x, const reverse_iterator<Iterator2>& y ) { return x.base() <= y.base() ;}
 
 	template< class Iterator>
-		reverse_iterator<Iterator> operator+ (typename reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator>& rev_it)
-		{return (rev_it.base() + n);}
+		reverse_iterator<Iterator> operator+ (typename reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator>& rev_it) {return (rev_it.base() + n);}
 
 	template< class Iterator1, class Iterator2 >
 		typename reverse_iterator<Iterator1>::difference_type operator-( const reverse_iterator<Iterator1>& x, const reverse_iterator<Iterator2>& y )
 		{ return y.base().operator-(x.base()) ; }
-//		{ return y.base() - x.base() ; }
 
 }
 

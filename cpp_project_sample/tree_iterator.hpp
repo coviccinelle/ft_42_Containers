@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:59:03 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/26 14:45:22 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/02/27 15:02:21 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,9 @@ namespace ft
 
 
 				reference	operator*(void) { return (node->data);}
-
 				const_reference	operator*(void) const { return (node->data); }
 
 				pointer operator->() { return &(operator*()); }
-
 				const_pointer	operator->(void) const { return (&(operator*()));}
 
 				tree_iterator	&operator++(void)
@@ -96,11 +94,6 @@ namespace ft
 					--(*this);
 					return (tmp);
 				}
-//				friend tree_iterator operator+(size_type i) { return operator++;}
-//					friend iterator operator+(size_t i, const const_iterator& it) { return it + i;}
-
-//				tree_iterator operator-(size_type n) const { return (tree_iterator(_ptr - n)); }		
-//				tree_iterator operator-(size_type n) { return (tree_iterator(_ptr - n)); }		
 
 			private:
 				node_ptr	_max(node_ptr node)
@@ -151,9 +144,9 @@ namespace ft
 					return (next);
 				}
 		};
+
 template <typename N1, typename I1, typename N2, typename I2>
 	bool	operator==(const tree_iterator<N1, I1>& x, const tree_iterator<N2, I2> &y){ return (x.operator->() == y.operator->());}
-
 template <typename N1, typename I1, typename N2, typename I2>
 	bool	operator!=(const tree_iterator<N1, I1>& x, const tree_iterator<N2, I2> &y){ return (!(x == y));}
 template <typename N1, typename I1, typename N2, typename I2>
