@@ -469,7 +469,7 @@ namespace ft
 					else
 					{
 						if (size() + count > _capacity)
-							reserve(capacity() ? capacity() + count : 1);
+							reserve(capacity() ? capacity() + count : count);
 						for (size_t i = _c_size; i > index; --i)
 						{
 							_alloc.construct(_c_data + i + count - 1, _c_data[i - 1]);
