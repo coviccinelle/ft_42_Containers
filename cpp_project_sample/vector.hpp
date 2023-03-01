@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/27 14:58:26 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/01 10:40:12 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ namespace ft
 				typedef const Allocator & 	const_allocator_reference;	
 				typedef value_type & 		reference;
 				typedef const Type & 		const_reference;
-				typedef ptrdiff_t			difference_type;
+				typedef std::ptrdiff_t			difference_type;
 
 				//--------------------------------//
 				// ***	  MEMBER FUNCTIONS 	***   //
@@ -61,7 +61,6 @@ namespace ft
 					if (count > this->max_size()) // equal .max_size()
 					{
 						throw std::length_error("cannot create std::vector larger than max_size()");
-						std::abort();
 					}
 					this->_c_data =  this->_alloc.allocate(count);
 					for (size_t i = 0; i < count; i++)
@@ -73,13 +72,7 @@ namespace ft
 				template< class InputIt > vector( InputIt first, InputIt last, const_allocator_reference alloc = allocator_type(),
 						typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL) : _c_size(0), _c_data(0), _alloc(alloc), _capacity(0)
 			{
-				size_t count = ft::distance(first, last);
-				if (count == 0)
-					return;
-				_capacity = count;
-				_c_data = _alloc.allocate(_capacity);
-				_c_size = count;
-				std::uninitialized_copy(first, last, _c_data);
+				insert(begin(), first, last);
 			}
 
 				vector( const vector& other ) : _c_size(other.size()), _c_data(0),_alloc(other.get_allocator()), _capacity(other.size())
@@ -440,11 +433,14 @@ namespace ft
 				}
 
 				size_type max_size() const{
-#ifdef __APPLE__
-					if (sizeof(Type) == 1)
-						return (std::numeric_limits< size_t >::max() / (2 * sizeof (Type)));
-#endif
-					return (this->_alloc.max_size());
+//#ifdef __APPLE__
+//					if (sizeof(Type) == 1)
+//					map<Key, T, Compare, Alloc>::_max_size =
+				//return (std::numeric_limits<difference_type>::max() / (sizeof(node_type) / 2 ?: 1);
+			//			return (std::numeric_limits< size_t >::max() / (2 * sizeof (Type)));
+			 return(_alloc.max_size());
+//#endif
+//return (this->_alloc.max_size());
 				}
 
 
