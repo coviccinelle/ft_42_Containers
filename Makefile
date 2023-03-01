@@ -1,82 +1,62 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/08/12 18:22:34 by thi-phng          #+#    #+#              #
-#    Updated: 2022/08/16 21:50:24 by thi-phng         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+NAME := a.out
 
+CC := c++
+STDFLAGS := -std=c++98
+CFLAGS := -Wall -Werror -Wextra 
+INCLUDE := -I include/
+TESTFLAGS := -lgtest -lgtest_main -lgmock
+F17:= -std=c++98
 
-NAME	=	Easy_find
-CC		=	c++
-CFLAGS	=	-Wall -Wextra -Werror -std=c++98
-RM		=	rm -rf
-SRC		=	main.cpp 
+SRCDIR := src/
+OBJSDIR := objs/
+TESTDIR := test/
 
-OBJDIR	=	objs
-OBJ		=	$(addprefix $(OBJDIR)/, $(SRC:.cpp=.o))
+SRC := 
 
-.SILENT:
-SHELL	:= bash
-CRED 	= \033[0;31m
-CGRIS	= \033[0;214m
-CWHITE	= \033[0;37m
-CYELLOW	= \033[1;33m
-CGREEN 	= \033[0;32m
-CCYAN 	= \033[1;36m
-CBLUE 	= \033[0;34m
-CPURPLE	= \033[0;35m
-B 	=	$(shell tput bold)
-D =		$(shell tput sgr0)
+ifeq ($(INT_ONLY), 1)
+	CFLAGS		+= -DINT_ONLY
+endif
 
+ifeq ($(NICE), 1)
+	CFLAGS  += -DNICE
+endif
 
-all: TITLE launch $(NAME)
-	@printf "\n$(B)$(CCYAN)$(NAME) compiled$(D)\n\n"
+TEST := map_test.cpp 
 
-TITLE:
-	printf "${CRED}  _   ${CGRIS} _     ${CYELLOW}_  ${CGREEN}    ${CCYAN}       ${CBLUE} _     ${CPURPLE}     ${CRED}      \n"
-	printf "${CRED} | |_ ${CGRIS}| |_  ${CYELLOW}(_)${CGREEN} ___ ${CCYAN} _ __  ${CBLUE}| |_   ${CPURPLE}_ _  ${CRED} __ _ \n"
-	printf "${CRED} |  _|${CGRIS}| ' \\ ${CYELLOW}| |${CGREEN}|___|${CCYAN}| '_ \\ ${CBLUE}| ' \\ ${CPURPLE}| ' \\ ${CRED}/ _\` |\n"
-	printf "${CRED}  \__|${CGRIS}|_||_|${CYELLOW}|_|${CGREEN}     ${CCYAN}| .__/ ${CBLUE}|_||_|${CPURPLE}|_||_|${CRED}\\__, |\n"
-	printf "${CRED}      ${CGRIS}      ${CYELLOW}   ${CGREEN}     ${CCYAN}|_|     ${CBLUE}     ${CPURPLE}      ${CRED}|___/ \n"
-	printf "${CYELLOW}"
-	@echo Clumsy ${NAME} is on the way!
+OBJS := $(SRC:%.cpp=$(OBJSDIR)%.o)
+OBJSTEST := $(TEST:%.cpp=$(OBJSDIR)%.o)
 
+all:
+	make $(NAME)
 
- # ******************************************************************************* #
-define  progress_bar
-        @i=0; \
-        while [[ $$i -le $(words $(SRCS)) ]]; do \
-                printf " "; \
-                ((i = i + 1)); \
-        done; \
-		printf "$(B)$(CWHITE)]\r[$(CGREEN)";
-endef
- # ******************************************************************************* #
+$(NAME): $(OBJSDIR)main.o $(OBJS)
+	$(CC) $(CFLAGS) $(STDFLAGS) $(INCLUDE) $^ -o $@
 
-$(NAME): $(OBJ)
-	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
-	@printf "${B}${CWHITE}]\n"
+tests: $(OBJS) $(OBJSTEST)
+	$(CC) $(CFLAGS) $(STDFLAGS) $(F17) $(INCLUDE) $^ $(TESTFLAGS) -o $@
 
-${OBJDIR}/%.o:${SRCDIR}%.cpp
-	@mkdir -p objs
-	@$(CC) $(CFLAGS) -c $< -o $@
-	printf "█"
+$(OBJSDIR)%.o: $(TESTDIR)%.cpp 
+	mkdir -p $(OBJSDIR)
+	$(CC) $(CFLAGS) $(F17) $(INCLUDE) -c $< -o $@
 
-launch:
-	$(call progress_bar)
+$(OBJSDIR)%.o: $(SRCDIR)%.cpp 
+	mkdir -p $(OBJSDIR)
+	$(CC) $(CFLAGS) $(STDFLAGS) $(INCLUDE) -c $< -o $@
 
 clean:
-	$(RM) $(OBJDIR)
-	@echo "$(B)Cleared$(D)"
+	rm -rf $(OBJSDIR) 
 
-fclean:			clean
-	$(RM) $(NAME) ${RM} objs
+retet: fclean
+	make tests
 
-re:				fclean all
+retet_int: fclean
+	make tests INT_ONLY=1
 
-.PHONY:			all clean fclean re launch
+fclean: clean
+	rm -rf $(NAME)
+	rm -rf tests
+
+re: fclean
+	make $(NAME)
+
+.PHONY: all clean re fclean tests retet retet_int
