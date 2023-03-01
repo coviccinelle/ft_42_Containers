@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 14:05:16 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/28 22:02:48 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/01 18:39:56 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ namespace ft
 					NIL->color = other.color;
 					NIL->is_nil = other.is_nil;
 					root = NIL;
-					_recursive_copy(*this, other.root, other.NIL);
+					_recursive_copy(other.root);
 				}
 
 				~RB_tree()
@@ -111,7 +111,7 @@ namespace ft
 				RB_tree	&operator=(const RB_tree &other)
 				{
 					clear();
-					_recursive_copy(*this, other.root, other.NIL);
+					_recursive_copy(other.root);
 					return *this;
 				}
 
@@ -134,7 +134,7 @@ namespace ft
 					if (!found)
 						return (end());
 					else
-						return (iterator(found, root, NIL));
+						return (iterator(found, root));
 				}
 
 				ft::pair<iterator, bool>	insert(value_type const &value)
@@ -172,7 +172,7 @@ namespace ft
 						ft::pair<node_ptr, bool>	r = _insert_recursive(hint.node, n);
 
 						_size++;
-						return (iterator(r.first, root, NIL));
+						return (iterator(r.first, root));
 					}
 					else
 						return (insert(value).first);
@@ -593,10 +593,8 @@ namespace ft
 					x->color = BLACK;
 				}
 
-				void	_recursive_clear(node_ptr x = NULL)
+				void	_recursive_clear(node_ptr x)
 				{
-					if (x == NULL)
-						x = root;
 					if (x != NIL)
 					{
 						_recursive_clear(x->left);
@@ -606,14 +604,17 @@ namespace ft
 					}
 				}
 
-				void	_recursive_copy(RB_tree &dst, node_ptr x, node_ptr x_nil)
+				node	*_recursive_copy(node_ptr x)
 				{
-					if (x != x_nil)
-					{
-						_recursive_copy(dst, x->left, x_nil);
-						dst.insert(x->data);
-						_recursive_copy(dst, x->right, x_nil);
-					}
+					if (x->is_nil)
+						return (NIL);
+					node *nnode = _new_node(x->data);
+					nnode->color = x->color;
+					nnode->left = _recursive_copy(x->left);
+					nnode->left = nnode;
+					nnode->right = _recursive_copy(x->right);
+					nnode->right = nnode;
+					return (nnode);
 				}
 
 				node_ptr	_prev(node_ptr node) const

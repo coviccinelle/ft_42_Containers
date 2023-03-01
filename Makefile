@@ -12,7 +12,8 @@ TESTDIR := test/
 
 SRC := 
 
-TEST := vector_test.cpp 
+TEST := vector_test.cpp \
+	map_test.cpp
 
 OBJS := $(SRC:%.cpp=$(OBJSDIR)%.o)
 OBJSTEST := $(TEST:%.cpp=$(OBJSDIR)%.o)

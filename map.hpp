@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:58:53 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/28 20:56:51 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/01 18:44:54 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,17 @@ namespace ft
 		class map
 		{
 			public:
-				typedef Key									key_type;
-				typedef T									mapped_type;
-				typedef ft::pair<key_type, mapped_type>		value_type;
-				typedef std::size_t							size_type;
-				typedef std::ptrdiff_t						difference_type;
-				typedef Compare								key_compare;
-				typedef Allocator							allocator_type;
-				typedef value_type							&reference;
-				typedef const value_type					&const_reference;
-				typedef value_type							*pointer;
-				typedef const value_type					*const_pointer;
+				typedef Key										key_type;
+				typedef T										mapped_type;
+				typedef ft::pair<const key_type, mapped_type>	value_type;
+				typedef std::size_t								size_type;
+				typedef std::ptrdiff_t							difference_type;
+				typedef Compare									key_compare;
+				typedef Allocator								allocator_type;
+				typedef value_type								&reference;
+				typedef const value_type						&const_reference;
+				typedef value_type								*pointer;
+				typedef const value_type						*const_pointer;
 				class value_compare;
 				typedef typename RB_tree<value_type, value_compare>::iterator	iterator;
 				typedef typename RB_tree<value_type, value_compare>::const_iterator	const_iterator;
@@ -102,7 +102,7 @@ namespace ft
 					if (this == &other)
 						return (*this);
 					this->clear();
-					this->insert(other.begin(), other.end());
+					this->_tree = other._tree;
 					return (*this);
 				}
 
