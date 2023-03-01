@@ -1,18 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   vector.hpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/08 10:59:18 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/01 11:24:48 by thi-phng         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
+#include <cstdlib>
 #include <iostream>
 #include <cstring>
 #include <sstream>
@@ -409,7 +398,7 @@ namespace ft
 				}
 
 				void reserve( size_type new_cap ){
-					if (new_cap > max_size())
+					if (new_cap >= max_size())
 						throw std::length_error("vector::reserve");
 					else if (new_cap > _capacity)
 					{
@@ -455,55 +444,46 @@ namespace ft
 					this->_c_size = 0;
 				}
 
-//				iterator insert( const_iterator pos, const_reference value )
-//				{
-//					size_t index = pos - begin();
-//
-//					insert(pos, 1, value);
-//					return (iterator(_c_data + index));
-//				}
-//
 				iterator insert( const_iterator pos, const_reference value )
 				{
-//					std::cout << "Hi i'm the problem is me" << std::endl;
-					size_t index = pos - begin();
+					size_type	index = pos - begin();
+					if (_c_size == _capacity)
+						reserve(_capacity ? 2 * _capacity : 1);
+					for (size_type i = _c_size; i > index; --i)
+					{
+						_alloc.construct(_c_data + i, _c_data[i - 1]);
+						_alloc.destroy(_c_data + i - 1);
+					}
+					_alloc.construct(_c_data + index, value);
+					++_c_size;
 
-					insert(pos, 1, value);
 					return (iterator(_c_data + index));
 				}
 
 				void	insert(const_iterator pos, size_t count, const_reference value)
 				{
 					size_t index = pos - begin();
-					size_t new_size = _c_size + count;
 
 					if (count == 0)
 						return ;
-					if (empty())
+					else
 					{
-						reserve(count + 1);
+						if (size() + count > _capacity)
+							reserve(capacity() ? capacity() + count : 1);
+						for (size_t i = _c_size; i > index; --i)
+						{
+							_alloc.construct(_c_data + i + count - 1, _c_data[i - 1]);
+							_alloc.destroy(_c_data + i);
+						}
 						for (size_t i = index; i < index + count; ++i)
-							_c_data[i] = value;
-						_c_size = new_size;
-						_capacity = count;
-					}
-					else if (!empty())
-					{
-						if (new_size > _capacity)
-							reserve(_capacity + count);
-						for (size_t i = _c_size - 1; i > index; --i)
-							_c_data[i + count] = _c_data[i];
-						_c_data[index + count] = _c_data[index];
-						for (size_t i = index; i < index + count; ++i)
-							_c_data[i] = value;
-						_c_size = new_size;
+							_alloc.construct(_c_data + i, value);
+						_c_size += count;
 					}
 				}				
 
 				template< class InputIt >
 					void insert( iterator pos, InputIt first, InputIt last,
-							typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
-					{
+							typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL) {
 						difference_type const	i = pos - begin();
 						difference_type const	old_end_i = end() - begin();
 						iterator				old_end, end;
@@ -521,7 +501,7 @@ namespace ft
 							*--end = *--old_end;
 						while (first != last)
 							*(pos++) = *(first++);
-					}
+				}
 
 				iterator erase( iterator pos ){
 					if (pos == end())
@@ -578,7 +558,7 @@ namespace ft
 					if (count > this->max_size())
 					{
 						throw std::length_error("vector::resize");
-						//std::abort();
+						std::abort();
 					}
 					if (count > _c_size)
 					{

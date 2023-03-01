@@ -2,4 +2,5 @@ tags
 **.[oad]
 **.out
 tests
+googletest_build
 containers_test
