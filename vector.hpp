@@ -73,9 +73,8 @@ namespace ft
 
 				~vector(void)
 				{
-					if (this->_capacity > 0)
-						for (size_t i = 0; i < this->_c_size; i++)
-							this->_alloc.destroy((this->_c_data + i));
+					for (size_t i = 0; i < this->_c_size; i++)
+						this->_alloc.destroy((this->_c_data + i));
 					this->_alloc.deallocate(this->_c_data, this->_capacity);
 				};
 
@@ -523,26 +522,11 @@ namespace ft
 				}
 
 				void push_back( const Type& value ) {
-					if (this->_capacity == 0)
-					{
-						this->_c_data = this->_alloc.allocate(1);
-						this->_capacity = 1;
-					}
-					else if(this->_c_size == this->_capacity)
-					{
-
-						this->_capacity *= 2;
-						value_type	*new_data = this->_alloc.allocate((this->_capacity));
-						for (size_t i = 0; i < this->_c_size; i++)
-						{
-							this->_alloc.construct((new_data + i), *((*this)._c_data + i));
-							this->_alloc.destroy((*this)._c_data + i);
-						}
-						this->_alloc.deallocate((*this)._c_data, this->_capacity);
-						this->_c_data = new_data;
-					}
-					this->_alloc.construct(((*this)._c_data + (*this)._c_size), value);
-					this->_c_size++;
+					if(_c_size == _capacity)
+						reserve(capacity() ? _capacity * 2 : 1);
+					_alloc.construct(_c_data + _c_size, value);
+					_c_size++;
+					return ;
 				}
 
 				void pop_back()

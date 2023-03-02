@@ -2,7 +2,7 @@ NAME := a.out
 
 CC := c++
 STDFLAGS := -std=c++98
-CFLAGS := -Wall -Werror -Wextra -MMD #-fsanitize=address
+CFLAGS := -Wall -Werror -Wextra -MMD
 INCLUDE := -I . -I ./lib/googletest_build/googletest/include
 TESTFLAGS := -L ./lib/googletest_build/googletest/lib -lgtest -lgtest_main -lgmock
 
@@ -12,8 +12,9 @@ TESTDIR := test/
 
 SRC := 
 
-TEST := vector_test.cpp \
-	map_test.cpp
+TEST := stack_test.cpp \
+		map_test.cpp \
+		vector_test.cpp
 
 OBJS := $(SRC:%.cpp=$(OBJSDIR)%.o)
 OBJSTEST := $(TEST:%.cpp=$(OBJSDIR)%.o)

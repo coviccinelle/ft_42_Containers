@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 13:40:05 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/13 14:32:12 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/02 21:57:30 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ namespace ft
 				stack(const stack &other) : c(other.c) {}
 				explicit stack(const container_type &ctnr = container_type()) : c(ctnr) {}
 				~stack(void) {}
+			
 
 				stack	&operator=(stack const &other)
 				{
