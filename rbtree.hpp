@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 14:05:16 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/02 17:31:58 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/02 19:36:32 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,7 @@ namespace ft
 					NIL->right = NIL;
 					NIL->color = BLACK;
 					NIL->is_nil = 1;
-					root = NIL;
-					_recursive_copy(other.root);
+					root = _recursive_copy(other.root);
 				}
 
 				~RB_tree()
@@ -110,8 +109,13 @@ namespace ft
 
 				RB_tree	&operator=(const RB_tree &other)
 				{
+					if (this == &other)
+						return (*this);
 					clear();
-					_recursive_copy(other.root);
+					_alloc = other._alloc;
+					_compare = other._compare;
+					_size = other._size;
+					root = _recursive_copy(other.root);
 					return *this;
 				}
 
@@ -632,10 +636,13 @@ namespace ft
 						return (NIL);
 					node *nnode = _new_node(x->data);
 					nnode->color = x->color;
+
 					nnode->left = _recursive_copy(x->left);
-					nnode->left = nnode;
+					nnode->left->parent = nnode;
+
 					nnode->right = _recursive_copy(x->right);
-					nnode->right = nnode;
+					nnode->right->parent = nnode;
+
 					return (nnode);
 				}
 

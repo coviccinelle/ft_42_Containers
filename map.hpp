@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:58:53 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/02 16:58:36 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/02 19:36:32 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ namespace ft
 				{
 					if (this == &other)
 						return (*this);
-					this->clear();
 					this->_tree = other._tree;
 					return (*this);
 				}
