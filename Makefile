@@ -3,8 +3,8 @@ NAME := a.out
 CC := c++
 STDFLAGS := -std=c++98
 CFLAGS := -Wall -Werror -Wextra -MMD
-INCLUDE := -I . -I ./lib/googletest_build/googletest/include
-TESTFLAGS := -L ./lib/googletest_build/googletest/lib -lgtest -lgtest_main -lgmock
+INCLUDE := -I . -I ./lib/googletest/include
+TESTFLAGS := -L ./lib/googletest/lib -lgtest -lgtest_main -lgmock
 
 SRCDIR := 
 OBJSDIR := objs/
