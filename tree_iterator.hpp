@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:59:03 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/02 17:40:05 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/02 21:26:02 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,18 @@ namespace ft
 			
 				node_ptr	node;
 			private:
-				node_ptr	_root;
+				node_ptr	_parent;
 
 			public:
-				tree_iterator(node_ptr node, node_ptr root): node(node), _root(root) {}
+				tree_iterator(node_ptr node, node_ptr parent): node(node), _parent(parent) {}
 
-				tree_iterator(void) : node(NULL), _root(NULL) {}
+				tree_iterator(void) : node(NULL), _parent(NULL) {}
 
-				tree_iterator(const tree_iterator &other) : node(other.node), _root(other._root) {}
+				tree_iterator(const tree_iterator &other) : node(other.node), _parent(other._parent) {}
 
 				~tree_iterator(void) {}
 
-				operator tree_iterator<NodeType, const IteType>(void) const { return tree_iterator<NodeType, const IteType>(node, _root);}
+				operator tree_iterator<NodeType, const IteType>(void) const { return tree_iterator<NodeType, const IteType>(node, _parent);}
 
 				tree_iterator	&operator=(const tree_iterator &other)
 				{
@@ -68,6 +68,13 @@ namespace ft
 				{
 					if (node->is_nil == 0)
 						node = _next();
+					else
+					{
+						while (_parent->parent->is_nil == 0)
+							_parent = _parent->parent;
+						node = _min(_parent);
+						_parent = node->parent;
+					}
 					return (*this);
 				}
 
@@ -83,7 +90,12 @@ namespace ft
 					if (node->is_nil == 0)
 						node = _prev();
 					else
-						node = _max(_root);
+					{
+						while (_parent->parent->is_nil == 0)
+							_parent = _parent->parent;
+						node = _max(_parent);
+						_parent = node->parent;
+					}
 					return (*this);
 				}
 

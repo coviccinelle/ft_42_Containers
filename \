@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 14:05:16 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/02 21:16:27 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/02 20:23:47 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ namespace ft
 					if (!found)
 						return (end());
 					else
-						return (iterator(found, found->parent));
+						return (iterator(found));
 				}
 
 				const_iterator	find(value_type const &value) const
@@ -139,7 +139,7 @@ namespace ft
 					if (!found)
 						return (end());
 					else
-						return (iterator(found, found->parent));
+						return (iterator(found));
 				}
 
 				ft::pair<iterator, bool>	insert(value_type const &value)
@@ -150,7 +150,7 @@ namespace ft
 					{
 						_alloc.destroy(n);
 						_alloc.deallocate(n, 1);
-						return (ft::make_pair(iterator(r.first, (r.first)->parent), false));
+						return (ft::make_pair(iterator(r.first), false));
 					}
 					_size++;
 					if (n->parent == NIL)
@@ -163,7 +163,9 @@ namespace ft
 					root = n;
 					while (root->parent != NIL)
 						root = root->parent;
-					return (ft::make_pair(iterator(n, n->parent), true));
+					if (NIL->parent == NIL || _compare(value, NIL->parent->data))
+						NIL->parent = n;
+					return (ft::make_pair(iterator(n), true));
 				}
 
 				iterator	insert(iterator hint, const value_type &value)
@@ -174,9 +176,17 @@ namespace ft
 					{
 						node_ptr	n = _new_node(value);
 						ft::pair<node_ptr, bool>	r = _insert_recursive(hint.node, n);
+						if (r.second == 0)
+						{
+							_alloc.destroy(n);
+							_alloc.deallocate(n, 1);
+							return (iterator(r.first));
+						}
+						if (NIL->parent == NIL || _compare(value, NIL->parent->data))
+							NIL->parent = n;
 
 						_size++;
-						return (iterator(r.first, (r.first)->parent));
+						return (iterator(r.first));
 					}
 					else
 						return (insert(value).first);
@@ -184,11 +194,16 @@ namespace ft
 
 				size_type	erase(value_type const &value)
 				{
+					node_ptr	parent;
 					node_ptr	n = _find_node(value);
 
 					if (n)
 					{
+						parent = n;
+						if (n == NIL->parent)
+							parent = n->parent;
 						_delete_node(n);
+						NIL->parent = parent;
 						return (1);
 					}
 					else
@@ -197,8 +212,17 @@ namespace ft
 
 				void	erase(iterator pos)
 				{
+					node_ptr	parent = pos.node;
+
 					if (pos.node != NIL)
+					{
+						if (pos.node == NIL->parent)
+						{
+							parent = pos.node->parent;
+						}
 						_delete_node(pos.node);
+						NIL->parent = parent;
+					}
 				}
 
 				void	clear()
@@ -262,10 +286,10 @@ namespace ft
 					return (end());
 				}
 
-				iterator		begin() { node_ptr min = _minimum(root); return (iterator(min, min->parent));}
-				const_iterator	begin() const { node_ptr min = _minimum(root); return (const_iterator(min, min->parent));}
-				iterator		end() { return (iterator(NIL, _maximum(root)));}
-				const_iterator	end() const { return (const_iterator(NIL, _maximum(root)));}
+				iterator		begin() { return (iterator(_minimum(root)));}
+				const_iterator	begin() const { return (const_iterator(_minimum(root)));}
+				iterator		end() { return (iterator(NIL));}
+				const_iterator	end() const { return (const_iterator(NIL));}
 
 				reverse_iterator	rbegin()
 				{
