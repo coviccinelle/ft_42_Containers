@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:59:03 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/28 21:58:29 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/02 17:32:29 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ namespace ft
 				typedef typename std::ptrdiff_t					difference_type;
 				typedef std::bidirectional_iterator_tag			iterator_category;
 			
-				node_ptr	node;
 			private:
-				node_ptr _root;
+				node_ptr	node;
+				node_ptr	_root;
 
 			public:
 				tree_iterator(node_ptr node, node_ptr root): node(node), _root(root) {}
@@ -106,24 +106,20 @@ namespace ft
 
 				node_ptr	_min(node_ptr node)
 				{
-					if (node->is_nil)
-						return (node);
-					while (node->left->is_nil == 0)// && node != node->left)
-					{
-//						std::cout << "2.0 BOUCLE, node = " << node << "and node -> left = " << node->left << std::endl;
-						node = node->left;
-					}
-					return (node);
+					node_ptr n = node;
+
+					while (n->left->is_nil == 0)
+						n = n->left;
+					return (n);
 				}
 
 				node_ptr	_prev(void)
 				{
 					node_ptr	n = node;
-					node_ptr	prev;
 
 					if (n->left->is_nil == 0)
 						return _max(n->left);
-					prev = n->parent;
+					node_ptr prev = n->parent;
 					while (prev->is_nil == 0 && n == prev->left)
 					{
 						n = prev;
@@ -134,20 +130,17 @@ namespace ft
 
 				node_ptr	_next(void)
 				{
-					node_ptr	n = node;
-					node_ptr	next;
+					node_ptr n = node;
 
-					if (n->is_nil)
-						return (n);
 					if (n->right->is_nil == 0)
-						return _min(n->right);
-					next = n->parent;
-					while (next->is_nil == 0 && n == next->right)
+						return (_min(n->right));
+					node_ptr parent = n->parent;
+					while (parent->is_nil == 0 && n== parent->right)
 					{
-						n = next;
-						next = next->parent;
+						n = parent;
+						parent = parent->parent;
 					}
-					return (next);
+					return (parent);
 				}
 		};
 

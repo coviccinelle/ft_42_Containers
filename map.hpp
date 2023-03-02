@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:58:53 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/01 18:44:54 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/02 16:58:36 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,15 @@ namespace ft
 				value_compare						_value_comp;
 
 			public:
+				typename RB_tree<value_type, value_compare>::node_ptr getRoot(void) const
+				{
+					return (_tree.GetRoot());
+				}
+
+				void	printHelper(void) const
+				{
+					return (_tree.printHelper(getRoot()));
+				}
 
 				explicit map(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type()) : _tree()
 				{

@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 14:05:16 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/01 18:39:56 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/02 17:31:58 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ namespace ft
 					NIL->parent = NIL;
 					NIL->left = NIL;
 					NIL->right = NIL;
-					NIL->color = other.color;
-					NIL->is_nil = other.is_nil;
+					NIL->color = BLACK;
+					NIL->is_nil = 1;
 					root = NIL;
 					_recursive_copy(other.root);
 				}
@@ -116,6 +116,7 @@ namespace ft
 				}
 
 				node_ptr	GetNil(void) const { return (this->NIL); }
+				node_ptr	GetRoot(void) const { return (this->root); }
 
 				iterator	find(value_type const &value)
 				{
@@ -140,26 +141,25 @@ namespace ft
 				ft::pair<iterator, bool>	insert(value_type const &value)
 				{
 					node_ptr	n = _new_node(value);
-					ft::pair<node_ptr, bool>	r = _insert_recursive(root, n);
-
-					if (r.second)
-					{
-						_size++;
-						if (n->parent == NIL)
-							n->color = BLACK;
-						else
-							_insert_fixup(n);
-						root = n;
-						while (root->parent != NIL)
-							root = root->parent;
-						return (ft::make_pair(iterator(n, root), true));
-					}
-					else
+					ft::pair<node_ptr, bool> r = _insert_recursive(root, n);
+					if (r.second == 0)
 					{
 						_alloc.destroy(n);
 						_alloc.deallocate(n, 1);
 						return (ft::make_pair(iterator(r.first, root), false));
 					}
+					_size++;
+					if (n->parent == NIL)
+					{
+						n->color = BLACK;
+						n->is_nil = 0;
+					}
+					else
+						_insert_fixup(n);
+					root = n;
+					while (root->parent != NIL)
+						root = root->parent;
+					return (ft::make_pair(iterator(n, root), true));
 				}
 
 				iterator	insert(iterator hint, const value_type &value)
@@ -287,13 +287,33 @@ namespace ft
 					return (const_reverse_iterator(it));
 				}
 
+				void recursePrintHelper(node *root, int space) const
+				{
+					if (root == NIL)
+						return ;
+
+					space += 5;
+
+					recursePrintHelper(root->right, space); 
+					for (int i = 0; i < space; ++i)
+						std::cout << "-";
+					std::cout << "[first, second, color, is_nil] (" << root->data.first << ", " << root->data.second << ", " << root->color << ", [" << root->is_nil << "])" << "\n";
+					recursePrintHelper(root->left, space); 
+				}
+
+				void	printHelper(node *root) const
+				{
+					std::cout << "nil node info : " << NIL->is_nil <<  std::endl;
+					recursePrintHelper(root, 0);
+				}
+
 			private:
 				node	*_new_node(value_type const &data)
 				{
 					node	*node = _alloc.allocate(1);
 
-					node->is_nil = 0;
 					_alloc.construct(node, data);
+					node->is_nil = 0;
 					node->color = RED;
 					node->left = NIL;
 					node->right = NIL;
@@ -378,6 +398,7 @@ namespace ft
 					else if (root != NIL)
 						return (ft::make_pair(root, false));
 					n->parent = root;
+					n->is_nil = 0;
 					n->color = RED;
 					n->left = n->right = NIL;
 					return (ft::make_pair(n, true));
@@ -438,6 +459,7 @@ namespace ft
 							break ;
 					}
 					root->color = BLACK;
+					root->is_nil = 0;
 				}
 
 				node_ptr	_find_node(value_type const &data) const
@@ -634,12 +656,10 @@ namespace ft
 
 				node_ptr	_next(node_ptr node) const
 				{
-					node_ptr	next = NIL;
-
 					if (node->right != NIL)
 						return (_minimum(node->right));
 
-					next = node->parent;
+					node_ptr next = node->parent;
 					while (next != NIL && node == next->right)
 					{
 						node = next;
