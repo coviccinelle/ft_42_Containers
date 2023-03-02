@@ -6,11 +6,11 @@ CFLAGS := -Wall -Werror -Wextra -MMD
 INCLUDE := -I . -I ./lib/googletest_build/googletest/include
 TESTFLAGS := -L ./lib/googletest_build/googletest/lib -lgtest -lgtest_main -lgmock
 
-SRCDIR := src/
+SRCDIR := 
 OBJSDIR := objs/
 TESTDIR := test/
 
-SRC := 
+SRC := main.cpp 
 
 TEST := stack_test.cpp \
 		map_test.cpp \
