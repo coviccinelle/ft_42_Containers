@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:59:03 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/02 17:32:29 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/02 17:40:05 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ namespace ft
 				typedef typename std::ptrdiff_t					difference_type;
 				typedef std::bidirectional_iterator_tag			iterator_category;
 			
-			private:
 				node_ptr	node;
+			private:
 				node_ptr	_root;
 
 			public:
@@ -97,7 +97,7 @@ namespace ft
 			private:
 				node_ptr	_max(node_ptr node)
 				{
-					if (node->is_nil == 0)
+					if (node->is_nil)
 						return (node);
 					while (node->right->is_nil == 0)
 						node = node->right;
@@ -106,11 +106,11 @@ namespace ft
 
 				node_ptr	_min(node_ptr node)
 				{
-					node_ptr n = node;
-
-					while (n->left->is_nil == 0)
-						n = n->left;
-					return (n);
+					if (node->is_nil)
+						return (node);
+					while (node->left->is_nil == 0)
+						node = node->left;
+					return (node);
 				}
 
 				node_ptr	_prev(void)
