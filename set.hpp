@@ -6,19 +6,18 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:58:53 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/03 21:49:24 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/03 23:07:55 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SET_HPP
 # define SET_HPP
 
-# include <iostream>
-# include <memory>
-
 #include "rbtree.hpp"
 #include "equal.hpp"
 #include "reverse_iterator.hpp"
+
+//https://en.cppreference.com/w/cpp/container/set
 
 namespace ft
 {
@@ -61,6 +60,10 @@ namespace ft
 
 			public:
 
+							//--------------------------------//
+							//	 ***  MEMBER-FUNCTIONS	 ***  //
+							//--------------------------------//
+
 				explicit set(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type()) : _tree(alloc, comp)
 				{
 					_value_comp = value_compare();
@@ -71,10 +74,7 @@ namespace ft
 					insert(first, last);
 				}
 
-				set(const set &x): _tree(x._tree)
-				{
-//					_tree = other._tree;
-				}
+				set(const set &x): _tree(x._tree) { }
 
 				~set(void) {}
 
@@ -88,49 +88,57 @@ namespace ft
 				}
 
 				allocator_type  get_allocator() const {return (allocator_type());}
-				// ------------------- Iterator --------------------//
 
-				iterator	begin(void) {return (iterator(_tree.begin()));}
+							//--------------------------------//
+							//	 *** 	 ITERATORS		 ***  //
+							//--------------------------------//
+				
+				iterator				begin(void) {return (iterator(_tree.begin()));}
 
-				const_iterator	begin(void) const {return (_tree.begin());}
+				const_iterator			begin(void) const {return (_tree.begin());}
 
-				iterator	end(void) {return (_tree.end());}
+				iterator				end(void) {return (_tree.end());}
 
-				const_iterator	end(void) const {return (_tree.end());}
+				const_iterator			end(void) const {return (_tree.end());}
 
-				reverse_iterator	rbegin(void) {return (_tree.rbegin());}
+				reverse_iterator		rbegin(void) {return (_tree.rbegin());}
 
 				const_reverse_iterator	rbegin(void) const {return (_tree.rbegin());}
 
-				reverse_iterator	rend(void) {return (_tree.rend());}
+				reverse_iterator		rend(void) {return (_tree.rend());}
 
 				const_reverse_iterator	rend(void) const {return (_tree.rend());}
 
-					// ---------------------- At + [] ---------------------------------//
-				key_type	&at(const key_type &key) { return (_tree.at(key)); }
+							//--------------------------------//
+							//	 ***   ELEMENT_ACCES	 ***  //
+							//--------------------------------//
+				
+				key_type		&at(const key_type &key) { return (_tree.at(key)); }
 
 				const key_type	&at(const key_type &key) const { return (_tree.at(key)); }
 
-				key_type	&operator[](const key_type &key)
-				{
-					return (_tree[key] = key);
-				}
+				key_type		&operator[](const key_type &key) { return (_tree[key] = key); }
 
-					// ---------------------- [ CAPACITY ] ---------------------------------//
-				bool	empty(void) const {return (_tree.size() == 0);}
+							//--------------------------------//
+							//	 ***   		CAPACITY	 ***  //
+							//--------------------------------//
+				
+				bool		empty(void) const {return (_tree.size() == 0);}
 
 				size_type	size(void) const {return (_tree.size());}
 
 				size_type	max_size(void) const {return (_tree.max_size());}
 
-					// ---------------------- [ MODIFIERS ] ---------------------------------//
-
-				void	clear(void) {_tree.clear();}
+							//--------------------------------//
+							//	 *** 	  MODIFIERS		 ***  //
+							//--------------------------------//
+				
+				void					clear(void) {_tree.clear();}
 
 				pair<iterator, bool>	insert(const value_type &value) {return (_tree.insert(value));}
 
-
-				template <class InputIt> void insert(InputIt first, InputIt last) {
+				template <class InputIt> void 	insert(InputIt first, InputIt last) 
+				{
 					for(; first != last; ++first)
 						insert(*first);
 				}
@@ -160,6 +168,10 @@ namespace ft
 
 				void	swap(set &other) { _tree.swap(other._tree); }
 
+							//--------------------------------//
+							//	 ***   		LOOKUP		 ***  //
+							//--------------------------------//
+				
 				size_type	count(const key_type &key) const
 				{
 					const_iterator	res = _tree.find(key);
@@ -194,18 +206,18 @@ namespace ft
 					return (ft::make_pair(lower, upper));
 				}
 
+							//--------------------------------//
+							//	 ***   	OBSERVERS		 ***  //
+							//--------------------------------//
+				
 				key_compare		key_comp(void) const { return (_key_comp); }
 				value_compare	value_comp(void) const { return (_value_comp); }
 
-//				value_compare	value_comp(void) const { return (value_compare(_tree.key_comp())); }
-
-//				value_compare	value_comp(void) const { return (_tree.key_comp());}
-
-//				operator value_compare() const {
-//					return value_compare(_tree.key_comp());
-//				}
-
 		};
+
+							//------------------------------------//
+							//	 *** NON MEMBER-FUNCTIONS	 ***  //
+							//------------------------------------//
 
 	template <class Key, class Compare, class Alloc>
 		bool	operator==(const ft::set<Key, Compare, Alloc> &x, const ft::set<Key, Compare, Alloc> &y)

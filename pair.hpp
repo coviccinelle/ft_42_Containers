@@ -6,13 +6,15 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 13:25:09 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/03 17:58:40 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/03 22:42:47 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PAIR_HPP
 #define PAIR_HPP
 
+ // https://en.cppreference.com/w/cpp/utility/pair
+ 
 namespace ft
 {
 	template <class T1, class T2>
@@ -31,8 +33,7 @@ namespace ft
 			pair(const T1& x, const T2& y) : first(x), second(y) {}
 
 				// *** copy template *** //
-			template <class U1, class U2>
-				pair(const pair<U1, U2>& p) : first(p.first), second(p.second) {}
+			template <class U1, class U2>	 pair(const pair<U1, U2>& p) : first(p.first), second(p.second) {}
 
 				// *** = operator *** //
 			pair& operator=(const pair& other)
@@ -46,6 +47,10 @@ namespace ft
 			}
 
 		};
+
+				//------------------------------------//
+				//	 *** NON MEMBER-FUNCTIONS	 ***  //
+				//------------------------------------//
 
 	template <typename Pair1, typename Pair2>
 		bool operator==(const ft::pair<Pair1, Pair2>& x, const ft::pair<Pair1, Pair2>& y) { return (x.first == y.first && x.second == y.second); }

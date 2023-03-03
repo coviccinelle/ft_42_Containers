@@ -6,27 +6,26 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:59:03 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/03 21:36:42 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/03 23:46:12 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TREE_ITERATOR_HPP
 # define TREE_ITERATOR_HPP
 
-//# include <iterator>
 # include "rbtree.hpp"
 
 namespace ft
 {
 	template <class T>
 		struct RB_node;
+
 	template <class NodeType, class IteType>
 		class tree_iterator
 		{
 			public:
 				typedef IteType									value_type;
 				typedef ft::RB_node<NodeType>*					node_ptr;
-//				typedef typename Node::value_type				data_type;
 				typedef value_type &							reference;
 				typedef value_type const &						const_reference;
 				typedef value_type * 							pointer;
@@ -39,6 +38,10 @@ namespace ft
 				node_ptr	_parent;
 
 			public:
+							//--------------------------------//
+							// ***	  MEMBER FUNCTIONS 	***   //
+							//--------------------------------//
+
 				tree_iterator(node_ptr node, node_ptr parent): node(node), _parent(parent) {}
 
 				tree_iterator(void) : node(NULL), _parent(NULL) {}
@@ -59,9 +62,11 @@ namespace ft
 
 
 				reference	operator*(void) { return (node->data);}
+
 				const_reference	operator*(void) const { return (node->data); }
 
 				pointer operator->() { return &(operator*()); }
+
 				const_pointer	operator->(void) const { return (&(operator*()));}
 
 				tree_iterator	&operator++(void)

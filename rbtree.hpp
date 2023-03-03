@@ -6,16 +6,12 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 14:05:16 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/03 21:51:39 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/03 22:52:58 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #ifndef RBTREE_HPP
 # define RBTREE_HPP
-
-# include <iostream>
-# include <iomanip>
 
 # include "pair.hpp"
 # include "reverse_iterator.hpp"
@@ -29,8 +25,6 @@
 # define RED	true
 # define BLACK	false
 
-// https://algorithmtutor.com/Data-Structures/Tree/Red-Black-Trees/
-// https://www.geeksforgeeks.org/red-black-tree-set-1-introduction-2/
 // https://www.programiz.com/dsa/red-black-tree
 
 namespace ft
@@ -72,6 +66,11 @@ namespace ft
 				size_type	_size;
 
 			public:
+
+				//--------------------------------//
+				//	 ***  MEMBER-FUNCTIONS	 ***  //
+				//--------------------------------//
+
 				RB_tree(const allocator &alloc = allocator(), const compare &comp = compare()): _compare(comp), _size(0)
 				{
 					_alloc = alloc;
@@ -122,26 +121,60 @@ namespace ft
 				node_ptr	GetNil(void) const { return (this->NIL); }
 				node_ptr	GetRoot(void) const { return (this->root); }
 
-				iterator	find(value_type const &value)
-				{
-					node_ptr	found = _find_node(value);
+				//--------------------------------//
+				//	 *** 	 ITERATORS		 ***  //
+				//--------------------------------//
+				
+				iterator		begin() { node_ptr min = _minimum(root); return (iterator(min, min->parent));}
+				const_iterator	begin() const { node_ptr min = _minimum(root); return (const_iterator(min, min->parent));}
+				iterator		end() { return (iterator(NIL, _maximum(root)));}
+				const_iterator	end() const { return (const_iterator(NIL, _maximum(root)));}
 
-					if (!found)
-						return (end());
-					else
-						return (iterator(found, found->parent));
+				reverse_iterator	rbegin()
+				{
+					iterator	it = end();
+					return (reverse_iterator(it));
 				}
 
-				const_iterator	find(value_type const &value) const
+				const_reverse_iterator	rbegin() const
 				{
-					node_ptr	found = _find_node(value);
-
-					if (!found)
-						return (end());
-					else
-						return (iterator(found, found->parent));
+					const_iterator	it = end();
+					return (const_reverse_iterator(it));
 				}
 
+				reverse_iterator	rend()
+				{
+					iterator	it = begin();
+					return (reverse_iterator(it));
+				}
+
+				const_reverse_iterator	rend() const
+				{
+					const_iterator	it = begin();
+					return (const_reverse_iterator(it));
+				}
+
+				//--------------------------------//
+				//	 ***   	CAPACITY		 ***  //
+				//--------------------------------//
+				
+				size_type	size() const {return (_size);}
+				size_type	max_size() const {return (_alloc.max_size());}
+
+				void	swap(RB_tree &other)
+				{
+					std::swap(_alloc, other._alloc);
+					std::swap(_compare, other._compare);
+					std::swap(_size, other._size);
+					std::swap(NIL, other.NIL);
+					std::swap(root, other.root);
+				}
+
+
+				//--------------------------------//
+				//	 ***   	MODIFIERS		 ***  //
+				//--------------------------------//
+				
 				ft::pair<iterator, bool>	insert(value_type const &value)
 				{
 					node_ptr	n = _new_node(value);
@@ -214,18 +247,30 @@ namespace ft
 					_size = 0;
 				}
 
-				size_type	size() const {return (_size);}
-				size_type	max_size() const {return (_alloc.max_size());}
-
-				void	swap(RB_tree &other)
+				//--------------------------------//
+				//	 ***   		LOOKUP		 ***  //
+				//--------------------------------//
+				
+				iterator	find(value_type const &value)
 				{
-					std::swap(_alloc, other._alloc);
-					std::swap(_compare, other._compare);
-					std::swap(_size, other._size);
-					std::swap(NIL, other.NIL);
-					std::swap(root, other.root);
+					node_ptr	found = _find_node(value);
+
+					if (!found)
+						return (end());
+					else
+						return (iterator(found, found->parent));
 				}
 
+				const_iterator	find(value_type const &value) const
+				{
+					node_ptr	found = _find_node(value);
+
+					if (!found)
+						return (end());
+					else
+						return (iterator(found, found->parent));
+				}
+				
 				iterator	lower_bound(const value_type &value)
 				{
 					for (iterator it = begin(); it != end(); ++it)
@@ -268,35 +313,11 @@ namespace ft
 					return (end());
 				}
 
-				iterator		begin() { node_ptr min = _minimum(root); return (iterator(min, min->parent));}
-				const_iterator	begin() const { node_ptr min = _minimum(root); return (const_iterator(min, min->parent));}
-				iterator		end() { return (iterator(NIL, _maximum(root)));}
-				const_iterator	end() const { return (const_iterator(NIL, _maximum(root)));}
 
-				reverse_iterator	rbegin()
-				{
-					iterator	it = end();
-					return (reverse_iterator(it));
-				}
-
-				const_reverse_iterator	rbegin() const
-				{
-					const_iterator	it = end();
-					return (const_reverse_iterator(it));
-				}
-
-				reverse_iterator	rend()
-				{
-					iterator	it = begin();
-					return (reverse_iterator(it));
-				}
-
-				const_reverse_iterator	rend() const
-				{
-					const_iterator	it = begin();
-					return (const_reverse_iterator(it));
-				}
-
+				//--------------------------------//
+				//	 *** 	 HELPERS		 ***  //
+				//--------------------------------//
+				
 				void recursePrintHelper(node *root, int space) const
 				{
 					if (root == NIL)
@@ -318,6 +339,7 @@ namespace ft
 				}
 
 			private:
+
 				node	*_new_node(value_type const &data)
 				{
 					node	*node = _alloc.allocate(1);

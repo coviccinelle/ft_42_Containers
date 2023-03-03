@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 13:40:05 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/02 21:57:30 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/03 23:14:06 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@
 //https://en.cppreference.com/w/cpp/container/stack
 //https://cplusplus.com/reference/stack/stack/
 
-// stack container, which is a data structure that implements a last-in-first-out (LIFO) policy.
-// The stack container is defined in the <stack> header file and is implemented as an adapter class 
-// over a container, such as deque or vector.
+// Stack container, which is a data structure that implements a last-in-first-out (LIFO) policy.
+// The stack container is defined in the <stack> header file and is implemented as an adapter class over a container, such as deque or vector.
 
 namespace ft
 {
@@ -38,12 +37,18 @@ namespace ft
 
 			protected:
 				container_type		c;
+
 			public:
+							//--------------------------------//
+							//	 ***  MEMBER-FUNCTIONS	 ***  //
+							//--------------------------------//
+
 				stack(const stack &other) : c(other.c) {}
+
 				explicit stack(const container_type &ctnr = container_type()) : c(ctnr) {}
+
 				~stack(void) {}
 			
-
 				stack	&operator=(stack const &other)
 				{
 					if (this != &other)
@@ -51,25 +56,26 @@ namespace ft
 					return (*this);
 				}
 
-				//--------------------------------//
-				//	 *** 	ELEMENT ACCESS 	 ***  //
-				//--------------------------------//
+							//--------------------------------//
+							//	 ***   ELEMENT_ACCES	 ***  //
+							//--------------------------------//
+				
 
 				reference top() { return (c.back()); }
 				const_reference top() const { return ( c.back()); }
 
-				//--------------------------------//
-				//	 *** 	 CAPACITY		 ***  //
-				//--------------------------------//
-				// ( empty, size )
+							//--------------------------------//
+							//	 ***   	CAPACITY		 ***  //
+							//--------------------------------//
+									// ( empty, size )
 
 				bool empty() const { return (c.empty()); }
 				size_type size() const { return (c.size()); }
 
-				//--------------------------------//
-				//	 *** 	 MODIFIERS		 ***  //
-				//--------------------------------//
-				//	( push, pop)
+							//--------------------------------//
+							//	 ***   	MODIFIERS		 ***  //
+							//--------------------------------//
+									//	( push, pop)
 
 				void push( const value_type& value ) { return (c.push_back(value)); }
 				void pop() { return (c.pop_back()); }
@@ -78,8 +84,6 @@ namespace ft
 				friend bool operator<(const stack &x, const stack &y) { return (x.c < y.c); }
 
 		};
-
-// --------------------------------- ***  [ END OF STACK ] *** --------------------------------------------//
 
 				//-----------------------------------------//
 				//	 *** 	NON-MEMBER FUNCTIONS	 ***  //

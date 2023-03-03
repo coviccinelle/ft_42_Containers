@@ -1,11 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vector.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thi-phng <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/03 23:45:32 by thi-phng          #+#    #+#             */
+/*   Updated: 2023/03/03 23:45:44 by thi-phng         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
 #include <cstdlib>
 #include <iostream>
-#include <cstring>
 #include <sstream>
-#include "vector.hpp"
 #include "iterator_traits.hpp"
 #include "reverse_iterator.hpp"
 #include "enable_if.hpp"
@@ -39,9 +49,9 @@ namespace ft
 				typedef const Type & 		const_reference;
 				typedef std::ptrdiff_t			difference_type;
 
-				//--------------------------------//
-				// ***	  MEMBER FUNCTIONS 	***   //
-				//--------------------------------//
+							//--------------------------------//
+							// ***	  MEMBER FUNCTIONS 	***   //
+							//--------------------------------//
 
 				explicit vector( const Allocator& alloc = Allocator() ) : _c_size(0), _c_data(0), _alloc(alloc), _capacity(0) {
 				}
@@ -57,19 +67,18 @@ namespace ft
 				}
 
 				//	range(3) from first to last
-				//	creates a vector from a range of elements defined by two iterators
 				template< class InputIt > vector( InputIt first, InputIt last, const_allocator_reference alloc = allocator_type(),
 						typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL) : _c_size(0), _c_data(0), _alloc(alloc), _capacity(0)
-			{
-				insert(begin(), first, last);
-			}
-
+				{
+					insert(begin(), first, last);
+				}
+	
 				vector( const vector& other ) : _c_size(other.size()), _c_data(0),_alloc(other.get_allocator()), _capacity(other.size())
-			{
-				this->_c_data = this->_alloc.allocate(other.capacity());
-				for (size_t i = 0; i < this->_c_size; i++)
-					this->_alloc.construct(this->_c_data + i, other[i]);	
-			}
+				{
+					this->_c_data = this->_alloc.allocate(other.capacity());
+					for (size_t i = 0; i < this->_c_size; i++)
+						this->_alloc.construct(this->_c_data + i, other[i]);	
+				}
 
 				~vector(void)
 				{
@@ -109,6 +118,7 @@ namespace ft
 					clear();
 					resize(count, value);
 				}
+
 				// assign_2 with iterator
 				template< class InputIt > void assign( InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
 				{
@@ -122,10 +132,10 @@ namespace ft
 					insert(begin(), first, last);
 				}
 
-				//--------------------------------//
-				//	 *** 	ELEMENT ACCESS 	 ***  //
-				//--------------------------------//
-				// at, operator[], front, back, data
+							//--------------------------------//
+							//	 *** 	ELEMENT ACCESS 	 ***  //
+							//--------------------------------//
+							// at, operator[], front, back, data
 
 				const_reference at( size_type pos ) const
 				{
@@ -135,10 +145,10 @@ namespace ft
 						out << "vector::_M_range_check: __n (which is " << pos << ") >= this->size() (which is " << this->size() << ")";
 						throw std::out_of_range(out.str());
 					}
-					return (this->_c_data[pos]); }
+					return (this->_c_data[pos]);
+				}
 
-				reference at( size_type pos ){
-					return (const_cast<reference>(static_cast < const typename ft::vector< Type, Allocator >& >(*this).at(pos))); }
+				reference at( size_type pos ){ return (const_cast<reference>(static_cast < const typename ft::vector< Type, Allocator >& >(*this).at(pos))); }
 
 				reference operator[](size_t i) { return (_c_data[i]); }//return (const_cast<reference>(static_cast < const typename ft::vector< Type, Allocator > &>(*this)[i])); }
 
@@ -166,12 +176,11 @@ namespace ft
 					return (this->_c_data);
 				}
 
-				//--------------------------------//
-				//	 *** 	 ITERATORS  	***   //
-				//--------------------------------//
-				// begin, end, rbegin, rend	
+							//--------------------------------//
+							//	 *** 	 ITERATORS  	***   //
+							//--------------------------------//
+							// begin, end, rbegin, rend	
 
-				//template <class T>
 				class const_iterator;
 				class iterator 
 				{
@@ -179,22 +188,25 @@ namespace ft
 						friend class vector ;
 					friend class const_iterator ;
 					public:
-					typedef std::random_access_iterator_tag	iterator_category;
-					typedef Type							value_type;
-					typedef size_t							size_type;
-					typedef value_type&						reference;
-					typedef value_type*						pointer;
-					typedef std::ptrdiff_t					difference_type;
+						typedef std::random_access_iterator_tag	iterator_category;
+						typedef Type							value_type;
+						typedef size_t							size_type;
+						typedef value_type&						reference;
+						typedef value_type*						pointer;
+						typedef std::ptrdiff_t					difference_type;
 
+					private:
+						pointer  	_ptr;
+
+					public:
 					// Constructor
-					iterator(void) : _ptr(NULL){}
-					iterator(pointer p) : _ptr(p){}
-					iterator(const iterator& other) : _ptr(other._ptr) {}
-					~iterator(){}
+						iterator(void) : _ptr(NULL){}
+						iterator(pointer p) : _ptr(p){}
+						iterator(const iterator& other) : _ptr(other._ptr) {}
+						~iterator(){}
 
-//					//User-defined conversion function/
-//					operator	iterator<value_type const>() const
-//					{return (iterator<value_type const>(_ptr));}
+					//User-defined conversion function/
+					//	operator	iterator<value_type const>() const 	{return (iterator<value_type const>(_ptr));}
 
 					iterator& operator=(const iterator &other){
 						this->_ptr = other._ptr;
@@ -216,7 +228,6 @@ namespace ft
 					bool operator< (const const_iterator &other) const{ return (_ptr <  other._ptr); }
 
 					//access
-					// Overload the * operator to return a reference to the element at the current iterator position
 					reference operator*() const { return (* _ptr); }
 
 					pointer operator->() const{ return (_ptr); }
@@ -240,7 +251,6 @@ namespace ft
 					}		
 
 					friend iterator operator+(size_t i, const iterator& it) { return it + i;}
-//					friend iterator operator+(size_t i, const const_iterator& it) { return it + i;}
 
 					difference_type operator+(iterator const &other) const {  return (this->_ptr + other._ptr); }		
 					difference_type operator+(const_iterator const &other) const {  return (this->_ptr + other._ptr); }		
@@ -253,46 +263,56 @@ namespace ft
 
 
 					//pre-increment (++a)
-					iterator& operator++(){
+					iterator& operator++()
+					{
 						++_ptr;
-						return (*this); }
+						return (*this);
+					}
+
 					//post-decrement (--a)
-					iterator& operator--(){
+					iterator& operator--()
+					{
 						--_ptr;
-						return (*this); }
+						return (*this);
+					}
+
 					// post-increment (a++)
-					iterator operator++(int){
+					iterator operator++(int)
+					{
 						iterator tmp(*this);
 						++(*this);
-						return (tmp); }
+						return (tmp);
+					}
+
 					//pret-decrement (a--)
-					iterator operator--(int){
+					iterator operator--(int)
+					{
 						iterator tmp(*this);
 						--(*this);
-						return (tmp); }
+						return (tmp);
+					}
 
-					private:
-					pointer  	_ptr;
 				};
 
-				//--------------------------------//
-				//	 ***  CONST_ITERATORS  	***   //
-				//--------------------------------//
-				//template <class T>
+							//--------------------------------//
+							//	 ***  CONST_ITERATORS  	***   //
+							//--------------------------------//
+							//template <class T>
+							
 				class const_iterator 
 				{
 					template< class ItType, class ItAllocator >
 						friend class vector ;
 					friend class iterator ;
 					public:
-					typedef std::random_access_iterator_tag	iterator_category;
-					typedef const Type						value_type;
-					typedef size_t							size_type;
-					typedef value_type&						reference;
-					typedef const value_type&				const_reference;
-					typedef value_type*						pointer;
-					typedef const value_type*				const_pointer;
-					typedef std::ptrdiff_t					difference_type;
+						typedef std::random_access_iterator_tag	iterator_category;
+						typedef const Type						value_type;
+						typedef size_t							size_type;
+						typedef value_type&						reference;
+						typedef const value_type&				const_reference;
+						typedef value_type*						pointer;
+						typedef const value_type*				const_pointer;
+						typedef std::ptrdiff_t					difference_type;
 
 					// Constructor
 					const_iterator(void) : _ptr(NULL){}
@@ -301,10 +321,12 @@ namespace ft
 					const_iterator(const iterator& other){ this->_ptr = other._ptr;}
 					~const_iterator(){}
 
-					const_iterator& operator=(const const_iterator &other){
+					const_iterator& operator=(const const_iterator &other)
+					{
 						this->_ptr = other._ptr;
 						return (*this);
 					}
+
 					bool operator==(const const_iterator &other) const {return (this->_ptr == other._ptr);}
 					bool operator!=(const const_iterator &other) const {return (this->_ptr != other._ptr);}
 					bool operator>(const const_iterator &other) const {return (this->_ptr > other._ptr);}
@@ -313,7 +335,6 @@ namespace ft
 					bool operator>=(const const_iterator &other) const {return (this->_ptr >= other._ptr);}
 
 					//access
-					// Overload the * operator to return a reference to the element at the current iterator position
 					const_reference operator*() const { return (* _ptr); }
 
 					const_pointer operator->() const{ return (_ptr); }
@@ -321,12 +342,14 @@ namespace ft
 					const_reference operator[](size_type n) const { return (_ptr[n]); }
 
 					//assignment
-					const_iterator& operator+=(size_type n){
+					const_iterator& operator+=(size_type n)
+					{
 						_ptr += n;
 						return(* this);
 					}		
 
-					const_iterator& operator-=(size_type n){
+					const_iterator& operator-=(size_type n)
+					{
 						_ptr -= n;
 						return(* this);
 					}		
@@ -336,6 +359,7 @@ namespace ft
 					friend const_iterator operator+(size_type i, const const_iterator& it) { return it + i;}
 
 					const_iterator operator-(size_type n) { return (const_iterator(_ptr - n)); }
+
 					const_iterator operator-(size_type n) const { return (const_iterator(_ptr - n)); }		
 
 					difference_type operator+(const_iterator const &other) const { return (_ptr + other._ptr); }
@@ -343,30 +367,37 @@ namespace ft
 					difference_type operator-(const_iterator const &other) const { return (_ptr - other._ptr); }
 
 					//pre-increment (++a)
-					const_iterator& operator++(){
+					const_iterator& operator++()
+					{
 						++_ptr;
 						return (*this);
 					}
+
 					//post-decrement (--a)
-					const_iterator& operator--(){
+					const_iterator& operator--()
+					{
 						--_ptr;
 						return (*this);
 					}
+
 					// post-increment (a++)
-					const_iterator operator++(int){
+					const_iterator operator++(int)
+					{
 						const_iterator tmp(*this);
 						++(*this);
 						return (tmp);
 					}
+
 					//pret-decrement (a--)
-					const_iterator operator--(int){
+					const_iterator operator--(int)
+					{
 						const_iterator tmp(*this);
 						--(*this);
 						return (tmp);
 					}
 
 					private:
-						pointer  	_ptr;
+					pointer  	_ptr;
 				};
 
 				typedef ft::reverse_iterator<iterator>					reverse_iterator;
@@ -385,9 +416,9 @@ namespace ft
 				const_reverse_iterator	rend() const { return (const_reverse_iterator(_c_data)); }
 
 
-				//--------------------------------//
-				//	 *** 	 CAPACITY		 ***  //
-				//--------------------------------//
+							//--------------------------------//
+							//	 *** 	 CAPACITY		 ***  //
+							//--------------------------------//
 
 				size_type size() const {
 					return (this->_c_size); }
@@ -420,22 +451,20 @@ namespace ft
 					return (0);
 				}
 
-				size_type max_size() const{
-//#ifdef __APPLE__
-//					if (sizeof(Type) == 1)
-//					map<Key, T, Compare, Alloc>::_max_size =
-				//return (std::numeric_limits<difference_type>::max() / (sizeof(node_type) / 2 ?: 1);
-			//			return (std::numeric_limits< size_t >::max() / (2 * sizeof (Type)));
-			 		return(_alloc.max_size());
-//#endif
-//return (this->_alloc.max_size());
+				size_type max_size() const
+				{
+#ifdef __APPLE__
+					if (sizeof(Type) == 1)
+						return (std::numeric_limits< size_t >::max() / (2 * sizeof (Type)));
+#endif
+					return(_alloc.max_size());
 				}
 
 
-				//--------------------------------//
-				//	 *** 	 MODIFIERS		 ***  //
-				//--------------------------------//
-				//	( clear, insert, erease, push_back, pop_back, resize, swap )
+							//--------------------------------//
+							//	 *** 	 MODIFIERS		 ***  //
+							//--------------------------------//
+							//	( clear, insert, erease, push_back, pop_back, resize, swap )
 
 				void clear(){
 					for (size_t i = 0; i < this->_c_size; ++i)
@@ -482,7 +511,8 @@ namespace ft
 
 				template< class InputIt >
 					void insert( iterator pos, InputIt first, InputIt last,
-							typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL) {
+							typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
+					{
 						difference_type const	i = pos - begin();
 						difference_type const	old_end_i = end() - begin();
 						iterator				old_end, end;
@@ -500,9 +530,10 @@ namespace ft
 							*--end = *--old_end;
 						while (first != last)
 							*(pos++) = *(first++);
-				}
+					}
 
-				iterator erase( iterator pos ){
+				iterator erase( iterator pos )
+				{
 					if (pos == end())
 						return (end());
 					std::copy(pos + 1, end(), pos);
@@ -510,7 +541,8 @@ namespace ft
 					return (pos);
 				}
 
-				iterator erase( iterator first, iterator last ){
+				iterator erase( iterator first, iterator last )
+				{
 					if (first == last)
 						return (last);
 					size_t dif = std::distance( first, last);
@@ -521,7 +553,8 @@ namespace ft
 					return (first);
 				}
 
-				void push_back( const Type& value ) {
+				void push_back( const Type& value )
+				{
 					if(_c_size == _capacity)
 						reserve(capacity() ? _capacity * 2 : 1);
 					_alloc.construct(_c_data + _c_size, value);
@@ -538,7 +571,9 @@ namespace ft
 						this->_c_size--;
 					}
 				}
-				void resize( size_type count, value_type value= value_type() ){
+
+				void resize( size_type count, value_type value= value_type() )
+				{
 					if (count > this->max_size())
 					{
 						throw std::length_error("vector::resize");
@@ -558,8 +593,8 @@ namespace ft
 					_c_size = count;
 				}
 
-				void swap( vector& other ){
-
+				void swap( vector& other )
+				{
 					size_type tmp_size = this->_c_size;
 					pointer tmp_data = this->_c_data;
 					size_type tmp_capacity = this->_capacity;
@@ -576,37 +611,42 @@ namespace ft
 					other._alloc = tmp_alloc;
 				}
 
-				// Non-member functionn
-				friend bool operator==( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs )
-				{
-					if (lhs.size() != rhs.size())
-						return (0);
-					return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
-				}
-				friend bool operator!=( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs ) { return (!(lhs == rhs)); }
-				friend bool operator<( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs ) { return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())) ; }
-				friend bool operator>( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs ) { return (rhs < lhs); }
-				friend bool operator>=( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs ) { return (!(lhs < rhs)); }
-				friend bool operator<=( const ft::vector<Type, Allocator>& lhs, const ft::vector<Type, Allocator>& rhs ) { return (!(lhs > rhs)); }
 
-			private:
+	private:
 				size_t			_c_size;
 				value_type *	_c_data;
 				allocator_type	_alloc;
 				size_t			_capacity;
 
-		};
-		//template< class T, class Alloc >
-		template< class Type, class Allocator >
-			void swap( ft::vector < Type, Allocator >& x, ft::vector < Type, Allocator > & other ) {
-				x.swap(other);
-			}
+};
 
-		template< class Iterator >
-			void swap(Iterator& x, Iterator& other ) {
-				Iterator	tmp(x);
-				x = other;
-				other = tmp;
-			}
-		} // end of namespace
+// Non-member functionn
+template< typename Type > bool operator==( const ft::vector<Type>& lhs, const ft::vector<Type>& rhs )
+{
+	if (lhs.size() != rhs.size())
+		return (0);
+	return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+}
+
+template< typename Type > bool operator!=( const ft::vector<Type>& lhs, const ft::vector<Type>& rhs ) { return (!(lhs == rhs)); }
+
+template< typename Type > bool operator<( const ft::vector<Type>& lhs, const ft::vector<Type>& rhs ) { return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())) ; }
+
+template< typename Type > bool operator>( const ft::vector<Type>& lhs, const ft::vector<Type>& rhs ) { return (rhs < lhs); }
+
+template< typename Type > bool operator>=( const ft::vector<Type>& lhs, const ft::vector<Type>& rhs ) { return (!(lhs < rhs)); }
+
+template< typename Type > bool operator<=( const ft::vector<Type>& lhs, const ft::vector<Type>& rhs ) { return (!(lhs > rhs)); }
+
+
+template< class Type, class Allocator > void		swap( ft::vector < Type, Allocator >& x, ft::vector < Type, Allocator > & other ) { x.swap(other); }
+
+template< class Iterator > void						swap(Iterator& x, Iterator& other )
+{
+	Iterator	tmp(x);
+	x = other;
+	other = tmp;
+}
+
+} // end of namespace
 #endif
