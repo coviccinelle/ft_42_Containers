@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:58:53 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/02 19:36:32 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/03 13:46:16 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,11 @@ namespace ft
 				class value_compare
 				{
 					public:
-						bool	operator()(const value_type &a, const value_type &b) const
-						{return (key_compare()(a.first, b.first));}
+						bool	operator()(const value_type &a, const value_type &b) const {
+							return (key_compare()(a.first, b.first));}
 
-						// QUESTION ??? MUTED
-						value_compare	&operator=(const value_compare &)
-						{return (*this);}
+						value_compare	&operator=(const value_compare &) {
+							return (*this);}
 				};
 
 
@@ -87,14 +86,13 @@ namespace ft
 					_value_comp = value_compare();
 				}
 
-				template <class InputIt>
-					map(InputIt first, InputIt last, const Compare &comp = Compare(), const Allocator &alloc = Allocator()) : _tree()
-					{
-						_alloc = alloc;
-						_key_comp = comp;
-						_value_comp = value_compare();
-						insert(first, last);
-					}
+				template <class InputIt> map(InputIt first, InputIt last, const Compare &comp = Compare(), const Allocator &alloc = Allocator()) : _tree()
+				{
+					_alloc = alloc;
+					_key_comp = comp;
+					_value_comp = value_compare();
+					insert(first, last);
+				}
 
 				map(const map &other)
 				{
@@ -174,12 +172,11 @@ namespace ft
 
 				ft::pair<iterator, bool>	insert(const value_type &value) {return (_tree.insert(value));}
 
-				template <class InputIt>
-					void	insert(InputIt first, InputIt last)
-					{
-						for (; first != last; ++first)
-							_tree.insert(*first);
-					}
+				template <class InputIt> void	insert(InputIt first, InputIt last)
+				{
+					for (; first != last; ++first)
+						_tree.insert(*first);
+				}
 
 				iterator	insert(iterator hint, const value_type &value) {return (_tree.insert(hint, value));}
 
