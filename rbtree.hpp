@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 14:05:16 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/03 20:49:03 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/03 21:51:39 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,12 @@ namespace ft
 						_delete_node(pos.node);
 				}
 
+				void	erase(const_iterator pos)
+				{
+					if (pos.node != NIL)
+						_delete_node(pos.node);
+				}
+				
 				void	clear()
 				{
 					_recursive_clear(root);

@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:58:53 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/03 20:57:43 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/03 21:49:24 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,16 @@ namespace ft
 				typedef value_type								*pointer;
 				typedef const value_type						*const_pointer;
 				class value_compare;
-				typedef tree_iterator< key_type, key_type>			iterator;
-				typedef tree_iterator< key_type, const key_type>	const_iterator;
-				typedef ft::reverse_iterator< iterator >				reverse_iterator;
-				typedef ft::reverse_iterator< const_iterator >			const_reverse_iterator;
+				typedef tree_iterator< key_type, const key_type >	iterator;
+				typedef tree_iterator< key_type, const key_type >	const_iterator;
+				typedef ft::reverse_iterator< iterator >			reverse_iterator;
+				typedef ft::reverse_iterator< const_iterator >		const_reverse_iterator;
 
 				class value_compare
 				{
 					public:
 						bool	operator()(const value_type &a, const value_type &b) const {
-							return (key_compare()(a.first, b.first));}
+							return (key_compare()(a, b));}
 
 						value_compare	&operator=(const value_compare &) {
 							return (*this);}
@@ -56,11 +56,12 @@ namespace ft
 			private:
 				ft::RB_tree< Key, Compare, Allocator > _tree;
 				value_compare 				_value_comp;
+				key_compare					_key_comp;
 				
 
 			public:
 
-				explicit set(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type()) : _tree(comp, alloc)
+				explicit set(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type()) : _tree(alloc, comp)
 				{
 					_value_comp = value_compare();
 				}
@@ -112,7 +113,7 @@ namespace ft
 
 				key_type	&operator[](const key_type &key)
 				{
-					return (_tree[key] = ft::make_pair(key, key));
+					return (_tree[key] = key);
 				}
 
 					// ---------------------- [ CAPACITY ] ---------------------------------//
@@ -127,23 +128,12 @@ namespace ft
 				void	clear(void) {_tree.clear();}
 
 				pair<iterator, bool>	insert(const value_type &value) {return (_tree.insert(value));}
-//				pair<iterator, bool>	insert(const value_type &value) {return (_tree.insert(value));}
 
 
 				template <class InputIt> void insert(InputIt first, InputIt last) {
 					for(; first != last; ++first)
 						insert(*first);
 				}
-//				template <class InputIt> void insert(InputIt first, InputIt last) {
-//					for(; first != last; ++first)
-//						insert(first->first);
-//				}
-//
-//				template <class InputIt>
-//					void insert(InputIt first, InputIt last) {
-//						for(; first != last; ++first)
-//							insert(first->first);
-//					}
 
 				iterator	insert(iterator pos, const value_type &value) 
 				{
@@ -158,15 +148,24 @@ namespace ft
 					return (it);
 				}
 
-				void	erase(iterator pos) {_tree.erase(pos);}
+				void	erase(iterator pos) {_tree.erase(*pos);}
 
-				void	erase(iterator first, iterator last) { _tree.erase(first, last); }
+				void	erase(iterator first, iterator last)
+				{
+					while (first != last)
+						_tree.erase(first++);
+				}
 
-				size_type	erase(const key_type &key) {return (_tree.erase(ft::make_pair(key, key_type())));}
+				size_type	erase(const key_type &key) {return (_tree.erase(key));}
 
 				void	swap(set &other) { _tree.swap(other._tree); }
 
-				size_type	count(const key_type &key) const { return (_tree.count(key)); }
+				size_type	count(const key_type &key) const
+				{
+					const_iterator	res = _tree.find(key);
+
+					return ((res == _tree.end()) ? 0 : 1);
+				}
 
 				iterator		find(const key_type &key) {return (_tree.find(key));}
 				const_iterator	find(const key_type &key) const { return (_tree.find(key));}
@@ -179,12 +178,24 @@ namespace ft
 
 				const_iterator	upper_bound(const Key &key) const { return (_tree.upper_bound(key));}
 
-				ft::pair<iterator, iterator> equal_range(const Key &key) { return (_tree.equal_range(key)); }
+				ft::pair<iterator, iterator> equal_range(const Key &key)
+				{
+					iterator	lower = lower_bound(key);
+					iterator	upper = upper_bound(key);
 
-				ft::pair<const_iterator, const_iterator> equal_range(const Key &key) const { return (_tree.equal_range(key)); }
+					return (ft::make_pair(lower, upper));
+				}
 
-				key_compare		key_comp(void) const { return (_tree.key_comp());}
-				value_compare	value_comp(void) const { return (_tree.value_comp()); }
+				ft::pair<const_iterator, const_iterator> equal_range(const Key &key) const
+				{
+					const_iterator	lower = lower_bound(key);
+					const_iterator	upper = upper_bound(key);
+
+					return (ft::make_pair(lower, upper));
+				}
+
+				key_compare		key_comp(void) const { return (_key_comp); }
+				value_compare	value_comp(void) const { return (_value_comp); }
 
 //				value_compare	value_comp(void) const { return (value_compare(_tree.key_comp())); }
 

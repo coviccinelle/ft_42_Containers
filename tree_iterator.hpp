@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:59:03 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/03 20:41:39 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/03 21:36:42 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ namespace ft
 				tree_iterator	&operator++(void)
 				{
 					if (node->is_nil == 0)
+					{
 						node = _next();
+					}
 					else
 					{
 						while (_parent->parent->is_nil == 0)
@@ -145,14 +147,16 @@ namespace ft
 					node_ptr n = node;
 
 					if (n->right->is_nil == 0)
-						return (_min(n->right));
-					node_ptr parent = n->parent;
-					while (parent->is_nil == 0 && n== parent->right)
 					{
-						n = parent;
-						parent = parent->parent;
+						return (_min(n->right));
 					}
-					return (parent);
+					node_ptr next = n->parent;
+					while (next->is_nil == 0 && n == next->right)
+					{
+						n = next;
+						next = next->parent;
+					}
+					return (next);
 				}
 		};
 
