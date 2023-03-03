@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 14:05:16 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/03 14:14:38 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/03 20:49:03 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ namespace ft
 				size_type	_size;
 
 			public:
-				RB_tree(allocator alloc = allocator()): _compare(compare()), _size(0)
+				RB_tree(const allocator &alloc = allocator(), const compare &comp = compare()): _compare(comp), _size(0)
 				{
 					_alloc = alloc;
 
