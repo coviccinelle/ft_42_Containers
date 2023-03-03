@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 13:25:09 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/02/27 14:54:35 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/03 17:58:40 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,10 @@ namespace ft
     ** Construct a pair object with "first" and "second".
     ** Return the pair object.
     */
-	template<typename T1, typename T2>
-		ft::pair<T1, T2> make_pair(T1 first, T2 second) {
-			return ft::pair<T1, T2>(first, second);
-		}
+	template<typename T1, typename T2> ft::pair<T1, T2> 	make_pair(T1 first, T2 second)
+	{
+		return ft::pair<T1, T2>(first, second);
+	}
 
 }
 #endif

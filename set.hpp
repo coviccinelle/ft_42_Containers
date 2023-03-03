@@ -6,7 +6,7 @@
 /*   By: thi-phng <thi-phng@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 12:58:53 by thi-phng          #+#    #+#             */
-/*   Updated: 2023/03/03 15:05:41 by thi-phng         ###   ########.fr       */
+/*   Updated: 2023/03/03 17:57:42 by thi-phng         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ namespace ft
 				typedef value_type								*pointer;
 				typedef const value_type						*const_pointer;
 				class value_compare;
+//				typedef typename RB_tree<ft::pair< key_type, value_type >, value_compare>::iterator		iterator;
+//				typedef typename RB_tree<ft::pair< key_type, value_type >, value_compare>::const_iterator	const_iterator;
+//				typedef typename RB_tree<ft::pair < key_type, value_type >, value_compare>::reverse_iterator	reverse_iterator;
+//				typedef typename RB_tree<ft::pair < key_type, value_type >, value_compare>::const_reverse_iterator	const_reverse_iterator;
+
 				typedef typename map<key_type, value_type, key_compare, allocator_type>::iterator				iterator;
 				typedef typename map<key_type, value_type, key_compare, allocator_type>::const_iterator			const_iterator;
 				typedef typename map<key_type, value_type, key_compare, allocator_type>::reverse_iterator		reverse_iterator;
@@ -62,7 +67,7 @@ namespace ft
 
 				explicit set(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type()) : _map(comp, alloc)
 				{
-					_value_comp = value_compare();
+//					_value_comp = value_compare();
 				}
 
 				template <class InputIt> set(InputIt first, InputIt last, const Compare &comp = Compare(), const Allocator &alloc = Allocator()) : _map(comp, alloc)
@@ -70,14 +75,14 @@ namespace ft
 					insert(first, last);
 				}
 
-				set(const set &other)
+				set(const set<Key, Compare, Allocator>&x):_map(x.begin(), x.end(), x.value_comp(), x.get_allocator())
 				{
-					_map = other._map;
+//					_map = other._map;
 				}
 
 				~set(void) {}
 
-				set	&operator=(const set &other)
+				set<Key, Compare, Allocator>&operator=(const set<Key, Compare, Allocator>&other)
 				{
 					if (this == &other)
 						return (*this);
@@ -85,9 +90,13 @@ namespace ft
 					insert(other.begin(), other.end());
 					return (*this);
 				}
+					//----------------- GETTER ---------------------//
+//				allocator_type	get_allocator() const {return (_map.get_allocator());}
+				allocator_type	get_allocator() const {return (allocator_type());}
 
-				allocator_type	get_allocator() const {return (_map.get_allocator());}
 				ft::map<Key, Key, Compare>	getMap() const {return (_map);}
+
+					// ------------------- Iterator --------------------//
 
 				iterator	begin(void) {return (_map.begin());}
 
@@ -105,36 +114,45 @@ namespace ft
 
 				const_reverse_iterator	rend(void) const {return (_map.rend());}
 
-				key_type	&at(const key_type &key)
-				{
-					return (_map.at(key));
-				}
+					// ---------------------- At + [] ---------------------------------//
+				key_type	&at(const key_type &key) { return (_map.at(key)); }
 
-				const key_type	&at(const key_type &key) const
-				{
-					return (_map.at(key));
-				}
+				const key_type	&at(const key_type &key) const { return (_map.at(key)); }
 
 				key_type	&operator[](const key_type &key)
 				{
 					return (_map[key] = ft::make_pair(key, key));
 				}
 
+					// ---------------------- [ CAPACITY ] ---------------------------------//
 				bool	empty(void) const {return (_map.size() == 0);}
 
 				size_type	size(void) const {return (_map.size());}
 
 				size_type	max_size(void) const {return (_map.max_size());}
 
+					// ---------------------- [ MODIFIERS ] ---------------------------------//
+
 				void	clear(void) {_map.clear();}
 
-				ft::pair<iterator, bool>	insert(const value_type &value) {return (_map.insert(ft::make_pair(value, value)));}
+				pair<iterator, bool>	insert(const value_type &value) {return (_map.insert(ft::make_pair(value, value)));}
+//				pair<iterator, bool>	insert(const value_type &value) {return (_map.insert(value));}
 
-				template <class InputIt> void	insert(InputIt first, InputIt last)
-				{
-					for (; first != last; ++first)
+
+				template <class InputIt> void insert(InputIt first, InputIt last) {
+					for(; first != last; ++first)
 						insert(*first);
 				}
+//				template <class InputIt> void insert(InputIt first, InputIt last) {
+//					for(; first != last; ++first)
+//						insert(first->first);
+//				}
+//
+//				template <class InputIt>
+//					void insert(InputIt first, InputIt last) {
+//						for(; first != last; ++first)
+//							insert(first->first);
+//					}
 
 				iterator	insert(iterator pos, const value_type &value) 
 				{
@@ -151,25 +169,17 @@ namespace ft
 
 				void	erase(iterator pos) {_map.erase(pos);}
 
-				void	erase(iterator first, iterator last)
-				{
-					_map.erase(first, last);
-				}
+				void	erase(iterator first, iterator last) { _map.erase(first, last); }
 
 				size_type	erase(const key_type &key) {return (_map.erase(ft::make_pair(key, key_type())));}
 
-				void	swap(set &other)
-				{
-					_map.swap(other._map);
-				}
+				void	swap(set &other) { _map.swap(other._map); }
 
-				size_type	count(const key_type &key) const
-				{
-					return (_map.count(key));
-				}
+				size_type	count(const key_type &key) const { return (_map.count(key)); }
 
 				iterator		find(const key_type &key) {return (_map.find(key));}
 				const_iterator	find(const key_type &key) const { return (_map.find(key));}
+
 				iterator		lower_bound(const Key &key) { return (_map.lower_bound(key));}
 
 				const_iterator	lower_bound(const Key &key) const { return (_map.lower_bound(key));}
@@ -178,18 +188,13 @@ namespace ft
 
 				const_iterator	upper_bound(const Key &key) const { return (_map.upper_bound(key));}
 
-				ft::pair<iterator, iterator> equal_range(const Key &key)
-				{
-					return (_map.equal_range(key));
-				}
+				ft::pair<iterator, iterator> equal_range(const Key &key) { return (_map.equal_range(key)); }
 
-				ft::pair<const_iterator, const_iterator> equal_range(const Key &key) const
-				{
-					return (_map.equal_range(key));
-				}
+				ft::pair<const_iterator, const_iterator> equal_range(const Key &key) const { return (_map.equal_range(key)); }
 
 				key_compare		key_comp(void) const { return (_map.key_comp());}
 				value_compare	value_comp(void) const { return (_map.value_comp()); }
+
 //				value_compare	value_comp(void) const { return (value_compare(_map.key_comp())); }
 
 //				value_compare	value_comp(void) const { return (_map.key_comp());}
